@@ -1,0 +1,6 @@
+__pycache__/
+datasets/cifar10/
+data/cifar10/
+data/FashionMNIST/
+data/MNIST/
+data/svhn/
