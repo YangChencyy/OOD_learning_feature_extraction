@@ -2,6 +2,7 @@ import numpy as np
 import torch
 from sklearn.metrics import roc_auc_score
 
+
 # from utils.datasets import (
 #     get_CIFAR10,
 #     get_SVHN,
@@ -9,6 +10,8 @@ from sklearn.metrics import roc_auc_score
 #     get_MNIST,
 #     get_notMNIST,
 # )
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def prepare_ood_datasets(true_dataset, ood_dataset):
@@ -37,8 +40,8 @@ def loop_over_dataloader(model, dataloader):
         scores = []
         accuracies = []
         for data, target in dataloader:
-            data = data.cuda()
-            target = target.cuda()
+            data = data.to(device)
+            target = target.to(device)
 
             output = model(data)
             kernel_distance, pred = output.max(1)

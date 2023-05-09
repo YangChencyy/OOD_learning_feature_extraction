@@ -34,8 +34,14 @@ def train_model(l_gradient_penalty, length_scale, final_model, dataset, test_dat
         train_dataset = dataset
         val_dataset = test_dataset
     else:
-        train_dataset = torch.utils.data.Subset(dataset, indices=idx[:55000])
-        val_dataset = torch.utils.data.Subset(dataset, indices=idx[55000:])
+        # modify
+        # train_dataset = torch.utils.data.Subset(dataset, indices=idx[:55000])
+        # val_dataset = torch.utils.data.Subset(dataset, indices=idx[55000:])
+        train_dataset = torch.utils.data.Subset(dataset, indices=idx[:500])
+        val_dataset = torch.utils.data.Subset(dataset, indices=idx[500:])
+
+
+        
 
     num_classes = 10
     embedding_size = 256
@@ -180,7 +186,7 @@ def train_model(l_gradient_penalty, length_scale, final_model, dataset, test_dat
             )
             print(f"Sigma: {model.sigma}")
 
-    trainer.run(dl_train, max_epochs=30)
+    trainer.run(dl_train, max_epochs=1)
 
     evaluator.run(dl_val)
     val_accuracy = evaluator.state.metrics["accuracy"]
