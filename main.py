@@ -25,15 +25,16 @@ from multi_GP import *
 from DUQ.train_duq_fm import train_model
 from DUQ.evaluate_ood import get_auroc_ood
 
-
+import Mahalanobis.models
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 if __name__ == "__main__":
-    methods = [2]
-    epochs = 5
+    methods = []
+    
+    num_classes = 10
     train_batch_size = 64
     test_batch_size = 64
     InD_Dataset = 'MNIST'
@@ -46,7 +47,7 @@ if __name__ == "__main__":
         os.makedirs(path)
         print("The new directory is created!")
 
-    OOD_Dataset = ['FashionMNIST'] #, 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
+    OOD_Dataset = ['FashionMNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
 
     data_dic = {
         'MNIST': MNIST_dataset,
@@ -84,6 +85,7 @@ if __name__ == "__main__":
     # multi_GP
     if 1 in methods:
         print("Method 1: Multi-GP")
+        epochs = 5
         net = data_model[InD_Dataset]()
         train(network = net, trloader = trloader, epochs = epochs)
 
@@ -163,6 +165,95 @@ if __name__ == "__main__":
 
 
 
+    # Mahalanobis
+    if 3 in methods:
+        net_type = 'resnet'
+        gpu = 0
+        pre_trained_net = './Mahalanobis/pre_trained/' + net_type + '_' + InD_Dataset + '.pth'
+        outf = './Mahalanobis/output/' + net_type + '_' + InD_Dataset + '/'
+        if os.path.isdir(outf) == False:
+            os.mkdir(outf)
+        torch.cuda.manual_seed(0)
+        torch.cuda.set_device(args.gpu)
+        # # check the in-distribution dataset
+        # if args.dataset == 'cifar100':
+        #     args.num_classes = 100
+        # if args.dataset == 'svhn':
+        #     out_dist_list = ['cifar10', 'imagenet_resize', 'lsun_resize']
+        # else:
+        #     out_dist_list = ['svhn', 'imagenet_resize', 'lsun_resize']
+            
+        # load networks
+        location = ("cuda:" + str(gpu)) if torch.cuda.is_available() else "cpu"
+        if net_type == 'densenet':
+            if InD_Dataset == 'svhn':                
+                model = Mahalanobis.models.DenseNet3(100, int(num_classes))
+                model.load_state_dict(torch.load(pre_trained_net, map_location = location))
+            else:
+                model = torch.load(pre_trained_net, map_location = location)
+            in_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((125.3/255, 123.0/255, 113.9/255), (63.0/255, 62.1/255.0, 66.7/255.0)),])
+        elif net_type == 'resnet':
+            model = Mahalanobis.models.ResNet34(num_c = num_classes)
+            model.load_state_dict(torch.load(pre_trained_net, map_location = location))
+            in_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),])
+        model.cuda()
+        print('load model: ' + net_type)
+        
+        # load dataset
+        print('load target data: ', InD_Dataset)
+        train_loader, test_loader = trloader, tsloader
+        # train_loader, test_loader = data_loader.getTargetDataSet(args.dataset, args.batch_size, in_transform, args.dataroot)
+        
+        # set information about feature extaction
+        model.eval()
+        temp_x = torch.rand(2,3,32,32).cuda()
+        temp_x = Variable(temp_x)
+        temp_list = model.feature_list(temp_x)[1]
+        num_output = len(temp_list)
+        feature_list = np.empty(num_output)
+        count = 0
+        for out in temp_list:
+            feature_list[count] = out.size(1)
+            count += 1
+            
+        print('get sample mean and covariance')
+        sample_mean, precision = lib_generation.sample_estimator(model, num_classes, feature_list, train_loader)
+        
+        print('get Mahalanobis scores')
+        m_list = [0.0, 0.01, 0.005, 0.002, 0.0014, 0.001, 0.0005]
+        for magnitude in m_list:
+            print('Noise: ' + str(magnitude))
+            for i in range(num_output):
+                M_in = lib_generation.get_Mahalanobis_score(model, test_loader, num_classes, outf, \
+                                                            True, net_type, sample_mean, precision, i, magnitude)
+                M_in = np.asarray(M_in, dtype=np.float32)
+                if i == 0:
+                    Mahalanobis_in = M_in.reshape((M_in.shape[0], -1))
+                else:
+                    Mahalanobis_in = np.concatenate((Mahalanobis_in, M_in.reshape((M_in.shape[0], -1))), axis=1)
+                
+            for out_dist in out_dist_list:
+                out_test_loader = data_loader.getNonTargetDataSet(out_dist, args.batch_size, in_transform, args.dataroot)
+                print('Out-distribution: ' + out_dist) 
+                for i in range(num_output):
+                    M_out = lib_generation.get_Mahalanobis_score(model, out_test_loader, args.num_classes, args.outf, \
+                                                                False, args.net_type, sample_mean, precision, i, magnitude)
+                    M_out = np.asarray(M_out, dtype=np.float32)
+                    if i == 0:
+                        Mahalanobis_out = M_out.reshape((M_out.shape[0], -1))
+                    else:
+                        Mahalanobis_out = np.concatenate((Mahalanobis_out, M_out.reshape((M_out.shape[0], -1))), axis=1)
+
+                Mahalanobis_in = np.asarray(Mahalanobis_in, dtype=np.float32)
+                Mahalanobis_out = np.asarray(Mahalanobis_out, dtype=np.float32)
+                Mahalanobis_data, Mahalanobis_labels = lib_generation.merge_and_generate_labels(Mahalanobis_out, Mahalanobis_in)
+                file_name = os.path.join(args.outf, 'Mahalanobis_%s_%s_%s.npy' % (str(magnitude), args.dataset , out_dist))
+                Mahalanobis_data = np.concatenate((Mahalanobis_data, Mahalanobis_labels), axis=1)
+                np.save(file_name, Mahalanobis_data)
+
+
+    # ODIN
+
 
 
 
@@ -172,11 +263,9 @@ if __name__ == "__main__":
 
 
 
-    # Mahalanobis
 
 
 
 
 
-    # Temperature scaling
 
