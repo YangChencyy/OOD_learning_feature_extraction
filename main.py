@@ -26,6 +26,7 @@ from DUQ.train_duq_fm import train_model
 from DUQ.evaluate_ood import get_auroc_ood
 
 import Mahalanobis.models
+import Mahalanobis.lib_generation
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -33,6 +34,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 if __name__ == "__main__":
     methods = []
+
+    into_grey = False
+    resize = 28
     
     num_classes = 10
     train_batch_size = 64
@@ -174,7 +178,7 @@ if __name__ == "__main__":
         if os.path.isdir(outf) == False:
             os.mkdir(outf)
         torch.cuda.manual_seed(0)
-        torch.cuda.set_device(args.gpu)
+        torch.cuda.set_device(gpu)
         # # check the in-distribution dataset
         # if args.dataset == 'cifar100':
         #     args.num_classes = 100
@@ -206,7 +210,7 @@ if __name__ == "__main__":
         
         # set information about feature extaction
         model.eval()
-        temp_x = torch.rand(2,3,32,32).cuda()
+        temp_x = torch.rand(2,3,32,32).to_device()
         temp_x = Variable(temp_x)
         temp_list = model.feature_list(temp_x)[1]
         num_output = len(temp_list)
@@ -217,14 +221,14 @@ if __name__ == "__main__":
             count += 1
             
         print('get sample mean and covariance')
-        sample_mean, precision = lib_generation.sample_estimator(model, num_classes, feature_list, train_loader)
+        sample_mean, precision = Mahalanobis.lib_generation.sample_estimator(model, num_classes, feature_list, train_loader)
         
         print('get Mahalanobis scores')
         m_list = [0.0, 0.01, 0.005, 0.002, 0.0014, 0.001, 0.0005]
         for magnitude in m_list:
             print('Noise: ' + str(magnitude))
             for i in range(num_output):
-                M_in = lib_generation.get_Mahalanobis_score(model, test_loader, num_classes, outf, \
+                M_in = Mahalanobis.lib_generation.get_Mahalanobis_score(model, test_loader, num_classes, outf, \
                                                             True, net_type, sample_mean, precision, i, magnitude)
                 M_in = np.asarray(M_in, dtype=np.float32)
                 if i == 0:
@@ -232,12 +236,13 @@ if __name__ == "__main__":
                 else:
                     Mahalanobis_in = np.concatenate((Mahalanobis_in, M_in.reshape((M_in.shape[0], -1))), axis=1)
                 
-            for out_dist in out_dist_list:
-                out_test_loader = data_loader.getNonTargetDataSet(out_dist, args.batch_size, in_transform, args.dataroot)
-                print('Out-distribution: ' + out_dist) 
+            for s in range(len(OOD_Dataset)):
+                out_test_loader = OOD_loaders[s]
+                # out_test_loader = data_loader.getNonTargetDataSet(out_dist, args.batch_size, in_transform, args.dataroot)
+                print('Out-distribution: ' + OOD_Dataset[s]) 
                 for i in range(num_output):
-                    M_out = lib_generation.get_Mahalanobis_score(model, out_test_loader, args.num_classes, args.outf, \
-                                                                False, args.net_type, sample_mean, precision, i, magnitude)
+                    M_out = Mahalanobis.lib_generation.get_Mahalanobis_score(model, out_test_loader, num_classes, outf, \
+                                                                False, net_type, sample_mean, precision, i, magnitude)
                     M_out = np.asarray(M_out, dtype=np.float32)
                     if i == 0:
                         Mahalanobis_out = M_out.reshape((M_out.shape[0], -1))
@@ -246,8 +251,8 @@ if __name__ == "__main__":
 
                 Mahalanobis_in = np.asarray(Mahalanobis_in, dtype=np.float32)
                 Mahalanobis_out = np.asarray(Mahalanobis_out, dtype=np.float32)
-                Mahalanobis_data, Mahalanobis_labels = lib_generation.merge_and_generate_labels(Mahalanobis_out, Mahalanobis_in)
-                file_name = os.path.join(args.outf, 'Mahalanobis_%s_%s_%s.npy' % (str(magnitude), args.dataset , out_dist))
+                Mahalanobis_data, Mahalanobis_labels = Mahalanobis.lib_generation.merge_and_generate_labels(Mahalanobis_out, Mahalanobis_in)
+                file_name = os.path.join(outf, 'Mahalanobis_%s_%s_%s.npy' % (str(magnitude), InD_Dataset, OOD_Dataset[s]))
                 Mahalanobis_data = np.concatenate((Mahalanobis_data, Mahalanobis_labels), axis=1)
                 np.save(file_name, Mahalanobis_data)
 
