@@ -109,7 +109,7 @@ if __name__ == "__main__":
             network = load_part(network, pretrained_resnet18.state_dict())
             
             epochs = 30
-            cifar10_train(network = network, trloader = trloader, epochs = epochs, verbal=True)
+            cifar10_train(network = network, trloader = trloader, epochs = epochs, optim == 'SGD', verbal=True)
         else:
             epochs = 5
             net = data_model[InD_Dataset]()
@@ -200,14 +200,19 @@ if __name__ == "__main__":
 
     # ODIN
     if 4 in methods:
-        if InD_Dataset == "Cifar_10":
-            net_ODIN = torch.load("ODIN/models/densnet_Cifar_10.pth")
-        else:
-            net_ODIN = data_model[InD_Dataset]()
-        criterion_ODIN = nn.CrossEntropyLoss()
+        for i in range(len(OOD_sets)):
 
-        testData_ODIN(net_ODIN, criterion_ODIN, gpu, trloader, OODloader, InD_Dataset,
-                      noiseMagnitude1 = 0.0014, temper = 1000)
+            if InD_Dataset == "Cifar_10":
+                net_ODIN = torch.load("ODIN/models/densnet_Cifar_10.pth")
+            else:
+                net_ODIN = data_model[InD_Dataset]()
+
+            criterion_ODIN = nn.CrossEntropyLoss()
+
+            testData_ODIN(net_ODIN, criterion_ODIN, gpu, trloader, OOD_loaders[i], InD_Dataset,
+                        noiseMagnitude1 = 0.0014, temper = 1000)
+            metric_ODIN(InD_Dataset, OOD_sets[i])
+            
 
 
 
