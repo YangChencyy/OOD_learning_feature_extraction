@@ -172,15 +172,17 @@ if __name__ == "__main__":
                     roc_aucs_notmnist = []
 
                     for _ in range(repetition):
-                        print(" ### NEW MODEL ### ", l_gradient_penalty, length_scale)
+                        print(" ### NEW MODEL ### ")
+                        print("train with parameters:", l_gradient_penalty, length_scale)
                         model, val_accuracy, test_accuracy = train_model(
                             l_gradient_penalty, length_scale, final_model, train_set, test_set
                         )
                         # accuracy, roc_auc_mnist = get_fashionmnist_mnist_ood(model)
                         # _, roc_auc_notmnist = get_fashionmnist_notmnist_ood(model)
 
-                        for ood_set in OOD_sets:
-                            accuracy, roc_auc_mnist = get_auroc_ood(test_set, ood_set, model)
+                        for i in range(len(OOD_Dataset)):
+                            print("OOD: ", OOD_Dataset[i])
+                            accuracy, roc_auc_mnist = get_auroc_ood(test_set, OOD_sets[i], model)
 
                             val_accuracies.append(val_accuracy)
                             test_accuracies.append(test_accuracy)
