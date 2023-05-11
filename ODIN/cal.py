@@ -58,7 +58,9 @@ def test(nnName, dataName, CUDA_DEVICE, epsilon, temperature):
     #                   map_location=torch.device('cpu'))
     net1 = torch.load("../models/{}.pth".format(nnName))
     optimizer1 = optim.SGD(net1.parameters(), lr=0, momentum=0)
-    net1.cuda(CUDA_DEVICE)
+
+    if torch.cuda.is_available():
+        net1.cuda(CUDA_DEVICE)
 
     # MODIFIED
     if dataName == "SVHN":

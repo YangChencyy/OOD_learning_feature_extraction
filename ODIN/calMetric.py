@@ -311,7 +311,7 @@ def detection(name):
     return errorBase, errorNew
 
 
-def metric(nn, data):
+def metric_ODIN(nn, data):
     if nn == "densenet10" or nn == "wideresnet10":
         indis = "CIFAR-10"
     if nn == "densenet100" or nn == "wideresnet100":

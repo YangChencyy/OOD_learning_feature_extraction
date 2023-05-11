@@ -28,9 +28,13 @@ from DUQ.evaluate_ood import get_auroc_ood
 
 from Mahalanobis.OOD_Generate_Mahalanobis import Generate_Maha
 
+from ODIN.calData import testData_ODIN
+from ODIN.calMetric import metric_ODIN
+
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+gpu = 0
 
 
 if __name__ == "__main__":
@@ -76,7 +80,6 @@ if __name__ == "__main__":
     for i in range(len(train_set)):
         InD_label.append(train_set.__getitem__(i)[1])
 
-    print("here", len(InD_label))
 
     # Get all OOD datasets
     OOD_sets, OOD_loaders = [], []
@@ -88,6 +91,8 @@ if __name__ == "__main__":
     # multi_GP
     if 1 in methods:
         print("Method 1: Multi-GP")
+
+        # mkdir directory to save
         parent_dir = os.getcwd()
         directory = 'Multi_GP/store_data/' + InD_Dataset
         path = os.path.join(parent_dir, directory)
@@ -104,7 +109,6 @@ if __name__ == "__main__":
             network = load_part(network, pretrained_resnet18.state_dict())
             
             epochs = 30
-            # net = data_model[InD_Dataset]()
             cifar10_train(network = network, trloader = trloader, epochs = epochs, verbal=True)
         else:
             epochs = 5
@@ -190,16 +194,20 @@ if __name__ == "__main__":
     # Mahalanobis
     if 3 in methods:
         net_type = 'densenet'
-        gpu = 0
+        
         Generate_Maha(net_type, InD_Dataset, trloader, tsloader, OOD_Dataset, OOD_loaders, gpu = 0, num_classes = 10)
 
 
     # ODIN
     if 4 in methods:
-        None
+        if InD_Dataset == "Cifar_10":
+            net_ODIN = torch.load("ODIN/models/densnet_Cifar_10.pth")
+        else:
+            net_ODIN = data_model[InD_Dataset]()
+        criterion_ODIN = nn.CrossEntropyLoss()
 
-
-
+        testData_ODIN(net_ODIN, criterion_ODIN, gpu, trloader, OODloader, InD_Dataset,
+                      noiseMagnitude1 = 0.0014, temper = 1000)
 
 
 
