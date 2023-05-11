@@ -206,7 +206,7 @@ if __name__ == "__main__":
 
             if InD_Dataset == "Cifar_10":
                 net_ODIN = DenseNet3(depth=100, num_classes=int(10))
-                net_ODIN = model.load_state_dict(torch.load("ODIN/models/densenet_Cifar_10.pth"))
+                net_ODIN.load_state_dict(torch.load("ODIN/models/densenet_Cifar_10.pth"))
                 # densenet = torch.load("ODIN/models/densenet_Cifar_10.pth")
             else:
                 net_ODIN = data_model[InD_Dataset]()
