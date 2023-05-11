@@ -156,7 +156,7 @@ if __name__ == "__main__":
         if InD_Dataset == 'Cifar_10':
             None
             for ood_set in OOD_sets:
-                train_model_cifar(train_set, test_set)
+                train_model_cifar(train_set, test_set, ood_set)
         else:
             l_gradient_penalties = [0.0]
             length_scales = [0.1]
