@@ -173,6 +173,7 @@ if __name__ == "__main__":
 
                     for _ in range(repetition):
                         print(" ### NEW MODEL ### ")
+                        print("OOD sets: ", OOD_Dataset)
                         print("train with parameters:", l_gradient_penalty, length_scale)
                         model, val_accuracy, test_accuracy = train_model(
                             l_gradient_penalty, length_scale, final_model, train_set, test_set
