@@ -35,10 +35,10 @@ def train_model(l_gradient_penalty, length_scale, final_model, dataset, test_dat
         val_dataset = test_dataset
     else:
         # modify
-        # train_dataset = torch.utils.data.Subset(dataset, indices=idx[:55000])
-        # val_dataset = torch.utils.data.Subset(dataset, indices=idx[55000:])
-        train_dataset = torch.utils.data.Subset(dataset, indices=idx[:500])
-        val_dataset = torch.utils.data.Subset(dataset, indices=idx[500:])
+        train_dataset = torch.utils.data.Subset(dataset, indices=idx[:55000])
+        val_dataset = torch.utils.data.Subset(dataset, indices=idx[55000:])
+        # train_dataset = torch.utils.data.Subset(dataset, indices=idx[:500])
+        # val_dataset = torch.utils.data.Subset(dataset, indices=idx[500:])
 
 
         

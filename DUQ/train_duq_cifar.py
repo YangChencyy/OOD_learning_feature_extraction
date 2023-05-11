@@ -24,16 +24,16 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def train_model_cifar(
     dataset, test_dataset,
-    architecture,
-    batch_size,
-    length_scale,
-    centroid_size,
-    learning_rate,
-    l_gradient_penalty,
-    gamma,
-    weight_decay,
-    final_model,
-    output_dir,
+    architecture = 'ResNet18',
+    batch_size = 128,
+    length_scale = 0.1,
+    centroid_size = None,
+    learning_rate = 0.05,
+    l_gradient_penalty = 0.75,
+    gamma = 0.999,
+    weight_decay = 5e-4,
+    final_model = False,
+    output_dir = 'ODIN/results',
 ):
     writer = SummaryWriter(log_dir=f"runs/{output_dir}")
 
@@ -53,6 +53,7 @@ def train_model_cifar(
         train_dataset = torch.utils.data.Subset(dataset, idx[:val_size])
         val_dataset = torch.utils.data.Subset(dataset, idx[val_size:])
 
+        #?
         val_dataset.transform = (
             test_dataset.transform
         )  # Test time preprocessing for validation

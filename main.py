@@ -42,8 +42,8 @@ if __name__ == "__main__":
     methods = [4]
     
     num_classes = 10
-    train_batch_size = 64
-    test_batch_size = 64
+    train_batch_size = 128
+    test_batch_size = 128
 
     InD_Dataset = 'Cifar_10'
     if InD_Dataset == 'MNIST':
@@ -206,7 +206,8 @@ if __name__ == "__main__":
 
             if InD_Dataset == "Cifar_10":
                 net_ODIN = DenseNet3(depth=100, num_classes=int(10))
-                net_ODIN = torch.load("ODIN/models/densenet_Cifar_10.pth")
+                net_ODIN = model.load_state_dict(torch.load("ODIN/models/densenet_Cifar_10.pth"))
+                # densenet = torch.load("ODIN/models/densenet_Cifar_10.pth")
             else:
                 net_ODIN = data_model[InD_Dataset]()
 
