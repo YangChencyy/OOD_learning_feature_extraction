@@ -330,4 +330,4 @@ if __name__ == "__main__":
 
     pathlib.Path("runs/" + args.output_dir).mkdir(exist_ok=True)
 
-    main(**kwargs)
+    train_model_cifar(**kwargs)

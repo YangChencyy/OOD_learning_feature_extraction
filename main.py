@@ -24,6 +24,7 @@ from Multi_GP.multi_GP import *
 from Multi_GP.model_cifar import Cifar_10_Net, BasicBlock, resnet18, load_part
 
 from DUQ.train_duq_fm import train_model
+from DUQ.train_duq_cifar import train_model_cifar
 from DUQ.evaluate_ood import get_auroc_ood
 
 from Mahalanobis.OOD_Generate_Mahalanobis import Generate_Maha
@@ -39,13 +40,13 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [4]
+    methods = [2]
     
     num_classes = 10
     train_batch_size = 128
     test_batch_size = 128
 
-    InD_Dataset = 'Cifar_10'
+    InD_Dataset = 'MNIST'
     if InD_Dataset == 'MNIST':
         OOD_Dataset = ['FashionMNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
     elif InD_Dataset == 'FashionMNIST':
@@ -149,47 +150,52 @@ if __name__ == "__main__":
     # DUQ
     if 2 in methods:
         print("Method 2: DUQ")
-        l_gradient_penalties = [0.0]
-        length_scales = [0.1]
-        # length_scales = [0.05, 0.1, 0.2, 0.3, 0.5, 1.0]
+        if InD_Dataset == 'Cifar_10':
+            None
+            for ood_set in OOD_sets:
+                train_model_cifar(train_set, test_set)
+        else:
+            l_gradient_penalties = [0.0]
+            length_scales = [0.1]
+            # length_scales = [0.05, 0.1, 0.2, 0.3, 0.5, 1.0]
 
-        repetition = 1  # Increase for multiple repetitions
-        final_model = False  # set true for final model to train on full train set
+            repetition = 1  # Increase for multiple repetitions
+            final_model = False  # set true for final model to train on full train set
 
-        results = {}
+            results = {}
 
-        for l_gradient_penalty in l_gradient_penalties:
-            for length_scale in length_scales:
-                val_accuracies = []
-                test_accuracies = []
-                roc_aucs_mnist = []
-                roc_aucs_notmnist = []
+            for l_gradient_penalty in l_gradient_penalties:
+                for length_scale in length_scales:
+                    val_accuracies = []
+                    test_accuracies = []
+                    roc_aucs_mnist = []
+                    roc_aucs_notmnist = []
 
-                for _ in range(repetition):
-                    print(" ### NEW MODEL ### ", l_gradient_penalty, length_scale)
-                    model, val_accuracy, test_accuracy = train_model(
-                        l_gradient_penalty, length_scale, final_model, train_set, test_set
-                    )
-                    # accuracy, roc_auc_mnist = get_fashionmnist_mnist_ood(model)
-                    # _, roc_auc_notmnist = get_fashionmnist_notmnist_ood(model)
+                    for _ in range(repetition):
+                        print(" ### NEW MODEL ### ", l_gradient_penalty, length_scale)
+                        model, val_accuracy, test_accuracy = train_model(
+                            l_gradient_penalty, length_scale, final_model, train_set, test_set
+                        )
+                        # accuracy, roc_auc_mnist = get_fashionmnist_mnist_ood(model)
+                        # _, roc_auc_notmnist = get_fashionmnist_notmnist_ood(model)
 
-                    for ood_set in OOD_sets:
-                        accuracy, roc_auc_mnist = get_auroc_ood(test_set, ood_set, model)
+                        for ood_set in OOD_sets:
+                            accuracy, roc_auc_mnist = get_auroc_ood(test_set, ood_set, model)
 
-                        val_accuracies.append(val_accuracy)
-                        test_accuracies.append(test_accuracy)
-                        roc_aucs_mnist.append(roc_auc_mnist)
-                    #roc_aucs_notmnist.append(roc_auc_notmnist)
+                            val_accuracies.append(val_accuracy)
+                            test_accuracies.append(test_accuracy)
+                            roc_aucs_mnist.append(roc_auc_mnist)
+                        #roc_aucs_notmnist.append(roc_auc_notmnist)
 
-                results[f"lgp{l_gradient_penalty}_ls{length_scale}"] = [
-                    (np.mean(val_accuracies), np.std(val_accuracies)),
-                    (np.mean(test_accuracies), np.std(test_accuracies)),
-                    (np.mean(roc_aucs_mnist), np.std(roc_aucs_mnist)),
-                    (np.mean(roc_aucs_notmnist), np.std(roc_aucs_notmnist)),
-                ]
-                print(results[f"lgp{l_gradient_penalty}_ls{length_scale}"])
+                    results[f"lgp{l_gradient_penalty}_ls{length_scale}"] = [
+                        (np.mean(val_accuracies), np.std(val_accuracies)),
+                        (np.mean(test_accuracies), np.std(test_accuracies)),
+                        (np.mean(roc_aucs_mnist), np.std(roc_aucs_mnist)),
+                        (np.mean(roc_aucs_notmnist), np.std(roc_aucs_notmnist)),
+                    ]
+                    print(results[f"lgp{l_gradient_penalty}_ls{length_scale}"])
 
-        print(results)
+            print(results)
 
 
 
