@@ -17,13 +17,13 @@ from ignite.contrib.handlers import ProgressBar
 from DUQ.utils.wide_resnet import WideResNet
 from DUQ.utils.resnet_duq import ResNet_DUQ
 from DUQ.utils.datasets import all_datasets
-from DUQ.utils.evaluate_ood import get_cifar_svhn_ood, get_auroc_classification
+from DUQ.utils.evaluate_ood import get_auroc_ood, get_auroc_classification
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def train_model_cifar(
-    dataset, test_dataset,
+    dataset, test_dataset, oodset,
     architecture = 'ResNet18',
     batch_size = 128,
     length_scale = 0.1,
@@ -211,7 +211,7 @@ def train_model_cifar(
         writer.add_scalar("Loss/train", loss, trainer.state.epoch)
 
         if trainer.state.epoch > (epochs - 5):
-            accuracy, auroc = get_cifar_svhn_ood(model)
+            accuracy, auroc = get_auroc_ood(test_dataset, oodset, model)
             print(f"Test Accuracy: {accuracy}, AUROC: {auroc}")
             writer.add_scalar("OoD/test_accuracy", accuracy, trainer.state.epoch)
             writer.add_scalar("OoD/roc_auc", auroc, trainer.state.epoch)
