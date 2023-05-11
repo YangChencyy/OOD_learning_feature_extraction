@@ -38,7 +38,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [1]
+    methods = [4]
     
     num_classes = 10
     train_batch_size = 64
@@ -102,14 +102,15 @@ if __name__ == "__main__":
             os.makedirs(path)
             print("The new directory is created!")
 
+        net = None
         if InD_Dataset == 'Cifar_10':
             pretrained_resnet18 = resnet18(pretrained=True)
-            network = data_model[InD_Dataset](BasicBlock, [2, 2, 2, 2])
+            net = data_model[InD_Dataset](BasicBlock, [2, 2, 2, 2])
             # network.load_sta(torch.load('path'))
-            network = load_part(network, pretrained_resnet18.state_dict())
+            net = load_part(network, pretrained_resnet18.state_dict())
             
             epochs = 30
-            cifar10_train(network = network, trloader = trloader, epochs = epochs, optim = 'SGD', verbal=True)
+            cifar10_train(network = net, trloader = trloader, epochs = epochs, optim = 'SGD', verbal=True)
         else:
             epochs = 5
             net = data_model[InD_Dataset]()
