@@ -109,7 +109,7 @@ if __name__ == "__main__":
             network = load_part(network, pretrained_resnet18.state_dict())
             
             epochs = 30
-            cifar10_train(network = network, trloader = trloader, epochs = epochs, optim == 'SGD', verbal=True)
+            cifar10_train(network = network, trloader = trloader, epochs = epochs, optim = 'SGD', verbal=True)
         else:
             epochs = 5
             net = data_model[InD_Dataset]()
