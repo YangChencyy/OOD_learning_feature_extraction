@@ -108,7 +108,7 @@ if __name__ == "__main__":
             pretrained_resnet18 = resnet18(pretrained=True)
             net = data_model[InD_Dataset](BasicBlock, [2, 2, 2, 2])
             # network.load_sta(torch.load('path'))
-            net = load_part(network, pretrained_resnet18.state_dict())
+            net = load_part(net, pretrained_resnet18.state_dict())
             
             epochs = 30
             cifar10_train(network = net, trloader = trloader, epochs = epochs, optim = 'SGD', verbal=True)
@@ -205,7 +205,7 @@ if __name__ == "__main__":
         for i in range(len(OOD_sets)):
 
             if InD_Dataset == "Cifar_10":
-                net_ODIN = DenseNet3()
+                net_ODIN = DenseNet3(depth=100, num_classes=10)
                 net_ODIN = torch.load("ODIN/models/densenet_Cifar_10.pth")
             else:
                 net_ODIN = data_model[InD_Dataset]()
