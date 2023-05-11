@@ -7,6 +7,14 @@ import torchvision.datasets as datasets
 from torchvision.transforms import Grayscale
 import os
 
+
+# def grayscale_to_3d(image):
+#     gray = np.dot(image[...,:3], [0.333, 0.333, 0.334])
+#     gray_3d = np.expand_dims(gray, axis=3)
+#     return gray_3d
+
+
+
 # 1*28*28
 def Fashion_MNIST_dataset(batch_size, test_batch_size):
     
@@ -37,17 +45,20 @@ def MNIST_dataset(batch_size, test_batch_size):
     return train_set, test_set, train_loader, test_loader
 
 # 3*32*32
-def Cifar_10_dataset(batch_size, test_batch_size, into_grey = False, resize_s = 0):
-    if (not into_grey) and (resize_s == 0):
-        transform = transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-    elif (into_grey) and (resize_s != 0):
-        transform = transforms.Compose([transforms.Resize(resize_s),Grayscale(num_output_channels=1),transforms.ToTensor(),transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-    elif (not into_grey) and (resize_s != 0):
-        transform = transforms.Compose([transforms.Resize(resize_s),transforms.ToTensor(),transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+def Cifar_10_dataset(batch_size, test_batch_size, size = 32, into_grey = False):
+    if into_grey:
+        transform = transforms.Compose([transforms.Resize(size),
+                                        transforms.Grayscale(),
+                                        transforms.ToTensor(),
+                                        transforms.Normalize((0.5,), (0.5,))
+                                        ])
     else:
-        transform = transforms.Compose([Grayscale(num_output_channels=1),transforms.ToTensor(),transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-    #normalizer = transforms.Normalize(mean=[x/255.0 for x in [125.3, 123.0, 113.9]],
-                                         #std=[x/255.0 for x in [63.0, 62.1, 66.7]])
+        transform = transforms.Compose([transforms.Resize(size),
+                                        transforms.ToTensor(),
+                                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+                                        ])
+
+
     train_set = datasets.CIFAR10('./data/cifar10', train=True,download=True,
                                                                 transform=transform)
     test_set = datasets.CIFAR10('./datasets/cifar10', train=False,download=True, 
@@ -59,6 +70,7 @@ def Cifar_10_dataset(batch_size, test_batch_size, into_grey = False, resize_s = 
                                              batch_size=test_batch_size, shuffle=True)
     
     return train_set, test_set, train_loader, val_loader
+
 
 # 3*32*32
 def SVHN_dataset(batch_size, test_batch_size):
@@ -105,5 +117,63 @@ def TinyImagenet_c_dataset(batch_size, test_batch_size):
     
     
     
+if __name__ == "__main__":   
+    a_m, b_m, c_m, d_m = MNIST_dataset(batch_size = 64, test_batch_size = 64)
+    a_c, b_c, c_c, d_c = Cifar_10_dataset(batch_size = 64, test_batch_size = 64, size = 28, into_grey = True)
+    # print(a)
+    # print(a.data.shape)
+    # a.data = grayscale_to_3d(a.data)
+    # print(a.data.shape)
+
+    i = 0
+    for data, target in d_m:
+        print(data.shape)
+        if i == 0: 
+            break
+
+    for data, target in d_c:
+        print(data.shape)
+        if i == 0: 
+            break
+    # a, b, c, d = Cifar_10_dataset(batch_size = 64, test_batch_size = 64, size = 28, into_grey = True)
+    # # print(a)
+    # print(a.data.shape)
+    # a.data = grayscale_to_3d(a.data)
+    # print(a.data.shape)
+
+    # i = 0
+    # for data, target in d:
+    #     print(data.shape)
+    #     if i == 0: 
+    #         break
+
+    # kk = np.arange(1, 28).reshape((3, 3, 3))
+    # print(kk.shape)
+    # print(grayscale_to_3d(kk))
+    # print(grayscale_to_3d(kk).shape)
+    # train_datasets, test_datasets, train_loader, test_loader =  TinyImagenet_r_dataset(batch_size = 64, test_batch_size = 64, into_grey = False, resize_s = 28)
+    # i = 0
+    # for data, target in d:
+    #     print(data.shape)
+    #     if i == 0: 
+    #         break
+    # print("HAHA2",a.data.shape)
+    # i = 0
+    # # for data, target in test_loader:
+    # #     print(data.shape)
+    # #     if i == 0: 
+    # #         break
+    # image, label = a[0]
+
+    # # Convert the image to a numpy array and transpose it to (height, width, channel)
+    # image = np.array(image).transpose((1, 2, 0))
+
+    # # Plot the grayscale image
+    # # plt.imshow(image.squeeze(), cmap='gray')
+    # # image = Image.fromarray(np.uint8(image.squeeze() * 255), mode='L')
+    # # image.save('grayscale_image.png')
+
+    # plt.imshow(image.squeeze())
+    # plt.savefig('non-grayscale-image.png')
+    # # Save the image
     
-    s

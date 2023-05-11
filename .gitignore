@@ -4,4 +4,4 @@ data/cifar10/
 data/FashionMNIST/
 data/MNIST/
 data/svhn/
-store_data/
+Multi_GP/store_data/

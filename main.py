@@ -35,16 +35,14 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 if __name__ == "__main__":
     methods = [1]
-
-    into_grey = False
-    resize = 28
     
     num_classes = 10
     train_batch_size = 64
     test_batch_size = 64
+
     InD_Dataset = 'Cifar_10'
     parent_dir = os.getcwd()
-    directory = 'store_data/' + InD_Dataset
+    directory = 'Multi_GP/store_data/' + InD_Dataset
     path = os.path.join(parent_dir, directory)
     isExist = os.path.exists(path)
     if not isExist:
