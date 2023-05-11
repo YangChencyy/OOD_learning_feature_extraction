@@ -46,19 +46,6 @@ if __name__ == "__main__":
     train_batch_size = 128
     test_batch_size = 128
 
-    InD_Dataset = 'MNIST'
-    if InD_Dataset == 'MNIST':
-        OOD_Dataset = ['FashionMNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
-    elif InD_Dataset == 'FashionMNIST':
-        OOD_Dataset = ['MNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
-    elif InD_Dataset == 'Cifar_10':
-        OOD_Dataset = ['SVHN', 'Imagenet_r', 'Imagenet_c']
-    
-    
-
-    # OOD_Dataset = ['FashionMNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
-    OOD_Dataset = ['SVHN']
-
     data_dic = {
         'MNIST': MNIST_dataset,
         'FashionMNIST': Fashion_MNIST_dataset, 
@@ -76,19 +63,31 @@ if __name__ == "__main__":
     }
 
 
-    train_set, test_set, trloader, tsloader = data_dic[InD_Dataset](batch_size = train_batch_size, test_batch_size = test_batch_size)
-    # Get all labels of training data for GP
-    InD_label = []
-    for i in range(len(train_set)):
-        InD_label.append(train_set.__getitem__(i)[1])
-
-
-    # Get all OOD datasets
+    InD_Dataset = 'MNIST'
+    train_set, test_set, trloader, tsloader = data_dic[InD_Dataset](batch_size = train_batch_size, 
+                                                                    test_batch_size = test_batch_size)
     OOD_sets, OOD_loaders = [], []
-    for dataset in OOD_Dataset:
-        _, OOD_set, _, OODloader = data_dic[dataset](batch_size = train_batch_size, test_batch_size = test_batch_size)
-        OOD_sets.append(OOD_set)
-        OOD_loaders.append(OODloader)
+    if InD_Dataset == 'Cifar_10':
+        OOD_Dataset = ['SVHN', 'Imagenet_r', 'Imagenet_c']
+
+        # Get all OOD datasets     
+        for dataset in OOD_Dataset:
+            _, OOD_set, _, OODloader = data_dic[dataset](batch_size = train_batch_size, 
+                                                         test_batch_size = test_batch_size)
+            OOD_sets.append(OOD_set)
+            OOD_loaders.append(OODloader)
+    else:
+        if InD_Dataset == 'MNIST':
+            OOD_Dataset = ['FashionMNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
+        elif InD_Dataset == 'FashionMNIST':
+            OOD_Dataset = ['MNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
+        # Get all OOD datasets     
+        for dataset in OOD_Dataset:
+            _, OOD_set, _, OODloader = data_dic[dataset](batch_size = train_batch_size, 
+                                                         test_batch_size = test_batch_size, into_grey = True)
+            OOD_sets.append(OOD_set)
+            OOD_loaders.append(OODloader)
+
 
     # multi_GP
     if 1 in methods:
@@ -103,6 +102,10 @@ if __name__ == "__main__":
             # Create a new directory because it does not exist
             os.makedirs(path)
             print("The new directory is created!")
+        # Get all labels of training data for GP
+        InD_label = []
+        for i in range(len(train_set)):
+            InD_label.append(train_set.__getitem__(i)[1])
 
         net = None
         if InD_Dataset == 'Cifar_10':

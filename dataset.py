@@ -16,7 +16,7 @@ import os
 
 
 # 1*28*28
-def Fashion_MNIST_dataset(batch_size, test_batch_size):
+def Fashion_MNIST_dataset(batch_size, test_batch_size, into_grey = False):
     
     train_set = torchvision.datasets.FashionMNIST("./data", download=True, transform=
                                                 transforms.Compose([transforms.ToTensor()]))
@@ -30,7 +30,7 @@ def Fashion_MNIST_dataset(batch_size, test_batch_size):
     return train_set, test_set, train_loader, test_loader
 
 # 1*28*28
-def MNIST_dataset(batch_size, test_batch_size):
+def MNIST_dataset(batch_size, test_batch_size, into_grey = False):
     
     train_set = torchvision.datasets.MNIST("./data", download=True, transform=
                                                 transforms.Compose([transforms.ToTensor()]))
@@ -45,16 +45,15 @@ def MNIST_dataset(batch_size, test_batch_size):
     return train_set, test_set, train_loader, test_loader
 
 # 3*32*32
-def Cifar_10_dataset(batch_size, test_batch_size, size = 32, into_grey = False):
+def Cifar_10_dataset(batch_size, test_batch_size, into_grey = False):
     if into_grey:
-        transform = transforms.Compose([transforms.Resize(size),
+        transform = transforms.Compose([transforms.Resize(28),
                                         transforms.Grayscale(),
                                         transforms.ToTensor(),
                                         transforms.Normalize((0.5,), (0.5,))
                                         ])
     else:
-        transform = transforms.Compose([transforms.Resize(size),
-                                        transforms.ToTensor(),
+        transform = transforms.Compose([transforms.ToTensor(),
                                         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                                         ])
 
@@ -73,8 +72,18 @@ def Cifar_10_dataset(batch_size, test_batch_size, size = 32, into_grey = False):
 
 
 # 3*32*32
-def SVHN_dataset(batch_size, test_batch_size):
-    transform = transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+def SVHN_dataset(batch_size, test_batch_size, into_grey = False):
+    if into_grey:
+        transform = transforms.Compose([transforms.Resize(28),
+                                        transforms.Grayscale(),
+                                        transforms.ToTensor(),
+                                        transforms.Normalize((0.5,), (0.5,))
+                                        ])
+    else:
+        transform = transforms.Compose([transforms.ToTensor(),
+                                        transforms.Normalize((0.5,), (0.5,))
+                                        ])
+    
     train_set = datasets.SVHN('./data/svhn/', split='train',transform=transform,
                                                          download=True)
     test_set = datasets.SVHN('./data/svhn/', split='test', transform=transform, 
@@ -88,10 +97,18 @@ def SVHN_dataset(batch_size, test_batch_size):
     return train_set, test_set, train_loader, val_loader
 
 # 3*64*64
-def TinyImagenet_r_dataset(batch_size, test_batch_size):
-    transform = transforms.Compose([transforms.Resize(32),
-                                    transforms.ToTensor(),
-                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+def TinyImagenet_r_dataset(batch_size, test_batch_size, into_grey = False):
+    if into_grey:
+        transform = transforms.Compose([transforms.Resize(28),
+                                        transforms.Grayscale(),
+                                        transforms.ToTensor(),
+                                        transforms.Normalize((0.5,), (0.5,))
+                                        ])
+    else:
+        transform = transforms.Compose([transforms.Resize(32),
+                                        transforms.ToTensor(),
+                                        transforms.Normalize((0.5,), (0.5,))
+                                        ])
     
     train_datasets = datasets.ImageFolder(os.path.join('./data/tiny-imagenet-200', 'train'), transform=transform) 
     train_loader = torch.utils.data.DataLoader(train_datasets, batch_size=batch_size, shuffle=True)
@@ -102,10 +119,18 @@ def TinyImagenet_r_dataset(batch_size, test_batch_size):
     return train_datasets, test_datasets, train_loader, test_loader
 
 # 3*64*64
-def TinyImagenet_c_dataset(batch_size, test_batch_size):
-    transform = transforms.Compose([transforms.RandomCrop(32),
-                                    transforms.ToTensor(),
-                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+def TinyImagenet_c_dataset(batch_size, test_batch_size, into_grey = False):
+    if into_grey:
+        transform = transforms.Compose([transforms.Resize(28),
+                                        transforms.Grayscale(),
+                                        transforms.ToTensor(),
+                                        transforms.Normalize((0.5,), (0.5,))
+                                        ])
+    else:
+        transform = transforms.Compose([transforms.Resize(32),
+                                        transforms.ToTensor(),
+                                        transforms.Normalize((0.5,), (0.5,))
+                                        ])
     
     train_datasets = datasets.ImageFolder(os.path.join('./data/tiny-imagenet-200', 'train'), transform=transform) 
     train_loader = torch.utils.data.DataLoader(train_datasets, batch_size=batch_size, shuffle=True)
@@ -135,45 +160,3 @@ if __name__ == "__main__":
         print(data.shape)
         if i == 0: 
             break
-    # a, b, c, d = Cifar_10_dataset(batch_size = 64, test_batch_size = 64, size = 28, into_grey = True)
-    # # print(a)
-    # print(a.data.shape)
-    # a.data = grayscale_to_3d(a.data)
-    # print(a.data.shape)
-
-    # i = 0
-    # for data, target in d:
-    #     print(data.shape)
-    #     if i == 0: 
-    #         break
-
-    # kk = np.arange(1, 28).reshape((3, 3, 3))
-    # print(kk.shape)
-    # print(grayscale_to_3d(kk))
-    # print(grayscale_to_3d(kk).shape)
-    # train_datasets, test_datasets, train_loader, test_loader =  TinyImagenet_r_dataset(batch_size = 64, test_batch_size = 64, into_grey = False, resize_s = 28)
-    # i = 0
-    # for data, target in d:
-    #     print(data.shape)
-    #     if i == 0: 
-    #         break
-    # print("HAHA2",a.data.shape)
-    # i = 0
-    # # for data, target in test_loader:
-    # #     print(data.shape)
-    # #     if i == 0: 
-    # #         break
-    # image, label = a[0]
-
-    # # Convert the image to a numpy array and transpose it to (height, width, channel)
-    # image = np.array(image).transpose((1, 2, 0))
-
-    # # Plot the grayscale image
-    # # plt.imshow(image.squeeze(), cmap='gray')
-    # # image = Image.fromarray(np.uint8(image.squeeze() * 255), mode='L')
-    # # image.save('grayscale_image.png')
-
-    # plt.imshow(image.squeeze())
-    # plt.savefig('non-grayscale-image.png')
-    # # Save the image
-    
