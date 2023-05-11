@@ -17,7 +17,7 @@ from ignite.contrib.handlers import ProgressBar
 from DUQ.utils.wide_resnet import WideResNet
 from DUQ.utils.resnet_duq import ResNet_DUQ
 # from DUQ.utils.datasets import all_datasets
-from DUQ.utils.evaluate_ood import get_auroc_ood, get_auroc_classification
+from DUQ.evaluate_ood import get_auroc_ood, get_auroc_classification
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
