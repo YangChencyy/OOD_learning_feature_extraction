@@ -41,14 +41,14 @@ if __name__ == "__main__":
     test_batch_size = 64
 
     InD_Dataset = 'Cifar_10'
-    parent_dir = os.getcwd()
-    directory = 'Multi_GP/store_data/' + InD_Dataset
-    path = os.path.join(parent_dir, directory)
-    isExist = os.path.exists(path)
-    if not isExist:
-        # Create a new directory because it does not exist
-        os.makedirs(path)
-        print("The new directory is created!")
+    if InD_Dataset == 'MNIST':
+        OOD_Dataset = ['FashionMNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
+    elif InD_Dataset == 'FashionMNIST':
+        OOD_Dataset = ['MNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
+    elif InD_Dataset == 'Cifar_10':
+        OOD_Dataset = ['SVHN', 'Imagenet_r', 'Imagenet_c']
+    
+    
 
     # OOD_Dataset = ['FashionMNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
     OOD_Dataset = ['SVHN']
@@ -88,6 +88,15 @@ if __name__ == "__main__":
     # multi_GP
     if 1 in methods:
         print("Method 1: Multi-GP")
+        parent_dir = os.getcwd()
+        directory = 'Multi_GP/store_data/' + InD_Dataset
+        path = os.path.join(parent_dir, directory)
+        isExist = os.path.exists(path)
+        if not isExist:
+            # Create a new directory because it does not exist
+            os.makedirs(path)
+            print("The new directory is created!")
+
         if InD_Dataset == 'Cifar_10':
             pretrained_resnet18 = resnet18(pretrained=True)
             network = data_model[InD_Dataset](BasicBlock, [2, 2, 2, 2])
