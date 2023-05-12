@@ -26,7 +26,7 @@ def prepare_ood_datasets(true_dataset, ood_dataset):
     )
 
     concat_datasets = torch.utils.data.ConcatDataset(datasets)
-    print(concat_datasets[0])
+    # print(concat_datasets[0])
 
     dataloader = torch.utils.data.DataLoader(
         concat_datasets, batch_size=500, shuffle=False, num_workers=4, pin_memory=False
