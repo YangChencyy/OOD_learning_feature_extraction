@@ -19,7 +19,7 @@ def prepare_ood_datasets(true_dataset, ood_dataset):
     ood_dataset.transform = true_dataset.transform
 
     datasets = [true_dataset, ood_dataset]
-    print(true_dataset[0].size(), ood_dataset[0].size)
+    print(true_dataset[0][0].size(), ood_dataset[0][0].size)
 
     anomaly_targets = torch.cat(
         (torch.zeros(len(true_dataset)), torch.ones(len(ood_dataset)))
