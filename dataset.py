@@ -153,8 +153,8 @@ if __name__ == "__main__":
     a_m, b_m, c_m, d_m = MNIST_dataset(batch_size = 64, test_batch_size = 64)
     a_c, b_c, c_c, d_c = Cifar_10_dataset(batch_size = 64, test_batch_size = 64, into_grey = True)
     # print(a)
-    print(a_m[0].size())
-    print(a_c[0].size())
+    print(b_m[0][0].size())
+    print(b_c[0][0].size())
 
     # a.data = grayscale_to_3d(a.data)
     # print(a.data.shape)

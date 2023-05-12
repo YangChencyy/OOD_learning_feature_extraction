@@ -40,7 +40,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [2]
+    methods = []
     
     num_classes = 10
     train_batch_size = 128
@@ -87,6 +87,7 @@ if __name__ == "__main__":
             _, OOD_set, _, OODloader = data_dic[dataset](batch_size = train_batch_size, 
                                                          test_batch_size = test_batch_size, into_grey = True)
             OOD_sets.append(OOD_set)
+            print(dataset, OOD_set[0][0].size())
             OOD_loaders.append(OODloader)
 
 

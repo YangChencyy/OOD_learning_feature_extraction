@@ -15,8 +15,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def prepare_ood_datasets(true_dataset, ood_dataset):
-    # Preprocess OoD dataset same as true dataset
-    ood_dataset.transform = true_dataset.transform
+    # # Preprocess OoD dataset same as true dataset
+    # ood_dataset.transform = true_dataset.transform
 
     datasets = [true_dataset, ood_dataset]
     print(true_dataset[0][0].size(), ood_dataset[0][0].size())
