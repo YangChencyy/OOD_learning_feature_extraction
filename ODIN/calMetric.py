@@ -32,9 +32,9 @@ def tpr95(name):
 
     # calculate our algorithm
     T = 1000
-    cifar = np.loadtxt('./softmax_scores/confidence_Our_In.txt', delimiter=',')
+    cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
-        './softmax_scores/confidence_Our_Out.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
     start = 0.1
     end = 0.12
     # if name == "CIFAR-10":
@@ -95,9 +95,9 @@ def auprIn(name):
     # calculate the AUPR
     # calculate our algorithm
     T = 1000
-    cifar = np.loadtxt('./softmax_scores/confidence_Our_In.txt', delimiter=',')
+    cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
-        './softmax_scores/confidence_Our_Out.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
     start = 0.1
     end = 0.12
     # if name == "CIFAR-10":
@@ -131,9 +131,9 @@ def auprOut(name):
     # calculate the AUPR
     # calculate our algorithm
     T = 1000
-    cifar = np.loadtxt('./softmax_scores/confidence_Our_In.txt', delimiter=',')
+    cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
-        './softmax_scores/confidence_Our_Out.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
     start = 0.1
     end = 0.12
     # if name == "CIFAR-10":
@@ -165,9 +165,9 @@ def detection(name):
     # calculate the minimum detection error
     # calculate our algorithm
     T = 1000
-    cifar = np.loadtxt('./softmax_scores/confidence_Our_In.txt', delimiter=',')
+    cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
-        './softmax_scores/confidence_Our_Out.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
     start = 0.1
     end = 0.12
     # if name == "CIFAR-10":
