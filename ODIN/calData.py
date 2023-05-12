@@ -28,8 +28,8 @@ from scipy import misc
 
 def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataName, noiseMagnitude1, temper):
     t0 = time.time()
-    f1 = open("./softmax_scores/confidence_Base_In.txt", 'w')
-    f2 = open("./softmax_scores/confidence_Base_Out.txt", 'w')
+    # f1 = open("./softmax_scores/confidence_Base_In.txt", 'w')
+    # f2 = open("./softmax_scores/confidence_Base_Out.txt", 'w')
     g1 = open("./softmax_scores/confidence_Our_In.txt", 'w')
     g2 = open("./softmax_scores/confidence_Our_Out.txt", 'w')
     N = 10000
@@ -53,8 +53,8 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         nnOutputs = nnOutputs[0]
         nnOutputs = nnOutputs - np.max(nnOutputs)
         nnOutputs = np.exp(nnOutputs)/np.sum(np.exp(nnOutputs))
-        f1.write("{}, {}, {}\n".format(
-            temper, noiseMagnitude1, np.max(nnOutputs)))
+        # f1.write("{}, {}, {}\n".format(
+        #     temper, noiseMagnitude1, np.max(nnOutputs)))
 
         # Using temperature scaling
         outputs = outputs / temper
@@ -110,8 +110,8 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         nnOutputs = nnOutputs[0]
         nnOutputs = nnOutputs - np.max(nnOutputs)
         nnOutputs = np.exp(nnOutputs)/np.sum(np.exp(nnOutputs))
-        f2.write("{}, {}, {}\n".format(
-            temper, noiseMagnitude1, np.max(nnOutputs)))
+        # f2.write("{}, {}, {}\n".format(
+        #     temper, noiseMagnitude1, np.max(nnOutputs)))
 
         # Using temperature scaling
         outputs = outputs / temper
