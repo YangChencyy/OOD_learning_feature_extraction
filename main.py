@@ -40,7 +40,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [2]
+    methods = [4]
     
     num_classes = 10
     train_batch_size = 128
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     }
 
 
-    InD_Dataset = 'Cifar_10'
+    InD_Dataset = 'MNIST'
     train_set, test_set, trloader, tsloader = data_dic[InD_Dataset](batch_size = train_batch_size, 
                                                                     test_batch_size = test_batch_size)
     OOD_sets, OOD_loaders = [], []
@@ -76,6 +76,7 @@ if __name__ == "__main__":
                                                          test_batch_size = test_batch_size)
             OOD_sets.append(OOD_set)
             OOD_loaders.append(OODloader)
+
     else:
         if InD_Dataset == 'MNIST':
             OOD_Dataset = ['FashionMNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
@@ -88,6 +89,8 @@ if __name__ == "__main__":
             OOD_sets.append(OOD_set)
             OOD_loaders.append(OODloader)
 
+
+    print("OOD sets: ", OOD_Dataset)
 
     # multi_GP
     if 1 in methods:
@@ -154,9 +157,9 @@ if __name__ == "__main__":
     if 2 in methods:
         print("Method 2: DUQ")
         if InD_Dataset == 'Cifar_10':
-            None
-            for ood_set in OOD_sets:
-                train_model_cifar(train_set, test_set, ood_set)
+            for i in range(len(OOD_Dataset)):
+                print("OOD:", OOD_Dataset[i])
+                train_model_cifar(train_set, test_set, OOD_sets[i])
         else:
             l_gradient_penalties = [0.0]
             length_scales = [0.1]
@@ -176,7 +179,7 @@ if __name__ == "__main__":
 
                     for _ in range(repetition):
                         print(" ### NEW MODEL ### ")
-                        print("OOD sets: ", OOD_Dataset)
+                        
                         print("train with parameters:", l_gradient_penalty, length_scale)
                         model, val_accuracy, test_accuracy = train_model(
                             l_gradient_penalty, length_scale, final_model, train_set, test_set

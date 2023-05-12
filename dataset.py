@@ -57,9 +57,11 @@ def Cifar_10_dataset(batch_size, test_batch_size, into_grey = False):
                                         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                                         ])
 
-
+    a = datasets.CIFAR10('./data/cifar10', train=True,download=True)
+    print(a.data.shape)
     train_set = datasets.CIFAR10('./data/cifar10', train=True,download=True,
                                                                 transform=transform)
+    print(train_set.data.shape)
     test_set = datasets.CIFAR10('./datasets/cifar10', train=False,download=True, 
                                                               transform=transform)
     train_loader = torch.utils.data.DataLoader(train_set,
@@ -67,6 +69,11 @@ def Cifar_10_dataset(batch_size, test_batch_size, into_grey = False):
 
     val_loader = torch.utils.data.DataLoader(test_set,
                                              batch_size=test_batch_size, shuffle=True)
+    
+    # for testing reason
+    loader = torch.utils.data.DataLoader(test_set,
+                                             batch_size=len(test_set), shuffle=True)
+    
     
     return train_set, test_set, train_loader, val_loader
 
@@ -144,9 +151,11 @@ def TinyImagenet_c_dataset(batch_size, test_batch_size, into_grey = False):
     
 if __name__ == "__main__":   
     a_m, b_m, c_m, d_m = MNIST_dataset(batch_size = 64, test_batch_size = 64)
-    a_c, b_c, c_c, d_c = Cifar_10_dataset(batch_size = 64, test_batch_size = 64, size = 28, into_grey = True)
+    a_c, b_c, c_c, d_c = Cifar_10_dataset(batch_size = 64, test_batch_size = 64, into_grey = True)
     # print(a)
-    # print(a.data.shape)
+    print(a_m[0].size())
+    print(a_c[0].size())
+
     # a.data = grayscale_to_3d(a.data)
     # print(a.data.shape)
 

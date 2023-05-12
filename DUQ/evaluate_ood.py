@@ -19,12 +19,14 @@ def prepare_ood_datasets(true_dataset, ood_dataset):
     ood_dataset.transform = true_dataset.transform
 
     datasets = [true_dataset, ood_dataset]
+    print(true_dataset[0].size(), ood_dataset[0].size)
 
     anomaly_targets = torch.cat(
         (torch.zeros(len(true_dataset)), torch.ones(len(ood_dataset)))
     )
 
     concat_datasets = torch.utils.data.ConcatDataset(datasets)
+    print(concat_datasets[0])
 
     dataloader = torch.utils.data.DataLoader(
         concat_datasets, batch_size=500, shuffle=False, num_workers=4, pin_memory=False
