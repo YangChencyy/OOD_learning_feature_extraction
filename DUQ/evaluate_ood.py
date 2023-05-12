@@ -41,11 +41,15 @@ def loop_over_dataloader(model, dataloader):
     with torch.no_grad():
         scores = []
         accuracies = []
+        i = 1
         for data, target in dataloader:
             data = data.to(device)
             target = target.to(device)
 
             output = model(data)
+            if i == 1:
+                print(data.shape)
+                i = i + 1
             kernel_distance, pred = output.max(1)
 
             accuracy = pred.eq(target)
