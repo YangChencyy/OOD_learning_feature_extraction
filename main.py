@@ -224,6 +224,7 @@ if __name__ == "__main__":
                 net_ODIN.load_state_dict(torch.load("ODIN/models/densenet_Cifar_10.pth"))
                 # densenet = torch.load("ODIN/models/densenet_Cifar_10.pth")
             else:
+                print("OOD: ", OOD_Dataset[i])
                 net_ODIN = data_model[InD_Dataset]()
 
             criterion_ODIN = nn.CrossEntropyLoss()

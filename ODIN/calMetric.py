@@ -45,6 +45,7 @@ def tpr95(name):
     #     end = 0.0104
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
+    print("Y,X", Y1.shape, X1.shape)
     Y1 = other[:, 2]
     X1 = cifar[:, 2]
     total = 0.0
