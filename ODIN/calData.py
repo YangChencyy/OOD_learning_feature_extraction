@@ -51,7 +51,7 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
 
         inputs = Variable(images.to(device), requires_grad=True)
         net1.to(device)
-        outputs = net1(inputs)
+        _, outputs = net1(inputs)
 
         # Calculating the confidence of the output, no perturbation added here, no temperature scaling used
         nnOutputs = outputs.data.cpu()
@@ -110,7 +110,7 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         images, _ = data
 
         inputs = Variable(images.cuda(CUDA_DEVICE), requires_grad=True)
-        outputs = net1(inputs)
+        _, outputs = net1(inputs)
 
         # Calculating the confidence of the output, no perturbation added here
         nnOutputs = outputs.data.cpu()
