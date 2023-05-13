@@ -62,7 +62,7 @@ if __name__ == "__main__":
     }
 
 
-    InD_Dataset = 'Cifar_10'
+    InD_Dataset = 'MNIST'
     train_set, test_set, trloader, tsloader = data_dic[InD_Dataset](batch_size = train_batch_size, 
                                                                     test_batch_size = test_batch_size)
     OOD_sets, OOD_loaders = [], []
