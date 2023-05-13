@@ -25,6 +25,9 @@ import numpy as np
 import time
 from scipy import misc
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
 
 def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataName, noiseMagnitude1, temper):
     t0 = time.time()
@@ -44,10 +47,10 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         if j < 1000:
             # print(j)
             continue
-        print("j", j)
         images, _ = data
 
-        inputs = Variable(images.cuda(CUDA_DEVICE), requires_grad=True)
+        inputs = Variable(images.to(device), requires_grad=True)
+        net1.to(device)
         outputs = net1(inputs)
 
         # Calculating the confidence of the output, no perturbation added here, no temperature scaling used
