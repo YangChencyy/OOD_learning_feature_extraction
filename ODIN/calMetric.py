@@ -58,14 +58,15 @@ def tpr95(name):
         tpr = np.sum(np.sum(X1 >= delta)) / np.float(len(X1))
         error2 = np.sum(np.sum(Y1 > delta)) / np.float(len(Y1))
         tpr_list.append(tpr)
-        if tpr <= 0.9505 and tpr >= 0.9495:
+        if tpr > 0.95:    #tpr <= 0.9505 and tpr >= 0.9495:
             fpr += error2
             total += 1
-        if total == 1:
-            print(delta)
+        # if total == 1:
+        #     print(delta)
 
     index = np.argmax(tpr_list)
     deltas = np.arange(start, end, gap)
+    print("total: ", total)
     print("delta: ", deltas[index], ", max tpr: ", tpr_list[index])
     
     fprNew = fpr/total
