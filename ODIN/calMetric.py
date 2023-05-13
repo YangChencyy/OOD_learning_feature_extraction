@@ -35,14 +35,17 @@ def tpr95(name):
     cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
         './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
-    start = 0.1
-    end = 0.12
-    # if name == "CIFAR-10":
-    #     start = 0.1
-    #     end = 0.12
-    # if name == "CIFAR-100":
-    #     start = 0.01
-    #     end = 0.0104
+
+    if name == "Cifar_10":
+        start = 0.1
+        end = 0.12
+    elif name == "MNIST":
+        start = 0.001
+        end = 0.5
+    elif name == "FashionMNIST":
+        start = 0.001
+        end = 0.5
+
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     print("Y,X", other.shape, cifar.shape)
@@ -56,6 +59,8 @@ def tpr95(name):
         if tpr <= 0.9505 and tpr >= 0.9495:
             fpr += error2
             total += 1
+        if total == 1:
+            print(delta)
     fprNew = fpr/total
 
     return fprNew
@@ -69,14 +74,17 @@ def auroc(name):
     cifar = np.loadtxt('./softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
         './softmax_scores/confidence_Our_Out.txt', delimiter=',')
-    start = 0.1
-    end = 0.12
-    # if name == "CIFAR-10":
-    #     start = 0.1
-    #     end = 0.12
-    # if name == "CIFAR-100":
-    #     start = 0.01
-    #     end = 0.0104
+    
+    if name == "Cifar_10":
+        start = 0.1
+        end = 0.12
+    elif name == "MNIST":
+        start = 0.001
+        end = 0.5
+    elif name == "FashionMNIST":
+        start = 0.001
+        end = 0.5
+
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
@@ -99,14 +107,17 @@ def auprIn(name):
     cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
         './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
-    start = 0.1
-    end = 0.12
-    # if name == "CIFAR-10":
-    #     start = 0.1
-    #     end = 0.12
-    # if name == "CIFAR-100":
-    #     start = 0.01
-    #     end = 0.0104
+    
+    if name == "Cifar_10":
+        start = 0.1
+        end = 0.12
+    elif name == "MNIST":
+        start = 0.001
+        end = 0.5
+    elif name == "FashionMNIST":
+        start = 0.001
+        end = 0.5
+
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
@@ -135,14 +146,17 @@ def auprOut(name):
     cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
         './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
-    start = 0.1
-    end = 0.12
-    # if name == "CIFAR-10":
-    #     start = 0.1
-    #     end = 0.12
-    # if name == "CIFAR-100":
-    #     start = 0.01
-    #     end = 0.0104
+    
+    if name == "Cifar_10":
+        start = 0.1
+        end = 0.12
+    elif name == "MNIST":
+        start = 0.001
+        end = 0.5
+    elif name == "FashionMNIST":
+        start = 0.001
+        end = 0.5
+
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
@@ -169,14 +183,17 @@ def detection(name):
     cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
         './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
-    start = 0.1
-    end = 0.12
-    # if name == "CIFAR-10":
-    #     start = 0.1
-    #     end = 0.12
-    # if name == "CIFAR-100":
-    #     start = 0.01
-    #     end = 0.0104
+    
+    if name == "Cifar_10":
+        start = 0.1
+        end = 0.12
+    elif name == "MNIST":
+        start = 0.001
+        end = 0.5
+    elif name == "FashionMNIST":
+        start = 0.001
+        end = 0.5
+        
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
