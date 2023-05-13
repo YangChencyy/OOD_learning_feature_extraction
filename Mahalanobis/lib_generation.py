@@ -176,8 +176,11 @@ def get_Mahalanobis_score(model, test_loader, num_classes, outf, out_flag, net_t
             gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.2023))
             gradient.index_copy_(1, torch.LongTensor([1]).cuda(), gradient.index_select(1, torch.LongTensor([1]).cuda()) / (0.1994))
             gradient.index_copy_(1, torch.LongTensor([2]).cuda(), gradient.index_select(1, torch.LongTensor([2]).cuda()) / (0.2010))
-        elif net_type == 'dnn':
-            None
+        elif net_type == 'dnn_MNIST':
+            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.3081))
+        elif net_type == 'dnn_FashionMNIST':
+            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.3530))
+        
         tempInputs = torch.add(data.data, -magnitude, gradient)
  
         noise_out_features = model.intermediate_forward(Variable(tempInputs, volatile=True), layer_index)
@@ -244,7 +247,11 @@ def get_posterior(model, net_type, test_loader, magnitude, temperature, outf, ou
             gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.2023))
             gradient.index_copy_(1, torch.LongTensor([1]).cuda(), gradient.index_select(1, torch.LongTensor([1]).cuda()) / (0.1994))
             gradient.index_copy_(1, torch.LongTensor([2]).cuda(), gradient.index_select(1, torch.LongTensor([2]).cuda()) / (0.2010))
-
+        elif net_type == 'dnn_MNIST':
+            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.3081))
+        elif net_type == 'dnn_FashionMNIST':
+            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.3530))
+        
         tempInputs = torch.add(data.data,  -magnitude, gradient)
         outputs = model(Variable(tempInputs, volatile=True))
         outputs = outputs / temperature
@@ -308,6 +315,12 @@ def get_Mahalanobis_score_adv(model, test_data, test_label, num_classes, outf, n
             gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.2023))
             gradient.index_copy_(1, torch.LongTensor([1]).cuda(), gradient.index_select(1, torch.LongTensor([1]).cuda()) / (0.1994))
             gradient.index_copy_(1, torch.LongTensor([2]).cuda(), gradient.index_select(1, torch.LongTensor([2]).cuda()) / (0.2010))
+        elif net_type == 'dnn_MNIST':
+            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.3081))
+        elif net_type == 'dnn_FashionMNIST':
+            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.3530))
+                
+        
         tempInputs = torch.add(data.data, -magnitude, gradient)
  
         noise_out_features = model.intermediate_forward(Variable(tempInputs, volatile=True), layer_index)

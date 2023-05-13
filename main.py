@@ -222,7 +222,7 @@ if __name__ == "__main__":
             print("successfully load model", net_name)
             
         else:
-            print("OOD: ", OOD_Dataset[i])
+            net_name = "dnn_" + InD_Dataset
             net_Maha = data_model[InD_Dataset]()
 
         
