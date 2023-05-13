@@ -212,7 +212,8 @@ if __name__ == "__main__":
     if 3 in methods:
         print("Method 3: Mahalanobis")
 
-        outf = './Mahalanobis/output/densenet_' + InD_Dataset + '/'
+        parent_dir = os.getcwd()
+        outf = parent_dir + '/Mahalanobis/output/densenet_' + InD_Dataset + '/'
         if os.path.isdir(outf) == False:
             os.mkdir(outf)
         if InD_Dataset == "Cifar_10":
