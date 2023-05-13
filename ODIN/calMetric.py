@@ -79,9 +79,9 @@ def auroc(name):
    
     # calculate our algorithm
     T = 1000
-    cifar = np.loadtxt('./softmax_scores/confidence_Our_In.txt', delimiter=',')
+    cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
-        './softmax_scores/confidence_Our_Out.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
     
     if name == "Cifar_10":
         start = 0.1
