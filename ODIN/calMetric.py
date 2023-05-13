@@ -53,14 +53,21 @@ def tpr95(name):
     X1 = cifar[:, 2]
     total = 0.0
     fpr = 0.0
+    fpr_list = []
     for delta in np.arange(start, end, gap):
         tpr = np.sum(np.sum(X1 >= delta)) / np.float(len(X1))
         error2 = np.sum(np.sum(Y1 > delta)) / np.float(len(Y1))
+        fpr_list.append(error2)
         if tpr <= 0.9505 and tpr >= 0.9495:
             fpr += error2
             total += 1
         if total == 1:
             print(delta)
+
+    index = np.argmax(fpr_list)
+    deltas = np.arange(start, end, gap)
+    print("delta: ", deltas[index], ", max fpr: ", fpr_list[index])
+    
     fprNew = fpr/total
 
     return fprNew
@@ -193,7 +200,7 @@ def detection(name):
     elif name == "FashionMNIST":
         start = 0.001
         end = 0.5
-        
+
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
