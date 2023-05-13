@@ -221,9 +221,9 @@ if __name__ == "__main__":
         for i in range(len(OOD_sets)):
 
             if InD_Dataset == "Cifar_10":
-                net_ODIN = torch.load("ODIN/models/densenet10.pth", map_location=device)
-                # net_ODIN = DenseNet3(depth=100, num_classes=int(10))
-                # net_ODIN.load_state_dict(torch.load("ODIN/models/densenet10.pth"))
+                # net_ODIN = torch.load("ODIN/models/densenet10.pth", map_location=device)
+                net_ODIN = densenet(depth=100, num_classes=int(10))
+                net_ODIN.load_state_dict(torch.load("ODIN/models/densenet10.pth"))
              
             else:
                 print("OOD: ", OOD_Dataset[i])

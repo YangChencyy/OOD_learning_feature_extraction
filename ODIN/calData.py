@@ -87,7 +87,7 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
 
         # Adding small perturbations to images
         tempInputs = torch.add(inputs.data,  -noiseMagnitude1, gradient)
-        outputs = net1(Variable(tempInputs))
+        _, outputs = net1(Variable(tempInputs))
         outputs = outputs / temper
         # Calculating the confidence after adding perturbations
         nnOutputs = outputs.data.cpu()
@@ -151,7 +151,7 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
             gradient[0][0] = (gradient[0][0])/(0.3530)
         # Adding small perturbations to images
         tempInputs = torch.add(inputs.data,  -noiseMagnitude1, gradient)
-        outputs = net1(Variable(tempInputs))
+        _, outputs = net1(Variable(tempInputs))
         outputs = outputs / temper
         # Calculating the confidence after adding perturbations
         nnOutputs = outputs.data.cpu()
