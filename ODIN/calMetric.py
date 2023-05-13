@@ -269,6 +269,7 @@ def auprOut(name):
         fp = np.sum(np.sum(X1 < delta)) / np.float(len(X1))
         tp = np.sum(np.sum(Y1 < delta)) / np.float(len(Y1))
         if tp + fp == 0:
+            print("delta: ", delta)
             break
         precision = tp / (tp + fp)
         recall = tp
