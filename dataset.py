@@ -57,11 +57,9 @@ def Cifar_10_dataset(batch_size, test_batch_size, into_grey = False):
                                         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                                         ])
 
-    a = datasets.CIFAR10('./data/cifar10', train=True,download=True)
-    print(a.data.shape)
     train_set = datasets.CIFAR10('./data/cifar10', train=True,download=True,
                                                                 transform=transform)
-    print(train_set.data.shape)
+
     test_set = datasets.CIFAR10('./datasets/cifar10', train=False,download=True, 
                                                               transform=transform)
     train_loader = torch.utils.data.DataLoader(train_set,
@@ -70,11 +68,7 @@ def Cifar_10_dataset(batch_size, test_batch_size, into_grey = False):
     val_loader = torch.utils.data.DataLoader(test_set,
                                              batch_size=test_batch_size, shuffle=True)
     
-    # for testing reason
-    loader = torch.utils.data.DataLoader(test_set,
-                                             batch_size=len(test_set), shuffle=True)
-    
-    
+   
     return train_set, test_set, train_loader, val_loader
 
 

@@ -40,8 +40,11 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
     print("Processing in-distribution images")
 ########################################In-distribution###########################################
     for j, data in enumerate(testloader10):
+        # print("enter loop")
         if j < 1000:
+            # print(j)
             continue
+        print("j", j)
         images, _ = data
 
         inputs = Variable(images.cuda(CUDA_DEVICE), requires_grad=True)
@@ -83,6 +86,8 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         nnOutputs = nnOutputs[0]
         nnOutputs = nnOutputs - np.max(nnOutputs)
         nnOutputs = np.exp(nnOutputs)/np.sum(np.exp(nnOutputs))
+        print("g1 write:", "{}, {}, {}\n".format(
+            temper, noiseMagnitude1, np.max(nnOutputs)))
         g1.write("{}, {}, {}\n".format(
             temper, noiseMagnitude1, np.max(nnOutputs)))
         if j % 100 == 99:

@@ -40,7 +40,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [2]
+    methods = [4]
     
     num_classes = 10
     train_batch_size = 128
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     }
 
 
-    InD_Dataset = 'Cifar_10'
+    InD_Dataset = 'MNIST'
     train_set, test_set, trloader, tsloader = data_dic[InD_Dataset](batch_size = train_batch_size, 
                                                                     test_batch_size = test_batch_size)
     OOD_sets, OOD_loaders = [], []
@@ -221,16 +221,22 @@ if __name__ == "__main__":
         for i in range(len(OOD_sets)):
 
             if InD_Dataset == "Cifar_10":
-                net_ODIN = DenseNet3(depth=100, num_classes=int(10))
-                net_ODIN.load_state_dict(torch.load("ODIN/models/densenet_Cifar_10.pth"))
-                # densenet = torch.load("ODIN/models/densenet_Cifar_10.pth")
+                net_ODIN = torch.load("ODIN/models/densenet10.pth")
+                # net_ODIN = DenseNet3(depth=100, num_classes=int(10))
+                # net_ODIN.load_state_dict(torch.load("ODIN/models/densenet10.pth"))
+             
             else:
                 print("OOD: ", OOD_Dataset[i])
                 net_ODIN = data_model[InD_Dataset]()
 
             criterion_ODIN = nn.CrossEntropyLoss()
 
-            testData_ODIN(net_ODIN, criterion_ODIN, gpu, trloader, OOD_loaders[i], InD_Dataset,
+            tr_l = torch.utils.data.DataLoader(train_set,
+                                             batch_size=1, shuffle=True)
+            ood_l = torch.utils.data.DataLoader(OOD_sets[i],
+                                             batch_size=1, shuffle=True)
+            
+            testData_ODIN(net_ODIN, criterion_ODIN, gpu, tr_l, ood_l, InD_Dataset,
                         noiseMagnitude1 = 0.0014, temper = 1000)
             metric_ODIN(InD_Dataset, OOD_sets[i])
             
