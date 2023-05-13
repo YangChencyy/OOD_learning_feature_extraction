@@ -211,23 +211,22 @@ if __name__ == "__main__":
     # Mahalanobis
     if 3 in methods:
         print("Method 3: Mahalanobis")
-        for i in range(len(OOD_sets)):
+
+        outf = './Mahalanobis/output/densenet_' + InD_Dataset + '/'
+        if os.path.isdir(outf) == False:
+            os.mkdir(outf)
+        if InD_Dataset == "Cifar_10":
+            net_name = "densenet10"
+            net_Maha = torch.load('./Mahalanobis/pre_trained/' + net_name + '_' + InD_Dataset + '.pth')
+            print("successfully load model", net_name)
+            
+        else:
             print("OOD: ", OOD_Dataset[i])
-            outf = './Mahalanobis/output/' + InD_Dataset + '_' + OOD_Dataset[i] + '/'
-            if os.path.isdir(outf) == False:
-                os.mkdir(outf)
-            if InD_Dataset == "Cifar_10":
-                net_name = "densenet10"
-                net_Maha = torch.load('./Mahalanobis/pre_trained/' + net_name + '_' + InD_Dataset + '.pth')
-                print("successfully load model", net_name)
-             
-            else:
-                print("OOD: ", OOD_Dataset[i])
-                net_Maha = data_model[InD_Dataset]()
+            net_Maha = data_model[InD_Dataset]()
 
         
-        Generate_Maha(net_Maha, outf, InD_Dataset, OOD_Dataset[i], trloader, tsloader, 
-                      OOD_loaders[i], 'densenet', gpu = gpu, num_classes = 10)
+        Generate_Maha(net_Maha, outf, InD_Dataset, OOD_Dataset, trloader, tsloader, 
+                      OOD_loaders, 'densenet', gpu = gpu, num_classes = 10)
 
 
     # ODIN

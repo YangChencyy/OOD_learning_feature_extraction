@@ -10,17 +10,12 @@ import argparse
 
 from sklearn.linear_model import LogisticRegressionCV
 
-parser = argparse.ArgumentParser(
-    description='PyTorch code: Mahalanobis detector')
-parser.add_argument('--net_type', required=True, help='resnet | densenet')
-args = parser.parse_args()
-print(args)
 
 
-def main():
+def Regression_Maha(InD_Dataset, OOD_Dataset, net_type):
     # initial setup
     # dataset_list = ['cifar10']
-    dataset_list = ['mnist23689']
+    dataset_list = [InD_Dataset]
     score_list = ['Mahalanobis_0.0', 'Mahalanobis_0.01', 'Mahalanobis_0.005',
                   'Mahalanobis_0.002', 'Mahalanobis_0.0014', 'Mahalanobis_0.001', 'Mahalanobis_0.0005']
 
@@ -28,12 +23,8 @@ def main():
     list_best_results, list_best_results_index = [], []
     for dataset in dataset_list:
         print('In-distribution: ', dataset)
-        outf = './output/' + args.net_type + '_' + dataset + '/'
-        out_list = ['svhn']
-        if dataset == 'svhn':
-            out_list = ['cifar10', 'imagenet_resize', 'lsun_resize']
-        elif dataset == 'mnist23689':
-            out_list = ['mnist17']
+        outf = './output/' + net_type + '_' + dataset + '/'
+        out_list = OOD_Dataset
 
         list_best_results_out, list_best_results_index_out = [], []
         for out in out_list:
@@ -52,9 +43,9 @@ def main():
                     (Y_val[500:1000], Y_val[1500:]))
                 lr = LogisticRegressionCV(n_jobs=-1).fit(X_train, Y_train)
                 y_pred = lr.predict_proba(X_train)[:, 1]
-                #print('training mse: {:.4f}'.format(np.mean(y_pred - Y_train)))
+                print('training mse: {:.4f}'.format(np.mean(y_pred - Y_train)))
                 y_pred = lr.predict_proba(X_val_for_test)[:, 1]
-                #print('test mse: {:.4f}'.format(np.mean(y_pred - Y_val_for_test)))
+                print('test mse: {:.4f}'.format(np.mean(y_pred - Y_val_for_test)))
                 results = lib_regression.detection_performance(
                     lr, X_val_for_test, Y_val_for_test, outf)
                 if best_tnr < results['TMP']['TNR']:
@@ -73,9 +64,7 @@ def main():
 
     for in_list in list_best_results:
         print('in_distribution: ' + dataset_list[count_in] + '==========')
-        out_list = ['svhn', 'imagenet_resize', 'lsun_resize']
-        if dataset_list[count_in] == 'svhn':
-            out_list = ['cifar10', 'imagenet_resize', 'lsun_resize']
+        out_list = InD_Dataset
         count_out = 0
         for results in in_list:
             print('out_distribution: ' + out_list[count_out])
@@ -99,4 +88,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    Regression_Maha()

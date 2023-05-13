@@ -22,7 +22,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def Generate_Maha(model, outf, InD_Dataset, OOD_Dataset,
-                  trloader, tsloader, OOD_loader, net = 'densenet', gpu = 0, num_classes = 10):
+                  trloader, tsloader, OOD_loaders, net = 'densenet', gpu = 0, num_classes = 10):
 
     torch.cuda.manual_seed(0)
     if torch.cuda.is_available():
@@ -64,24 +64,27 @@ def Generate_Maha(model, outf, InD_Dataset, OOD_Dataset,
                 Mahalanobis_in = M_in.reshape((M_in.shape[0], -1))
             else:
                 Mahalanobis_in = np.concatenate((Mahalanobis_in, M_in.reshape((M_in.shape[0], -1))), axis=1)
-            
 
-        out_test_loader = OOD_loader
-        for i in range(num_output):
-            M_out = Mahalanobis.lib_generation.get_Mahalanobis_score(model, out_test_loader, num_classes, outf, \
-                                                            False, net, sample_mean, precision, i, magnitude)
-            M_out = np.asarray(M_out, dtype=np.float32)
-            if i == 0:
-                Mahalanobis_out = M_out.reshape((M_out.shape[0], -1))
-            else:
-                Mahalanobis_out = np.concatenate((Mahalanobis_out, M_out.reshape((M_out.shape[0], -1))), axis=1)
+        for j in range(len(OOD_Dataset)): 
+            print("OOD: ", OOD_Dataset[j])
+            out_dist = OOD_Dataset[j]
+            out_test_loader = OOD_loaders[j]
+            print('Out-distribution: ' + out_dist) 
+            for i in range(num_output):
+                M_out = Mahalanobis.lib_generation.get_Mahalanobis_score(model, out_test_loader, num_classes, outf, \
+                                                                False, net, sample_mean, precision, i, magnitude)
+                M_out = np.asarray(M_out, dtype=np.float32)
+                if i == 0:
+                    Mahalanobis_out = M_out.reshape((M_out.shape[0], -1))
+                else:
+                    Mahalanobis_out = np.concatenate((Mahalanobis_out, M_out.reshape((M_out.shape[0], -1))), axis=1)
 
-        Mahalanobis_in = np.asarray(Mahalanobis_in, dtype=np.float32)
-        Mahalanobis_out = np.asarray(Mahalanobis_out, dtype=np.float32)
-        Mahalanobis_data, Mahalanobis_labels = Mahalanobis.lib_generation.merge_and_generate_labels(Mahalanobis_out, Mahalanobis_in)
-        file_name = os.path.join(outf, 'Mahalanobis_%s_%s_%s.npy' % (str(magnitude), InD_Dataset , OOD_Dataset))
-        Mahalanobis_data = np.concatenate((Mahalanobis_data, Mahalanobis_labels), axis=1)
-        np.save(file_name, Mahalanobis_data)
+            Mahalanobis_in = np.asarray(Mahalanobis_in, dtype=np.float32)
+            Mahalanobis_out = np.asarray(Mahalanobis_out, dtype=np.float32)
+            Mahalanobis_data, Mahalanobis_labels = Mahalanobis.lib_generation.merge_and_generate_labels(Mahalanobis_out, Mahalanobis_in)
+            file_name = os.path.join(outf, 'Mahalanobis_%s_%s_%s.npy' % (str(magnitude), InD_Dataset , out_dist))
+            Mahalanobis_data = np.concatenate((Mahalanobis_data, Mahalanobis_labels), axis=1)
+            np.save(file_name, Mahalanobis_data)
  
 
 if __name__ == '__main__':
