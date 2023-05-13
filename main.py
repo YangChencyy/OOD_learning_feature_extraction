@@ -31,7 +31,7 @@ from Mahalanobis.OOD_Generate_Mahalanobis import Generate_Maha
 
 from ODIN.calData import testData_ODIN
 from ODIN.calMetric import metric_ODIN
-from ODIN.densenet import densenet
+from ODIN.densenet import DenseNet3
 
 
 
@@ -222,7 +222,7 @@ if __name__ == "__main__":
 
             if InD_Dataset == "Cifar_10":
                 # net_ODIN = torch.load("ODIN/models/densenet10.pth", map_location=device)
-                net_ODIN = densenet(depth=100, num_classes=int(10))
+                net_ODIN = DenseNet3(depth=100, num_classes=int(10))
                 net_ODIN.load_state_dict(torch.load("ODIN/models/densenet10.pth"))
              
             else:

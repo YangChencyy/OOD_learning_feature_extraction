@@ -369,7 +369,8 @@ def metric_ODIN(indis, dataName):
 
     # print("{:31}{:>22}".format("Neural network architecture:", nnStructure))
     print("{:31}{:>22}".format("In-distribution dataset:", indis))
-    print("{:31}{:>22}".format("Out-of-distribution dataset:", dataName))
+    # print("{:31}{:>22}".format("Out-of-distribution dataset:", dataName))
+    print("Out-of-distribution dataset:", dataName)
     print("")
     print("{:>34}{:>19}".format("Baseline", "Our Method"))
     print("{:20}{:13.1f}%{:>18.1f}% ".format(
