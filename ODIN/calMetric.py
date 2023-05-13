@@ -174,9 +174,9 @@ def auprIn(name):
     # calculate baseline
     T = 1
     cifar = np.loadtxt(
-        './softmax_scores/confidence_Base_In.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Base_In.txt', delimiter=',')
     other = np.loadtxt(
-        './softmax_scores/confidence_Base_Out.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Base_Out.txt', delimiter=',')
     if name == "Cifar_10":
         start = 0.1
         end = 0.12
@@ -210,9 +210,9 @@ def auprIn(name):
 
     # calculate our algorithm
     T = 1000
-    cifar = np.loadtxt('./softmax_scores/confidence_Our_In.txt', delimiter=',')
+    cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
-        './softmax_scores/confidence_Our_Out.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
     if name == "Cifar_10":
         start = 0.1
         end = 0.12
@@ -248,9 +248,9 @@ def auprOut(name):
     # calculate baseline
     T = 1
     cifar = np.loadtxt(
-        './softmax_scores/confidence_Base_In.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Base_In.txt', delimiter=',')
     other = np.loadtxt(
-        './softmax_scores/confidence_Base_Out.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Base_Out.txt', delimiter=',')
     if name == "Cifar_10":
         start = 0.1
         end = 0.12
@@ -278,9 +278,9 @@ def auprOut(name):
 
     # calculate our algorithm
     T = 1000
-    cifar = np.loadtxt('./softmax_scores/confidence_Our_In.txt', delimiter=',')
+    cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
-        './softmax_scores/confidence_Our_Out.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
     if name == "CIFAR-10":
         start = 0.1
         end = 0.12
@@ -311,9 +311,9 @@ def detection(name):
     # calculate baseline
     T = 1
     cifar = np.loadtxt(
-        './softmax_scores/confidence_Base_In.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Base_In.txt', delimiter=',')
     other = np.loadtxt(
-        './softmax_scores/confidence_Base_Out.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Base_Out.txt', delimiter=',')
     if name == "Cifar_10":
         start = 0.1
         end = 0.12
@@ -335,9 +335,9 @@ def detection(name):
 
     # calculate our algorithm
     T = 1000
-    cifar = np.loadtxt('./softmax_scores/confidence_Our_In.txt', delimiter=',')
+    cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
-        './softmax_scores/confidence_Our_Out.txt', delimiter=',')
+        './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
     if name == "CIFAR-10":
         start = 0.1
         end = 0.12
