@@ -63,7 +63,7 @@ if __name__ == "__main__":
     }
 
 
-    InD_Dataset = 'MNIST'
+    InD_Dataset = 'Cifar_10'
     train_set, test_set, trloader, tsloader = data_dic[InD_Dataset](batch_size = train_batch_size, 
                                                                     test_batch_size = test_batch_size)
     OOD_sets, OOD_loaders = [], []
@@ -221,9 +221,11 @@ if __name__ == "__main__":
         for i in range(len(OOD_sets)):
 
             if InD_Dataset == "Cifar_10":
-                # net_ODIN = torch.load("ODIN/models/densenet10.pth", map_location=device)
-                net_ODIN = DenseNet3(depth=100, num_classes=int(10))
-                net_ODIN.load_state_dict(torch.load("ODIN/models/densenet10.pth"))
+                # net1 = torch.load("./models/{}.pth".format(nnName))
+                net_ODIN = torch.load("ODIN/models/densenet10.pth")
+                print("successfully load model")
+                # net_ODIN = DenseNet3(depth=100, num_classes=int(10))
+                # net_ODIN.load_state_dict(torch.load("ODIN/models/densenet10.pth"))
              
             else:
                 print("OOD: ", OOD_Dataset[i])
