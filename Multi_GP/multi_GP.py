@@ -35,10 +35,25 @@ class MNIST_Net(nn.Module):
         x = self.fc2(x)
         return out, F.log_softmax(x, dim = 1)
     
+    def feature_list(self, x):
+        out_list = []
+        x = F.relu(F.max_pool2d(self.conv1(x), 2))
+        out_list.append(x)
+        x = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x)), 2))
+        out_list.append(x)
+        x = x.view(-1, 320)
+        x = F.relu(self.fc1(x))
+        out_list.append(x)
+        x = F.dropout(x, training=self.training)
+        x = self.fc3(x)
+        out_list.append(x)
+        x = self.fc2(x)    
+        return F.log_softmax(x, dim = 1), out_list
+    
 
 class Fashion_MNIST_Net(nn.Module):
     
-    def __init__(self, temperature = 1.0):
+    def __init__(self):
         super(Fashion_MNIST_Net, self).__init__()
         
         self.layer1 = nn.Sequential(
@@ -63,16 +78,21 @@ class Fashion_MNIST_Net(nn.Module):
         self.temperature = temperature
         
     def forward(self, x):
+        out_list = []
         out = self.layer1(x)
+        out_list.append(out)
         out = self.layer2(out)
+        out_list.append(out)
         out = out.view(out.size(0), -1)
         out = self.fc1(out)
         out = self.drop(out)
+        out_list.append(out)
         out = self.fc2(out)
+        out_list.append(out)
         f = self.fc3(out)
         out = self.fc4(f)
-        out = out / self.temperature 
-        return f, F.log_softmax(out, dim = 1)
+
+        return F.log_softmax(out, dim = 1), out_list
 
 # parameter refers to k 
 def train(network, trloader, epochs, learning_rate = 0.01, momentum = 0.5, verbal = False):

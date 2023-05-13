@@ -140,6 +140,7 @@ class DenseNet3(nn.Module):
         out = F.avg_pool2d(out, 8)
         out = out.view(-1, self.in_planes)
         return self.fc(out)
+    
     # function to extact the multiple features
     def feature_list(self, x):
         out_list = []
