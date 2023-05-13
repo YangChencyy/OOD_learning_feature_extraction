@@ -39,7 +39,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [4]
+    methods = [3]
     
     num_classes = 10
     train_batch_size = 128
@@ -216,7 +216,7 @@ if __name__ == "__main__":
         if os.path.isdir(outf) == False:
             os.mkdir(outf)
         if InD_Dataset == "Cifar_10":
-            net_name = "densenet10"
+            net_name = "densenet"
             net_Maha = torch.load('./Mahalanobis/pre_trained/' + net_name + '_' + InD_Dataset + '.pth')
             print("successfully load model", net_name)
             
