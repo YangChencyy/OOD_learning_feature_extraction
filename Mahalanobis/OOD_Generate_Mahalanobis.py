@@ -36,9 +36,9 @@ def Generate_Maha(model, outf, InD_Dataset, OOD_Dataset,
     # set information about feature extaction
     model.eval()
     if InD_Dataset == 'Cifar_10':
-        temp_x = torch.rand(2,3,32,32).to_device()
+        temp_x = torch.rand(2,3,32,32).to(device)
     else:
-        temp_x = torch.rand(2,1,28,28).to_device()
+        temp_x = torch.rand(2,1,28,28).to(device)
     
     temp_x = Variable(temp_x)
     temp_list = model.feature_list(temp_x)[1]
