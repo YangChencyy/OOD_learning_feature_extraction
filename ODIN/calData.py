@@ -49,7 +49,10 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
 
         inputs = Variable(images.to(device), requires_grad=True)
         net1.to(device)
-        _, outputs = net1(inputs)
+        if dataName == 'Cifar_10':
+            outputs = net1(inputs)
+        else:
+            _, outputs = net1(inputs)
 
         # Calculating the confidence of the output, no perturbation added here, no temperature scaling used
         nnOutputs = outputs.data.cpu()
@@ -85,7 +88,12 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
 
         # Adding small perturbations to images
         tempInputs = torch.add(inputs.data,  -noiseMagnitude1, gradient)
-        _, outputs = net1(Variable(tempInputs))
+
+        if dataName == 'Cifar_10':
+            outputs = net1(Variable(tempInputs))
+        else:
+            _, outputs = net1(Variable(tempInputs))
+            
         outputs = outputs / temper
         # Calculating the confidence after adding perturbations
         nnOutputs = outputs.data.cpu()
@@ -113,7 +121,10 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         images, _ = data
 
         inputs = Variable(images.cuda(CUDA_DEVICE), requires_grad=True)
-        _, outputs = net1(inputs)
+        if dataName == 'Cifar_10':
+            outputs = net1(inputs)
+        else:
+            _, outputs = net1(inputs)
 
         # Calculating the confidence of the output, no perturbation added here
         nnOutputs = outputs.data.cpu()
@@ -148,7 +159,12 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
             gradient[0][0] = (gradient[0][0])/(0.3530)
         # Adding small perturbations to images
         tempInputs = torch.add(inputs.data,  -noiseMagnitude1, gradient)
-        _, outputs = net1(Variable(tempInputs))
+
+        if dataName == 'Cifar_10':
+            outputs = net1(Variable(tempInputs))
+        else:
+            _, outputs = net1(Variable(tempInputs))
+        
         outputs = outputs / temper
         # Calculating the confidence after adding perturbations
         nnOutputs = outputs.data.cpu()
