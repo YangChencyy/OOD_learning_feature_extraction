@@ -217,23 +217,41 @@ def detection(name):
 
 def metric_ODIN(indis, dataName):
 
-    fprBase, fprNew = tpr95(indis)
-    errorBase, errorNew = detection(indis)
-    aurocBase, aurocNew = auroc(indis)
-    auprinBase, auprinNew = auprIn(indis)
-    auproutBase, auproutNew = auprOut(indis)
+    # fprBase, fprNew = tpr95(indis)
+    # errorBase, errorNew = detection(indis)
+    # aurocBase, aurocNew = auroc(indis)
+    # auprinBase, auprinNew = auprIn(indis)
+    # auproutBase, auproutNew = auprOut(indis)
+
+    fprNew = tpr95(indis)
+    errorNew = detection(indis)
+    aurocNew = auroc(indis)
+    auprinNew = auprIn(indis)
+    auproutNew = auprOut(indis)
+
     # print("{:31}{:>22}".format("Neural network architecture:", nnStructure))
     print("{:31}{:>22}".format("In-distribution dataset:", indis))
     print("{:31}{:>22}".format("Out-of-distribution dataset:", dataName))
     print("")
     print("{:>34}{:>19}".format("Baseline", "Our Method"))
-    print("{:20}{:13.1f}%{:>18.1f}% ".format(
-        "FPR at TPR 95%:", fprBase*100, fprNew*100))
+    # print("{:20}{:13.1f}%{:>18.1f}% ".format(
+    #     "FPR at TPR 95%:", fprBase*100, fprNew*100))
+    # print("{:20}{:13.1f}%{:>18.1f}%".format(
+    #     "Detection error:", errorBase*100, errorNew*100))
+    # print("{:20}{:13.1f}%{:>18.1f}%".format(
+    #     "AUROC:", aurocBase*100, aurocNew*100))
+    # print("{:20}{:13.1f}%{:>18.1f}%".format(
+    #     "AUPR In:", auprinBase*100, auprinNew*100))
+    # print("{:20}{:13.1f}%{:>18.1f}%".format(
+    #     "AUPR Out:", auproutBase*100, auproutNew*100))
+
+    print("{:20}%{:>18.1f}% ".format(
+        "FPR at TPR 95%:", fprNew*100, fprNew*100))
     print("{:20}{:13.1f}%{:>18.1f}%".format(
-        "Detection error:", errorBase*100, errorNew*100))
+        "Detection error:", errorNew*100, errorNew*100))
     print("{:20}{:13.1f}%{:>18.1f}%".format(
-        "AUROC:", aurocBase*100, aurocNew*100))
+        "AUROC:", aurocNew*100, aurocNew*100))
     print("{:20}{:13.1f}%{:>18.1f}%".format(
-        "AUPR In:", auprinBase*100, auprinNew*100))
+        "AUPR In:", auprinNew*100, auprinNew*100))
     print("{:20}{:13.1f}%{:>18.1f}%".format(
-        "AUPR Out:", auproutBase*100, auproutNew*100))
+        "AUPR Out:", auproutNew*100, auproutNew*100))
