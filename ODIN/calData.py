@@ -76,9 +76,15 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         gradient = torch.ge(inputs.grad.data, 0)
         gradient = (gradient.float() - 0.5) * 2
         # Normalizing the gradient to the same space of image
-        gradient[0][0] = (gradient[0][0])/(63.0/255.0)
-        gradient[0][1] = (gradient[0][1])/(62.1/255.0)
-        gradient[0][2] = (gradient[0][2])/(66.7/255.0)
+        if dataName == "Cifar_10":
+            gradient[0][0] = (gradient[0][0])/(63.0/255.0)
+            gradient[0][1] = (gradient[0][1])/(62.1/255.0)
+            gradient[0][2] = (gradient[0][2])/(66.7/255.0)
+        elif dataName == "MNIST":
+            gradient[0][0] = (gradient[0][0])/(0.3081)
+        elif dataName == "FashionMNIST":
+            gradient[0][0] = (gradient[0][0])/(0.3530)
+
         # Adding small perturbations to images
         tempInputs = torch.add(inputs.data,  -noiseMagnitude1, gradient)
         outputs = net1(Variable(tempInputs))
@@ -135,9 +141,14 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         gradient = (torch.ge(inputs.grad.data, 0))
         gradient = (gradient.float() - 0.5) * 2
         # Normalizing the gradient to the same space of image
-        gradient[0][0] = (gradient[0][0])/(63.0/255.0)
-        gradient[0][1] = (gradient[0][1])/(62.1/255.0)
-        gradient[0][2] = (gradient[0][2])/(66.7/255.0)
+        if dataName == "Cifar_10":
+            gradient[0][0] = (gradient[0][0])/(63.0/255.0)
+            gradient[0][1] = (gradient[0][1])/(62.1/255.0)
+            gradient[0][2] = (gradient[0][2])/(66.7/255.0)
+        elif dataName == "MNIST":
+            gradient[0][0] = (gradient[0][0])/(0.3081)
+        elif dataName == "FashionMNIST":
+            gradient[0][0] = (gradient[0][0])/(0.3530)
         # Adding small perturbations to images
         tempInputs = torch.add(inputs.data,  -noiseMagnitude1, gradient)
         outputs = net1(Variable(tempInputs))

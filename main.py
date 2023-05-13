@@ -31,7 +31,7 @@ from Mahalanobis.OOD_Generate_Mahalanobis import Generate_Maha
 
 from ODIN.calData import testData_ODIN
 from ODIN.calMetric import metric_ODIN
-from ODIN.densenet import DenseNet3
+from ODIN.densenet import densenet
 
 
 
