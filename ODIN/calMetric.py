@@ -253,7 +253,7 @@ def auprOut(name):
         './ODIN/softmax_scores/confidence_Base_Out.txt', delimiter=',')
     if name == "Cifar_10":
         start = 0.1
-        end = 0.12
+        end = 0.9
     elif name == "MNIST":
         start = 0.001
         end = 0.9
@@ -284,7 +284,7 @@ def auprOut(name):
         './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
     if name == "CIFAR-10":
         start = 0.1
-        end = 0.12
+        end = 0.9
     if name == "CIFAR-100":
         start = 0.01
         end = 0.0104
