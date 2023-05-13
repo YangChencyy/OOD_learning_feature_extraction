@@ -210,26 +210,37 @@ if __name__ == "__main__":
 
     # Mahalanobis
     if 3 in methods:
-        net_type = 'densenet'
+        print("Method 3: Mahalanobis")
+        for i in range(len(OOD_sets)):
+            print("OOD: ", OOD_Dataset[i])
+            outf = './Mahalanobis/output/' + InD_Dataset + '_' + OOD_Dataset[i] + '/'
+            if os.path.isdir(outf) == False:
+                os.mkdir(outf)
+            if InD_Dataset == "Cifar_10":
+                net_name = "densenet10"
+                net_Maha = torch.load('./Mahalanobis/pre_trained/' + net_name + '_' + InD_Dataset + '.pth')
+                print("successfully load model", net_name)
+             
+            else:
+                print("OOD: ", OOD_Dataset[i])
+                net_Maha = data_model[InD_Dataset]()
+
         
-        Generate_Maha(net_type, InD_Dataset, trloader, tsloader, OOD_Dataset, OOD_loaders, gpu = 0, num_classes = 10)
+        Generate_Maha(net_Maha, outf, InD_Dataset, OOD_Dataset[i], trloader, tsloader, 
+                      OOD_loaders[i], 'densenet', gpu = gpu, num_classes = 10)
 
 
     # ODIN
     if 4 in methods:
+        print("Method 4: ODIN")
         for i in range(len(OOD_sets)):
-
+            print("OOD: ", OOD_Dataset[i])
             if InD_Dataset == "Cifar_10":
-                # net1 = torch.load("./models/{}.pth".format(nnName))
-                nnName = "densenet10"
-                net_ODIN = torch.load("./ODIN/models/{}.pth".format(nnName))
-                # net_ODIN = torch.load("ODIN/models/densenet10.pth")
-                print("successfully load model")
-                # net_ODIN = DenseNet3(depth=100, num_classes=int(10))
-                # net_ODIN.load_state_dict(torch.load("ODIN/models/densenet10.pth"))
+                net_name = "densenet10"
+                net_ODIN = torch.load("./ODIN/models/{}.pth".format(net_name))
+                print("successfully load model", net_name)
              
             else:
-                print("OOD: ", OOD_Dataset[i])
                 net_ODIN = data_model[InD_Dataset]()
 
             criterion_ODIN = nn.CrossEntropyLoss()
