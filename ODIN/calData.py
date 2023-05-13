@@ -31,8 +31,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataName, noiseMagnitude1, temper):
     t0 = time.time()
-    # f1 = open("./softmax_scores/confidence_Base_In.txt", 'w')
-    # f2 = open("./softmax_scores/confidence_Base_Out.txt", 'w')
+    f1 = open("./ODIN/softmax_scores/confidence_Base_In.txt", 'w')
+    f2 = open("./ODIN/softmax_scores/confidence_Base_Out.txt", 'w')
     g1 = open("./ODIN/softmax_scores/confidence_Our_In.txt", 'w')
     g2 = open("./ODIN/softmax_scores/confidence_Our_Out.txt", 'w')
     N = 10000
@@ -43,9 +43,7 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
     print("Processing in-distribution images")
 ########################################In-distribution###########################################
     for j, data in enumerate(testloader10):
-        # print("enter loop")
         if j < 1000:
-            # print(j)
             continue
         images, _ = data
 
@@ -59,8 +57,8 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         nnOutputs = nnOutputs[0]
         nnOutputs = nnOutputs - np.max(nnOutputs)
         nnOutputs = np.exp(nnOutputs)/np.sum(np.exp(nnOutputs))
-        # f1.write("{}, {}, {}\n".format(
-        #     temper, noiseMagnitude1, np.max(nnOutputs)))
+        f1.write("{}, {}, {}\n".format(
+            temper, noiseMagnitude1, np.max(nnOutputs)))
 
         # Using temperature scaling
         outputs = outputs / temper
@@ -123,8 +121,8 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         nnOutputs = nnOutputs[0]
         nnOutputs = nnOutputs - np.max(nnOutputs)
         nnOutputs = np.exp(nnOutputs)/np.sum(np.exp(nnOutputs))
-        # f2.write("{}, {}, {}\n".format(
-        #     temper, noiseMagnitude1, np.max(nnOutputs)))
+        f2.write("{}, {}, {}\n".format(
+            temper, noiseMagnitude1, np.max(nnOutputs)))
 
         # Using temperature scaling
         outputs = outputs / temper
