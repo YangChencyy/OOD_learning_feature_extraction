@@ -95,8 +95,7 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         nnOutputs = nnOutputs[0]
         nnOutputs = nnOutputs - np.max(nnOutputs)
         nnOutputs = np.exp(nnOutputs)/np.sum(np.exp(nnOutputs))
-        print("g1 write:", "{}, {}, {}\n".format(
-            temper, noiseMagnitude1, np.max(nnOutputs)))
+
         g1.write("{}, {}, {}\n".format(
             temper, noiseMagnitude1, np.max(nnOutputs)))
         if j % 100 == 99:
