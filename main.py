@@ -218,7 +218,8 @@ if __name__ == "__main__":
             os.mkdir(outf)
         if InD_Dataset == "Cifar_10":
             net_name = "densenet"
-            net_Maha = torch.load('./Mahalanobis/pre_trained/' + net_name + '_' + InD_Dataset + '.pth')
+            net_Maha = torch.load('./Mahalanobis/pre_trained/' + net_name + '_' + InD_Dataset + '.pth',
+                                   map_location = "cuda:" + str(gpu))
             print("successfully load model", net_name)
             
         else:
