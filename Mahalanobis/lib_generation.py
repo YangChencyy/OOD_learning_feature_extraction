@@ -176,6 +176,8 @@ def get_Mahalanobis_score(model, test_loader, num_classes, outf, out_flag, net_t
             gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.2023))
             gradient.index_copy_(1, torch.LongTensor([1]).cuda(), gradient.index_select(1, torch.LongTensor([1]).cuda()) / (0.1994))
             gradient.index_copy_(1, torch.LongTensor([2]).cuda(), gradient.index_select(1, torch.LongTensor([2]).cuda()) / (0.2010))
+        elif net_type == 'dnn':
+            None
         tempInputs = torch.add(data.data, -magnitude, gradient)
  
         noise_out_features = model.intermediate_forward(Variable(tempInputs, volatile=True), layer_index)
