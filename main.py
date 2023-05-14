@@ -63,10 +63,10 @@ if __name__ == "__main__":
 
 
     # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
-    InD_Datasets = ['FashionMNIST']
+    InD_Datasets = ['MNIST', 'FashionMNIST']
 
     for InD_Dataset in InD_Datasets:
-        
+        print("InD_dataset: ",InD_Dataset)
 
         # InD_Dataset = 'MNIST'
         train_set, test_set, trloader, tsloader = data_dic[InD_Dataset](batch_size = train_batch_size, 
@@ -92,7 +92,6 @@ if __name__ == "__main__":
                 _, OOD_set, _, OODloader = data_dic[dataset](batch_size = train_batch_size, 
                                                             test_batch_size = test_batch_size, into_grey = True)
                 OOD_sets.append(OOD_set)
-                print(dataset, OOD_set[0][0].size())
                 OOD_loaders.append(OODloader)
 
 

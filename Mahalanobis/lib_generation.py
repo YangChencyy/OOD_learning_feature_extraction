@@ -67,7 +67,7 @@ def sample_estimator(model, num_classes, feature_list, train_loader):
     
     for data, target in train_loader:
         total += data.size(0)
-        data = data.cuda()
+        data = data.to(device)
         data = Variable(data, volatile=True)
         output, out_features = model.feature_list(data)
         
@@ -78,7 +78,7 @@ def sample_estimator(model, num_classes, feature_list, train_loader):
             
         # compute the accuracy
         pred = output.data.max(1)[1]
-        equal_flag = pred.eq(target.cuda()).cpu()
+        equal_flag = pred.eq(target.to(device)).cpu()
         correct += equal_flag.sum()
         
         # construct the sample matrix
@@ -100,7 +100,7 @@ def sample_estimator(model, num_classes, feature_list, train_loader):
     sample_class_mean = []
     out_count = 0
     for num_feature in feature_list:
-        temp_list = torch.Tensor(num_classes, int(num_feature)).cuda()
+        temp_list = torch.Tensor(num_classes, int(num_feature)).to(device)
         for j in range(num_classes):
             temp_list[j] = torch.mean(list_features[out_count][j], 0)
         sample_class_mean.append(temp_list)
@@ -118,7 +118,7 @@ def sample_estimator(model, num_classes, feature_list, train_loader):
         # find inverse            
         group_lasso.fit(X.cpu().numpy())
         temp_precision = group_lasso.precision_
-        temp_precision = torch.from_numpy(temp_precision).float().cuda()
+        temp_precision = torch.from_numpy(temp_precision).float().to(device)
         precision.append(temp_precision)
         
     print('\n Training Accuracy:({:.2f}%)\n'.format(100. * correct / total))
@@ -142,7 +142,7 @@ def get_Mahalanobis_score(model, test_loader, num_classes, outf, out_flag, net_t
     
     for data, target in test_loader:
         
-        data, target = data.cuda(), target.cuda()
+        data, target = data.to(device), target.to(device)
         data, target = Variable(data, requires_grad = True), Variable(target)
         
         out_features = model.intermediate_forward(data, layer_index)
@@ -171,17 +171,17 @@ def get_Mahalanobis_score(model, test_loader, num_classes, outf, out_flag, net_t
         gradient =  torch.ge(data.grad.data, 0)
         gradient = (gradient.float() - 0.5) * 2
         if net_type == 'densenet':
-            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (63.0/255.0))
-            gradient.index_copy_(1, torch.LongTensor([1]).to(device), gradient.index_select(1, torch.LongTensor([1]).cuda()) / (62.1/255.0))
-            gradient.index_copy_(1, torch.LongTensor([2]).to(device), gradient.index_select(1, torch.LongTensor([2]).cuda()) / (66.7/255.0))
+            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (63.0/255.0))
+            gradient.index_copy_(1, torch.LongTensor([1]).to(device), gradient.index_select(1, torch.LongTensor([1]).to(device)) / (62.1/255.0))
+            gradient.index_copy_(1, torch.LongTensor([2]).to(device), gradient.index_select(1, torch.LongTensor([2]).to(device)) / (66.7/255.0))
         elif net_type == 'resnet':
-            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.2023))
-            gradient.index_copy_(1, torch.LongTensor([1]).to(device), gradient.index_select(1, torch.LongTensor([1]).cuda()) / (0.1994))
-            gradient.index_copy_(1, torch.LongTensor([2]).to(device), gradient.index_select(1, torch.LongTensor([2]).cuda()) / (0.2010))
+            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (0.2023))
+            gradient.index_copy_(1, torch.LongTensor([1]).to(device), gradient.index_select(1, torch.LongTensor([1]).to(device)) / (0.1994))
+            gradient.index_copy_(1, torch.LongTensor([2]).to(device), gradient.index_select(1, torch.LongTensor([2]).to(device)) / (0.2010))
         elif net_type == 'dnn_MNIST':
             gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (0.3081))
         elif net_type == 'dnn_FashionMNIST':
-            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.3530))
+            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (0.3530))
         
         tempInputs = torch.add(data.data, -magnitude, gradient)
  
@@ -227,7 +227,7 @@ def get_posterior(model, net_type, test_loader, magnitude, temperature, outf, ou
     
     for data, _ in test_loader:
         total += data.size(0)
-        data = data.cuda()
+        data = data.to(device)
         data = Variable(data, requires_grad = True)
         batch_output = model(data)
             
@@ -242,17 +242,17 @@ def get_posterior(model, net_type, test_loader, magnitude, temperature, outf, ou
         gradient =  torch.ge(data.grad.data, 0)
         gradient = (gradient.float() - 0.5) * 2
         if net_type == 'densenet':
-            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (63.0/255.0))
-            gradient.index_copy_(1, torch.LongTensor([1]).cuda(), gradient.index_select(1, torch.LongTensor([1]).cuda()) / (62.1/255.0))
-            gradient.index_copy_(1, torch.LongTensor([2]).cuda(), gradient.index_select(1, torch.LongTensor([2]).cuda()) / (66.7/255.0))
+            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (63.0/255.0))
+            gradient.index_copy_(1, torch.LongTensor([1]).to(device), gradient.index_select(1, torch.LongTensor([1]).to(device)) / (62.1/255.0))
+            gradient.index_copy_(1, torch.LongTensor([2]).to(device), gradient.index_select(1, torch.LongTensor([2]).to(device)) / (66.7/255.0))
         elif net_type == 'resnet':
-            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.2023))
-            gradient.index_copy_(1, torch.LongTensor([1]).cuda(), gradient.index_select(1, torch.LongTensor([1]).cuda()) / (0.1994))
-            gradient.index_copy_(1, torch.LongTensor([2]).cuda(), gradient.index_select(1, torch.LongTensor([2]).cuda()) / (0.2010))
+            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (0.2023))
+            gradient.index_copy_(1, torch.LongTensor([1]).to(device), gradient.index_select(1, torch.LongTensor([1]).to(device)) / (0.1994))
+            gradient.index_copy_(1, torch.LongTensor([2]).to(device), gradient.index_select(1, torch.LongTensor([2]).to(device)) / (0.2010))
         elif net_type == 'dnn_MNIST':
             gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (0.3081))
         elif net_type == 'dnn_FashionMNIST':
-            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.3530))
+            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (0.3530))
         
         tempInputs = torch.add(data.data,  -magnitude, gradient)
         outputs = model(Variable(tempInputs, volatile=True))
@@ -280,8 +280,8 @@ def get_Mahalanobis_score_adv(model, test_data, test_label, num_classes, outf, n
     total = 0
     
     for data_index in range(int(np.floor(test_data.size(0)/batch_size))):
-        target = test_label[total : total + batch_size].cuda()
-        data = test_data[total : total + batch_size].cuda()
+        target = test_label[total : total + batch_size].to(device)
+        data = test_data[total : total + batch_size].to(device)
         total += batch_size
         data, target = Variable(data, requires_grad = True), Variable(target)
         
@@ -310,17 +310,17 @@ def get_Mahalanobis_score_adv(model, test_data, test_label, num_classes, outf, n
         gradient =  torch.ge(data.grad.data, 0)
         gradient = (gradient.float() - 0.5) * 2
         if net_type == 'densenet':
-            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (63.0/255.0))
-            gradient.index_copy_(1, torch.LongTensor([1]).cuda(), gradient.index_select(1, torch.LongTensor([1]).cuda()) / (62.1/255.0))
-            gradient.index_copy_(1, torch.LongTensor([2]).cuda(), gradient.index_select(1, torch.LongTensor([2]).cuda()) / (66.7/255.0))
+            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (63.0/255.0))
+            gradient.index_copy_(1, torch.LongTensor([1]).to(device), gradient.index_select(1, torch.LongTensor([1]).to(device)) / (62.1/255.0))
+            gradient.index_copy_(1, torch.LongTensor([2]).to(device), gradient.index_select(1, torch.LongTensor([2]).to(device)) / (66.7/255.0))
         elif net_type == 'resnet':
-            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.2023))
-            gradient.index_copy_(1, torch.LongTensor([1]).cuda(), gradient.index_select(1, torch.LongTensor([1]).cuda()) / (0.1994))
-            gradient.index_copy_(1, torch.LongTensor([2]).cuda(), gradient.index_select(1, torch.LongTensor([2]).cuda()) / (0.2010))
+            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (0.2023))
+            gradient.index_copy_(1, torch.LongTensor([1]).to(device), gradient.index_select(1, torch.LongTensor([1]).to(device)) / (0.1994))
+            gradient.index_copy_(1, torch.LongTensor([2]).to(device), gradient.index_select(1, torch.LongTensor([2]).to(device)) / (0.2010))
         elif net_type == 'dnn_MNIST':
-            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.3081))
+            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (0.3081))
         elif net_type == 'dnn_FashionMNIST':
-            gradient.index_copy_(1, torch.LongTensor([0]).cuda(), gradient.index_select(1, torch.LongTensor([0]).cuda()) / (0.3530))
+            gradient.index_copy_(1, torch.LongTensor([0]).to(device), gradient.index_select(1, torch.LongTensor([0]).to(device)) / (0.3530))
                 
         
         tempInputs = torch.add(data.data, -magnitude, gradient)
@@ -361,10 +361,10 @@ def get_LID(model, test_clean_data, test_adv_data, test_noisy_data, test_label, 
         LID_noisy.append([])
         
     for data_index in range(int(np.floor(test_clean_data.size(0)/batch_size))):
-        data = test_clean_data[total : total + batch_size].cuda()
-        adv_data = test_adv_data[total : total + batch_size].cuda()
-        noisy_data = test_noisy_data[total : total + batch_size].cuda()
-        target = test_label[total : total + batch_size].cuda()
+        data = test_clean_data[total : total + batch_size].to(device)
+        adv_data = test_adv_data[total : total + batch_size].to(device)
+        noisy_data = test_noisy_data[total : total + batch_size].to(device)
+        target = test_label[total : total + batch_size].to(device)
 
         total += batch_size
         data, target = Variable(data, volatile=True), Variable(target)
