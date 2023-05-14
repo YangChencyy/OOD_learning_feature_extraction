@@ -39,7 +39,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [4]
+    methods = [1]
     
     num_classes = 10
     train_batch_size = 128
@@ -245,6 +245,7 @@ if __name__ == "__main__":
         # ODIN
         if 4 in methods:
             print("Method 4: ODIN")
+            print("InD_dataset: ",InD_Dataset)
             for i in range(len(OOD_sets)):
                 print("OOD: ", OOD_Dataset[i])
                 if InD_Dataset == "Cifar_10":

@@ -104,7 +104,7 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
 
         g1.write("{}, {}, {}\n".format(
             temper, noiseMagnitude1, np.max(nnOutputs)))
-        if j % 100 == 99:
+        if j % 1000 == 999:
             print("{:4}/{:4} images processed, {:.1f} seconds used.".format(j +
                   1-1000, N-1000, time.time()-t0))
             t0 = time.time()
@@ -174,7 +174,7 @@ def testData_ODIN(net1, criterion, CUDA_DEVICE, testloader10, testloader, dataNa
         nnOutputs = np.exp(nnOutputs)/np.sum(np.exp(nnOutputs))
         g2.write("{}, {}, {}\n".format(
             temper, noiseMagnitude1, np.max(nnOutputs)))
-        if j % 100 == 99:
+        if j % 1000 == 999:
             print("{:4}/{:4} images processed, {:.1f} seconds used.".format(j +
                   1-1000, N-1000, time.time()-t0))
             t0 = time.time()

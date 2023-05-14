@@ -36,7 +36,7 @@ def tpr95(name):
     other = np.loadtxt(
         './ODIN/softmax_scores/confidence_Base_Out.txt', delimiter=',')
     if name == "Cifar_10":
-        start = 0.1
+        start = 0.01
         end = 0.12
     elif name == "MNIST":
         start = 0.001
@@ -44,7 +44,7 @@ def tpr95(name):
     elif name == "FashionMNIST":
         start = 0.001
         end = 0.5
-    gap = (end - start)/100000
+    gap = (end - start)/1000000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
     X1 = cifar[:, 2]
@@ -55,17 +55,18 @@ def tpr95(name):
         tpr = np.sum(np.sum(X1 >= delta)) / np.float(len(X1))
         error2 = np.sum(np.sum(Y1 > delta)) / np.float(len(Y1))
         tpr_list.append(tpr)
-        if tpr > 0.95:    #tpr <= 0.9505 and tpr >= 0.9495:
-            fpr += error2
-            total += 1
+        if tpr > 0.95 and tpr < 0.96:    #tpr <= 0.9505 and tpr >= 0.9495:
+            fpr = error2
+            # total += 1
         # if total == 1:
         #     print(delta)
 
-    index = np.argmax(tpr_list)
-    deltas = np.arange(start, end, gap)
-    print("total: ", total)
-    print("delta: ", deltas[index], ", max tpr: ", tpr_list[index])
-    fprBase = fpr/total
+    # index = np.argmax(tpr_list)
+    # deltas = np.arange(start, end, gap)
+    # print("total: ", total)
+    # print("delta: ", deltas[index], ", max tpr: ", tpr_list[index])
+    # fprBase = fpr/total
+    fprBase = fpr
 
     # calculate our algorithm
     T = 1000
@@ -74,7 +75,7 @@ def tpr95(name):
         './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
 
     if name == "Cifar_10":
-        start = 0.1
+        start = 0.01
         end = 0.12
     elif name == "MNIST":
         start = 0.001
@@ -83,7 +84,7 @@ def tpr95(name):
         start = 0.001
         end = 0.5
 
-    gap = (end - start)/100000
+    gap = (end - start)/1000000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     print("Y,X", other.shape, cifar.shape)
     Y1 = other[:, 2]
@@ -95,18 +96,18 @@ def tpr95(name):
         tpr = np.sum(np.sum(X1 >= delta)) / np.float(len(X1))
         error2 = np.sum(np.sum(Y1 > delta)) / np.float(len(Y1))
         tpr_list.append(tpr)
-        if tpr > 0.95:    #tpr <= 0.9505 and tpr >= 0.9495:
-            fpr += error2
-            total += 1
+        if tpr > 0.95 and tpr < 0.96:    #tpr <= 0.9505 and tpr >= 0.9495:
+            fpr = error2
+            # total += 1
         # if total == 1:
         #     print(delta)
 
-    index = np.argmax(tpr_list)
-    deltas = np.arange(start, end, gap)
-    print("total: ", total)
-    print("delta: ", deltas[index], ", max tpr: ", tpr_list[index])
+    # index = np.argmax(tpr_list)
+    # deltas = np.arange(start, end, gap)
+    # print("total: ", total)
+    # print("delta: ", deltas[index], ", max tpr: ", tpr_list[index])
     
-    fprNew = fpr/total
+    fprNew = fpr  #/total
 
     return fprBase, fprNew
 
@@ -127,7 +128,7 @@ def auroc(name):
         end = 0.9
     elif name == "FashionMNIST":
         start = 0.001
-        end = 0.5
+        end = 0.9
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
@@ -153,7 +154,7 @@ def auroc(name):
         end = 0.9
     elif name == "FashionMNIST":
         start = 0.001
-        end = 0.5
+        end = 0.9
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
@@ -185,7 +186,7 @@ def auprIn(name):
         end = 0.9
     elif name == "FashionMNIST":
         start = 0.001
-        end = 0.5
+        end = 0.9
     gap = (end - start)/100000
     precisionVec = []
     recallVec = []
@@ -221,7 +222,7 @@ def auprIn(name):
         end = 0.9
     elif name == "FashionMNIST":
         start = 0.001
-        end = 0.5
+        end = 0.9
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
@@ -259,7 +260,7 @@ def auprOut(name):
         end = 0.9
     elif name == "FashionMNIST":
         start = 0.001
-        end = 0.5
+        end = 0.9
     gap = (end - start)/100000
     Y1 = other[:, 2]
     X1 = cifar[:, 2]
@@ -282,12 +283,15 @@ def auprOut(name):
     cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
         './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
-    if name == "CIFAR-10":
+    if name == "Cifar_10":
         start = 0.1
         end = 0.9
-    if name == "CIFAR-100":
-        start = 0.01
-        end = 0.0104
+    elif name == "MNIST":
+        start = 0.001
+        end = 0.9
+    elif name == "FashionMNIST":
+        start = 0.001
+        end = 0.9
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
@@ -323,7 +327,7 @@ def detection(name):
         end = 0.9
     elif name == "FashionMNIST":
         start = 0.001
-        end = 0.5
+        end = 0.9
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
@@ -339,12 +343,15 @@ def detection(name):
     cifar = np.loadtxt('./ODIN/softmax_scores/confidence_Our_In.txt', delimiter=',')
     other = np.loadtxt(
         './ODIN/softmax_scores/confidence_Our_Out.txt', delimiter=',')
-    if name == "CIFAR-10":
+    if name == "Cifar_10":
         start = 0.1
-        end = 0.12
-    if name == "CIFAR-100":
-        start = 0.01
-        end = 0.0104
+        end = 0.9
+    elif name == "MNIST":
+        start = 0.001
+        end = 0.9
+    elif name == "FashionMNIST":
+        start = 0.001
+        end = 0.9
     gap = (end - start)/100000
     #f = open("./{}/{}/T_{}.txt".format(nnName, dataName, T), 'w')
     Y1 = other[:, 2]
