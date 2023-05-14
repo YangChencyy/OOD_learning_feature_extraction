@@ -122,7 +122,6 @@ class Fashion_MNIST_Net(nn.Module):
 
         return F.log_softmax(out, dim = 1), out_list
     
-
     def intermediate_forward(self, x, layer_index):
         out = self.layer1(x)
         if layer_index == 1:
@@ -192,7 +191,7 @@ def cifar10_train(network, trloader, epochs, optim=None, learning_rate = 0.01, m
 
             optimizer.step()
 
-            if verbal and batch_idx % 100 == 0:
+            if verbal and batch_idx % 10 == 0:
                     print("epoch: ", epoch, ", batch: ", batch_idx, ", loss:", loss.item())
 
         scheduler.step()
@@ -205,6 +204,7 @@ def scores(network, tsloader):
 
     with torch.no_grad():
         for data, target in tsloader:
+            data, target = data.to(device), target.to(device)
             output16, output = network(data)
             outputs.append(output)
             outputs_16.append(output16)  # [B, 16, 1, 1]
