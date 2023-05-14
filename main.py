@@ -136,7 +136,7 @@ if __name__ == "__main__":
             InD_feature, InD_score = InD_feature[0:20000], InD_score[0:20000]
             test_feature, test_score = test_feature[0:5000], test_score[0:5000]
 
-            train_data = np.concatenate((InD_feature, InD_score, InD_label), 1)
+            train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy(), InD_label), 1)
             train_data = pd.DataFrame(train_data)
             train_data.to_csv(directory +  '/train.csv')
 
@@ -147,13 +147,13 @@ if __name__ == "__main__":
                 OOD_feature, OOD_score = OOD_feature[0:5000], OOD_score[0:5000]
 
 
-                total_CNN = np.concatenate((test_feature, OOD_feature), 0)
+                total_CNN = np.concatenate((test_feature.cpu().numpy(), OOD_feature.cpu().numpy()), 0)
                 reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=10, n_components=2)
                 UMAPf = reducer_CNN.fit_transform(total_CNN)
 
-                all_feature = np.concatenate((test_feature, OOD_feature), 0)
-                all_score = np.concatenate((test_score, OOD_score), 0)
-                DNN_data = np.concatenate((all_feature, all_score, UMAPf), 1)
+                # all_feature = np.concatenate((test_feature, OOD_feature), 0)
+                all_score = np.concatenate((test_score.cpu().numpy(), OOD_score.cpu().numpy()), 0)
+                DNN_data = np.concatenate((total_CNN, all_score, UMAPf), 1)
 
                 data_df = pd.DataFrame(DNN_data) 
                 data_df['class'] = ['test']*len(test_feature) + ['OOD']*len(OOD_feature)
