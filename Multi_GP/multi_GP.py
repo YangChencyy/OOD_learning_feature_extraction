@@ -59,7 +59,7 @@ class MNIST_Net(nn.Module):
             x = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x)), 2))
             x = x.view(-1, 320)
             x = F.relu(self.fc1(x))
-        elif layer_index == 2:
+        elif layer_index == 3:
             x = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x)), 2))
             x = x.view(-1, 320)
             x = F.relu(self.fc1(x))
@@ -93,8 +93,19 @@ class Fashion_MNIST_Net(nn.Module):
         self.fc3 = nn.Linear(in_features=120, out_features=16)
         self.fc4 = nn.Linear(in_features=16, out_features=10)
 
-        
     def forward(self, x):
+        out = self.layer1(x)
+        out = self.layer2(out)
+        out = out.view(out.size(0), -1)
+        out = self.fc1(out)
+        out = self.drop(out)
+        out = self.fc2(out)
+        f = self.fc3(out)
+        out = self.fc4(f)
+
+        return f, F.log_softmax(out, dim = 1)
+        
+    def feature_list(self, x):
         out_list = []
         out = self.layer1(x)
         out_list.append(out)
@@ -110,6 +121,26 @@ class Fashion_MNIST_Net(nn.Module):
         out = self.fc4(f)
 
         return F.log_softmax(out, dim = 1), out_list
+    
+
+    def intermediate_forward(self, x, layer_index):
+        out = self.layer1(x)
+        if layer_index == 1:
+            out = self.layer2(out)
+        elif layer_index == 1:
+            out = self.layer2(out)
+            out = out.view(out.size(0), -1)
+            out = self.fc1(out)
+        elif layer_index == 3:
+            out = self.layer2(out)
+            out = self.layer2(out)
+            out = out.view(out.size(0), -1)
+            out = self.fc1(out)
+            out = self.drop(out)
+            out = self.fc2(out)
+
+
+        return f, F.log_softmax(out, dim = 1)
 
 # parameter refers to k 
 def train(network, trloader, epochs, learning_rate = 0.01, momentum = 0.5, verbal = False):
