@@ -8,7 +8,7 @@
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
 #SBATCH --mem-per-gpu=12GB
-#SBATCH --time=00:30:00
+#SBATCH --time=20:00:00
 
 module purge
 conda init bash
@@ -18,4 +18,4 @@ conda activate GP
 # python3 main_ood.py --config=../config/GAN/OOD-GAN-FashionMNIST.yaml
 # python3 main_ood.py --config=../config/GAN/OOD-GAN-FashionMNIST-MNIST.yaml
 # python3 main_ood.py --config=../config/GAN/OOD-GAN-CIFAR10-SVHN.yaml
-python main.py
+python main.py > output.txt
