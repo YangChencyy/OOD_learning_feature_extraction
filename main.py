@@ -127,7 +127,7 @@ if __name__ == "__main__":
             else:
                 epochs = 20
                 net = data_model[InD_Dataset]()
-                train(network = net, trloader = trloader, epochs = epochs)
+                train(network = net, trloader = trloader, epochs = epochs, verbal=True)
 
             ## get InD data for GP
             InD_feature, InD_score, InD_acc = scores(net, trloader)
