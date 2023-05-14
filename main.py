@@ -39,7 +39,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [1]
+    methods = [2]
     
     num_classes = 10
     train_batch_size = 128
@@ -140,6 +140,7 @@ if __name__ == "__main__":
             train_data = pd.DataFrame(train_data)
             train_data['label'] = InD_label[0:20000]
             train_data.to_csv(directory +  '/train.csv')
+            print("train data stored")
 
             ## get OOD data for GP
             for i in range(len(OOD_loaders)):
@@ -160,6 +161,7 @@ if __name__ == "__main__":
                 data_df['class'] = ['test']*len(test_feature) + ['OOD']*len(OOD_feature)
 
                 data_df.to_csv(directory +  '/' + OOD_Dataset[i] + '_test.csv')
+                print(OOD_Dataset[i] + "test data stored")
 
 
         # DUQ

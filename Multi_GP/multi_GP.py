@@ -191,7 +191,7 @@ def cifar10_train(network, trloader, epochs, optim=None, learning_rate = 0.01, m
 
             optimizer.step()
 
-            if verbal and batch_idx % 10 == 0:
+            if verbal and batch_idx % 200 == 0:
                     print("epoch: ", epoch, ", batch: ", batch_idx, ", loss:", loss.item())
 
         scheduler.step()
