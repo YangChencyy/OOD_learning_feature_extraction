@@ -229,6 +229,7 @@ def scoresOOD(network, oodloader):
     outputs = []
     with torch.no_grad():
         for data, _ in oodloader:
+            data = data.to(device)
             output16, output = network(data)
             outputs_16.append(output16)  # [50, 128, 1, 1]
             outputs.append(output)
