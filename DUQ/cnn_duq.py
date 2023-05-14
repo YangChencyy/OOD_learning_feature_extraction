@@ -19,7 +19,7 @@ class Model(nn.Module):
         self.fc1 = nn.Linear(2 * 2 * 128, 256)
 
     def compute_features(self, x):
-        # print(x.shape)
+
         x = F.relu(self.bn1(self.conv1(x)))
         x = F.max_pool2d(x, 2, 2)
 

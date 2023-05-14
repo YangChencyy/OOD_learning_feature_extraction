@@ -19,7 +19,7 @@ def prepare_ood_datasets(true_dataset, ood_dataset):
     # ood_dataset.transform = true_dataset.transform
 
     datasets = [true_dataset, ood_dataset]
-    print(true_dataset[0][0].size(), ood_dataset[0][0].size())
+    # print(true_dataset[0][0].size(), ood_dataset[0][0].size())
 
     anomaly_targets = torch.cat(
         (torch.zeros(len(true_dataset)), torch.ones(len(ood_dataset)))
@@ -41,13 +41,10 @@ def loop_over_dataloader(model, dataloader):
     with torch.no_grad():
         scores = []
         accuracies = []
-        i = 1
         for data, target in dataloader:
             data = data.to(device)
             target = target.to(device)
-            if i == 1:
-                print(data.shape)
-                i = i + 1
+
             output = model(data)
 
             kernel_distance, pred = output.max(1)

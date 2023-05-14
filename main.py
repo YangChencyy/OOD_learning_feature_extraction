@@ -65,7 +65,7 @@ if __name__ == "__main__":
     InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
 
     for InD_Dataset in InD_Datasets:
-        print("InD_dataset: ",InD_Dataset)
+        
 
         # InD_Dataset = 'MNIST'
         train_set, test_set, trloader, tsloader = data_dic[InD_Dataset](batch_size = train_batch_size, 
@@ -100,7 +100,7 @@ if __name__ == "__main__":
         # multi_GP
         if 1 in methods:
             print("Method 1: Multi-GP")
-
+            print("InD_dataset: ",InD_Dataset)
             # mkdir directory to save
             parent_dir = os.getcwd()
             directory = 'Multi_GP/store_data/' + InD_Dataset
@@ -167,6 +167,7 @@ if __name__ == "__main__":
         # DUQ
         if 2 in methods:
             print("Method 2: DUQ")
+            print("InD_dataset: ",InD_Dataset)
             if InD_Dataset == 'Cifar_10':
                 for i in range(len(OOD_Dataset)):
                     print("OOD:", OOD_Dataset[i])
