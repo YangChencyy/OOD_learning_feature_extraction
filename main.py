@@ -136,6 +136,9 @@ if __name__ == "__main__":
             InD_feature, InD_score = InD_feature[0:20000], InD_score[0:20000]
             test_feature, test_score = test_feature[0:5000], test_score[0:5000]
 
+            train_data = np.concatenate((InD_feature, InD_score, InD_label), 1)
+            train_data = pd.DataFrame(train_data)
+            train_data.to_csv(directory +  '/train.csv')
 
             ## get OOD data for GP
             for i in range(len(OOD_loaders)):
