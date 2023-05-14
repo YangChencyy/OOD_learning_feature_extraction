@@ -130,8 +130,8 @@ class Fashion_MNIST_Net(nn.Module):
             out = self.layer2(out)
             out = out.view(out.size(0), -1)
             out = self.fc1(out)
+            out = self.drop(out)
         elif layer_index == 3:
-            out = self.layer2(out)
             out = self.layer2(out)
             out = out.view(out.size(0), -1)
             out = self.fc1(out)
