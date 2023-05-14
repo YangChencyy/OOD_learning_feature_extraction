@@ -51,7 +51,9 @@ def Generate_Maha(model, outf, InD_Dataset, OOD_Dataset,
         
     print('get sample mean and covariance')
     sample_mean, precision = Mahalanobis.lib_generation.sample_estimator(model, num_classes, feature_list, train_loader)
-    print("sample mean shape:", sample_mean[0].shape, sample_mean[0][0].shape, sample_mean[1].shape)
+    for i in range(len(sample_mean)):
+        print("sample mean shape:", str(i), sample_mean[i].shape)
+    
     
     print('get Mahalanobis scores')
     m_list = [0.0, 0.01, 0.005, 0.002, 0.0014, 0.001, 0.0005]
