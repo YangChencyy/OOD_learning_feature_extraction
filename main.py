@@ -125,7 +125,7 @@ if __name__ == "__main__":
                 epochs = 30
                 cifar10_train(network = net, trloader = trloader, epochs = epochs, optim = 'SGD', verbal=True)
             else:
-                epochs = 20
+                epochs = 10
                 net = data_model[InD_Dataset]()
                 train(network = net, trloader = trloader, epochs = epochs, verbal=True)
 
@@ -136,8 +136,9 @@ if __name__ == "__main__":
             InD_feature, InD_score = InD_feature[0:20000], InD_score[0:20000]
             test_feature, test_score = test_feature[0:5000], test_score[0:5000]
 
-            train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy(), InD_label), 1)
+            train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy()), 1)
             train_data = pd.DataFrame(train_data)
+            train_data['label'] = InD_label[0:20000]
             train_data.to_csv(directory +  '/train.csv')
 
             ## get OOD data for GP
