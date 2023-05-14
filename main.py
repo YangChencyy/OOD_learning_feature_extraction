@@ -227,7 +227,7 @@ if __name__ == "__main__":
 
         
         Generate_Maha(net_Maha, outf, InD_Dataset, OOD_Dataset, trloader, tsloader, 
-                      OOD_loaders, 'densenet', gpu = gpu, num_classes = 10)
+                      OOD_loaders, net_name, gpu = gpu, num_classes = 10)
 
 
     # ODIN
