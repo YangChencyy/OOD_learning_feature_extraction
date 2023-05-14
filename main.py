@@ -39,7 +39,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [3]
+    methods = [1]
     
     num_classes = 10
     train_batch_size = 128
@@ -120,7 +120,7 @@ if __name__ == "__main__":
             epochs = 30
             cifar10_train(network = net, trloader = trloader, epochs = epochs, optim = 'SGD', verbal=True)
         else:
-            epochs = 5
+            epochs = 20
             net = data_model[InD_Dataset]()
             train(network = net, trloader = trloader, epochs = epochs)
 
