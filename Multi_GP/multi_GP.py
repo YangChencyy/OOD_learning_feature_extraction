@@ -126,7 +126,7 @@ class Fashion_MNIST_Net(nn.Module):
         out = self.layer1(x)
         if layer_index == 1:
             out = self.layer2(out)
-        elif layer_index == 1:
+        elif layer_index == 2:
             out = self.layer2(out)
             out = out.view(out.size(0), -1)
             out = self.fc1(out)
