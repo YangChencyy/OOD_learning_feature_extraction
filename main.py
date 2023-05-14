@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
 
     # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
-    InD_Datasets = ['MNIST', 'FashionMNIST']
+    InD_Datasets = ['FashionMNIST']
 
     for InD_Dataset in InD_Datasets:
         print("InD_dataset: ",InD_Dataset)
@@ -223,7 +223,7 @@ if __name__ == "__main__":
         # Mahalanobis
         if 3 in methods:
             print("Method 3: Mahalanobis")
-
+            print("InD_dataset: ",InD_Dataset)
             parent_dir = os.getcwd()
             outf = parent_dir + '/Mahalanobis/output/densenet_' + InD_Dataset + '/'
             if os.path.isdir(outf) == False:
