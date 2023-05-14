@@ -139,8 +139,7 @@ class Fashion_MNIST_Net(nn.Module):
             out = self.drop(out)
             out = self.fc2(out)
 
-
-        return f, F.log_softmax(out, dim = 1)
+        return out
 
 # parameter refers to k 
 def train(network, trloader, epochs, learning_rate = 0.01, momentum = 0.5, verbal = False):
