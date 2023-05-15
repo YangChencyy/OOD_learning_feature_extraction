@@ -16,8 +16,9 @@ def Regression_Maha(InD_Dataset, OOD_Dataset, net_type):
     # initial setup
     # dataset_list = ['cifar10']
     dataset_list = [InD_Dataset]
-    score_list = ['Mahalanobis_0.0', 'Mahalanobis_0.01', 'Mahalanobis_0.005',
-                  'Mahalanobis_0.002', 'Mahalanobis_0.0014', 'Mahalanobis_0.001', 'Mahalanobis_0.0005']
+    score_list = ['Mahalanobis_0.0']
+    # score_list = ['Mahalanobis_0.0', 'Mahalanobis_0.01', 'Mahalanobis_0.005',
+    #               'Mahalanobis_0.002', 'Mahalanobis_0.0014', 'Mahalanobis_0.001', 'Mahalanobis_0.0005']
 
     # train and measure the performance of Mahalanobis detector
     list_best_results, list_best_results_index = [], []

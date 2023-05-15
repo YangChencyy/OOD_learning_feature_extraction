@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
 
     # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
-    InD_Datasets = ['MNIST']
+    InD_Datasets = ['FashionMNIST']
 
     for InD_Dataset in InD_Datasets:
         print("InD_dataset: ",InD_Dataset)
@@ -96,7 +96,7 @@ if __name__ == "__main__":
                 OOD_sets.append(OOD_set)
                 OOD_loaders.append(OODloader)
 
-
+        OOD_Dataset = ['FashionMNIST']
         print("OOD sets: ", OOD_Dataset)
 
         # multi_GP
