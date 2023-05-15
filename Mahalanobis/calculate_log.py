@@ -20,8 +20,8 @@ def get_curve(dir_name, stypes = ['Baseline', 'Gaussian_LDA']):
     tp, fp = dict(), dict()
     tnr_at_tpr95 = dict()
     for stype in stypes:
-        known = np.loadtxt('{}/confidence_{}_In.txt'.format(dir_name, stype), delimiter='\n')
-        novel = np.loadtxt('{}/confidence_{}_Out.txt'.format(dir_name, stype), delimiter='\n')
+        known = np.loadtxt('{}/confidence_{}_In.txt'.format(dir_name, stype), delimiter=',')
+        novel = np.loadtxt('{}/confidence_{}_Out.txt'.format(dir_name, stype), delimiter=',')
         known.sort()
         novel.sort()
         end = np.max([np.max(known), np.max(novel)])
