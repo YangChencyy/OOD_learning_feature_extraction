@@ -128,7 +128,7 @@ if __name__ == "__main__":
                 epochs = 10
                 net = data_model[InD_Dataset]()
                 train(network = net, trloader = trloader, epochs = epochs, verbal=True)
-                net.save(os.path.join(parent_dir, InD_Dataset + "_net.pt"))
+                torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
 
             ## get InD data for GP
             InD_feature, InD_score, InD_acc = scores(net, trloader)
@@ -270,7 +270,7 @@ if __name__ == "__main__":
                 
 
 
-
+    print("\nEND")
 
 
 
