@@ -96,7 +96,7 @@ if __name__ == "__main__":
                 OOD_sets.append(OOD_set)
                 OOD_loaders.append(OODloader)
 
-        OOD_Dataset = ['FashionMNIST']
+        # OOD_Dataset = ['FashionMNIST']
         print("OOD sets: ", OOD_Dataset)
 
         # multi_GP
