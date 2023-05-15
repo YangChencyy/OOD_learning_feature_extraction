@@ -228,8 +228,6 @@ if __name__ == "__main__":
             print("Method 3: Mahalanobis")
             print("InD_dataset: ",InD_Dataset)
             parent_dir = os.getcwd()
-            if os.path.isdir(outf) == False:
-                os.mkdir(outf)
             if InD_Dataset == "Cifar_10":
                 net_name = "densenet"
                 net_Maha = torch.load('./Mahalanobis/pre_trained/' + net_name + '_' + InD_Dataset + '.pth', map_location = "cuda:" + str(gpu))
@@ -241,6 +239,8 @@ if __name__ == "__main__":
                 # net_Maha = data_model[InD_Dataset]()
             
             outf = parent_dir + '/Mahalanobis/output/' + net_name  + '/'
+            if os.path.isdir(outf) == False:
+                os.mkdir(outf)
 
             
             Generate_Maha(net_Maha, outf, InD_Dataset, OOD_Dataset, trloader, tsloader, 
