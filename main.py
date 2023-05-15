@@ -39,7 +39,8 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [1]
+    # methods = [1, 2, 3, 4]
+    methods = [3]
     
     num_classes = 10
     train_batch_size = 128
@@ -63,7 +64,7 @@ if __name__ == "__main__":
 
 
     # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
-    InD_Datasets = ['MNIST', 'FashionMNIST']
+    InD_Datasets = ['MNIST']
 
     for InD_Dataset in InD_Datasets:
         print("InD_dataset: ",InD_Dataset)
@@ -209,13 +210,13 @@ if __name__ == "__main__":
                                 roc_aucs_mnist.append(roc_auc_mnist)
                             #roc_aucs_notmnist.append(roc_auc_notmnist)
 
-                            results[f"lgp{l_gradient_penalty}_ls{length_scale}"] = [
-                                (np.mean(val_accuracies), np.std(val_accuracies)),
-                                (np.mean(test_accuracies), np.std(test_accuracies)),
-                                (np.mean(roc_aucs_mnist), np.std(roc_aucs_mnist)),
-                                (np.mean(roc_aucs_notmnist), np.std(roc_aucs_notmnist)),
-                            ]
-                            print(results[f"lgp{l_gradient_penalty}_ls{length_scale}"])
+                                results[f"lgp{l_gradient_penalty}_ls{length_scale}"] = [
+                                    (np.mean(val_accuracies), np.std(val_accuracies)),
+                                    (np.mean(test_accuracies), np.std(test_accuracies)),
+                                    (np.mean(roc_aucs_mnist), np.std(roc_aucs_mnist)),
+                                    (np.mean(roc_aucs_notmnist), np.std(roc_aucs_notmnist)),
+                                ]
+                                print(results[f"lgp{l_gradient_penalty}_ls{length_scale}"])
 
                 print(results)
 
@@ -236,7 +237,8 @@ if __name__ == "__main__":
                 
             else:
                 net_name = "dnn_" + InD_Dataset
-                net_Maha = data_model[InD_Dataset]()
+                net_Maha = torch.load(os.path.join(parent_dir, InD_Dataset + "_net.pt"))
+                # net_Maha = data_model[InD_Dataset]()
 
             
             Generate_Maha(net_Maha, outf, InD_Dataset, OOD_Dataset, trloader, tsloader, 
