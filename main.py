@@ -28,6 +28,7 @@ from DUQ.train_duq_cifar import train_model_cifar
 from DUQ.evaluate_ood import get_auroc_ood
 
 from Mahalanobis.OOD_Generate_Mahalanobis import Generate_Maha
+from Mahalanobis.OOD_Regression_Mahalanobis import Regression_Maha
 
 from ODIN.calData import testData_ODIN
 from ODIN.calMetric import metric_ODIN
@@ -243,6 +244,7 @@ if __name__ == "__main__":
             
             Generate_Maha(net_Maha, outf, InD_Dataset, OOD_Dataset, trloader, tsloader, 
                         OOD_loaders, net_name, gpu = gpu, num_classes = 10)
+            Regression_Maha(InD_Dataset, OOD_Dataset, net_name)
 
 
         # ODIN
