@@ -5,7 +5,7 @@ Created on Sun Oct 21 2018
 from __future__ import print_function
 import numpy as np
 import os
-import lib_regression
+import Mahalanobis.lib_regression
 import argparse
 
 from sklearn.linear_model import LogisticRegressionCV
