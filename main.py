@@ -228,7 +228,6 @@ if __name__ == "__main__":
             print("Method 3: Mahalanobis")
             print("InD_dataset: ",InD_Dataset)
             parent_dir = os.getcwd()
-            outf = parent_dir + '/Mahalanobis/output/densenet_' + InD_Dataset + '/'
             if os.path.isdir(outf) == False:
                 os.mkdir(outf)
             if InD_Dataset == "Cifar_10":
@@ -240,11 +239,13 @@ if __name__ == "__main__":
                 net_name = "dnn_" + InD_Dataset
                 net_Maha = torch.load(os.path.join(parent_dir, InD_Dataset + "_net.pt"))
                 # net_Maha = data_model[InD_Dataset]()
+            
+            outf = parent_dir + '/Mahalanobis/output/' + net_name  + '/'
 
             
             Generate_Maha(net_Maha, outf, InD_Dataset, OOD_Dataset, trloader, tsloader, 
                         OOD_loaders, net_name, gpu = gpu, num_classes = 10)
-            Regression_Maha(InD_Dataset, OOD_Dataset, net_name)
+            Regression_Maha(InD_Dataset, OOD_Dataset, net_name, outf)
 
 
         # ODIN
