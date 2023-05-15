@@ -31,9 +31,9 @@ def Regression_Maha(InD_Dataset, OOD_Dataset, net_type):
             print('Out-of-distribution: ', out)
             best_tnr, best_result, best_index = 0, 0, 0
             for score in score_list:
-                total_X, total_Y = lib_regression.load_characteristics(
+                total_X, total_Y = Mahalanobis.lib_regression.load_characteristics(
                     score, dataset, out, outf)
-                X_val, Y_val, X_test, Y_test = lib_regression.block_split(
+                X_val, Y_val, X_test, Y_test = Mahalanobis.lib_regression.block_split(
                     total_X, total_Y, out)
                 X_train = np.concatenate((X_val[:500], X_val[1000:1500]))
                 Y_train = np.concatenate((Y_val[:500], Y_val[1000:1500]))
@@ -46,12 +46,12 @@ def Regression_Maha(InD_Dataset, OOD_Dataset, net_type):
                 print('training mse: {:.4f}'.format(np.mean(y_pred - Y_train)))
                 y_pred = lr.predict_proba(X_val_for_test)[:, 1]
                 print('test mse: {:.4f}'.format(np.mean(y_pred - Y_val_for_test)))
-                results = lib_regression.detection_performance(
+                results = Mahalanobis.lib_regression.detection_performance(
                     lr, X_val_for_test, Y_val_for_test, outf)
                 if best_tnr < results['TMP']['TNR']:
                     best_tnr = results['TMP']['TNR']
                     best_index = score
-                    best_result = lib_regression.detection_performance(
+                    best_result = Mahalanobis.lib_regression.detection_performance(
                         lr, X_test, Y_test, outf)
             list_best_results_out.append(best_result)
             list_best_results_index_out.append(best_index)
