@@ -50,11 +50,11 @@ def Cifar_10_dataset(batch_size, test_batch_size, into_grey = False):
         transform = transforms.Compose([transforms.Resize(28),
                                         transforms.Grayscale(),
                                         transforms.ToTensor(),
-                                        transforms.Normalize((0.5,), (0.5,))
+                                        # transforms.Normalize((0.5,), (0.5,))
                                         ])
     else:
         transform = transforms.Compose([transforms.ToTensor(),
-                                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+                                        # transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                                         ])
 
     train_set = datasets.CIFAR10('./data/cifar10', train=True,download=True,
@@ -78,11 +78,11 @@ def SVHN_dataset(batch_size, test_batch_size, into_grey = False):
         transform = transforms.Compose([transforms.Resize(28),
                                         transforms.Grayscale(),
                                         transforms.ToTensor(),
-                                        transforms.Normalize((0.5,), (0.5,))
+                                        # transforms.Normalize((0.5,), (0.5,))
                                         ])
     else:
         transform = transforms.Compose([transforms.ToTensor(),
-                                        transforms.Normalize((0.5,), (0.5,))
+                                        # transforms.Normalize((0.5,), (0.5,))
                                         ])
     
     train_set = datasets.SVHN('./data/svhn/', split='train',transform=transform,
@@ -103,12 +103,12 @@ def TinyImagenet_r_dataset(batch_size, test_batch_size, into_grey = False):
         transform = transforms.Compose([transforms.Resize(28),
                                         transforms.Grayscale(),
                                         transforms.ToTensor(),
-                                        transforms.Normalize((0.5,), (0.5,))
+                                        # transforms.Normalize((0.5,), (0.5,))
                                         ])
     else:
         transform = transforms.Compose([transforms.Resize(32),
                                         transforms.ToTensor(),
-                                        transforms.Normalize((0.5,), (0.5,))
+                                        # transforms.Normalize((0.5,), (0.5,))
                                         ])
     
     train_datasets = datasets.ImageFolder(os.path.join('./data/tiny-imagenet-200', 'train'), transform=transform) 
@@ -125,12 +125,12 @@ def TinyImagenet_c_dataset(batch_size, test_batch_size, into_grey = False):
         transform = transforms.Compose([transforms.Resize(28),
                                         transforms.Grayscale(),
                                         transforms.ToTensor(),
-                                        transforms.Normalize((0.5,), (0.5,))
+                                        # transforms.Normalize((0.5,), (0.5,))
                                         ])
     else:
         transform = transforms.Compose([transforms.Resize(32),
                                         transforms.ToTensor(),
-                                        transforms.Normalize((0.5,), (0.5,))
+                                        # transforms.Normalize((0.5,), (0.5,))
                                         ])
     
     train_datasets = datasets.ImageFolder(os.path.join('./data/tiny-imagenet-200', 'train'), transform=transform) 
