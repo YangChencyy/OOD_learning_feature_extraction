@@ -130,7 +130,7 @@ if __name__ == "__main__":
             else:
                 epochs = 10
                 net = data_model[InD_Dataset]()
-                train(network = net, trloader = trloader, epochs = epochs, verbal=True)
+                train(network = net, trloader = trloader, epochs = epochs, verbal=False)
                 torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
 
             ## get InD data for GP
@@ -165,7 +165,7 @@ if __name__ == "__main__":
                 data_df['class'] = ['test']*len(test_feature) + ['OOD']*len(OOD_feature)
 
                 data_df.to_csv(directory +  '/' + OOD_Dataset[i] + '_test.csv')
-                print(OOD_Dataset[i] + "test data stored")
+                print(OOD_Dataset[i] + " test data stored")
 
 
         # DUQ
