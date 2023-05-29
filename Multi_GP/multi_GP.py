@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from scipy import stats
 import math
 from sklearn.metrics import accuracy_score
-from model_cifar import BasicBlock, resnet18, load_part, Cifar_10_Net
+from Multi_GP.model_cifar import BasicBlock, resnet18, load_part, Cifar_10_Net
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
