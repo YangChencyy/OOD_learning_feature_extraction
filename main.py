@@ -119,14 +119,7 @@ if __name__ == "__main__":
 
             net = None
             if InD_Dataset == 'Cifar_10':
-                pretrained_resnet18 = resnet18(pretrained=True)
-                net = data_model[InD_Dataset](BasicBlock, [2, 2, 2, 2])
-                # network.load_sta(torch.load('path'))
-                net = load_part(net, pretrained_resnet18.state_dict())
-                
-                epochs = 30
-                cifar10_train(network = net, trloader = trloader, epochs = epochs, optim = 'SGD', verbal=True)
-
+                net = cifar10_train(network = net, trloader = trloader, epochs = 30, optim = 'SGD', verbal=False)
                 torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
 
             else:

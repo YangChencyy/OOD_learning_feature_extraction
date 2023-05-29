@@ -8,6 +8,7 @@ import torch.nn.functional as F
 from scipy import stats
 import math
 from sklearn.metrics import accuracy_score
+from model_cifar import BasicBlock, resnet18, load_part, Cifar_10_Net
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -172,6 +173,12 @@ def cifar10_train(network, trloader, epochs, optim=None, learning_rate = 0.01, m
         optimizer = torch.optim.SGD(network.parameters(), lr=learning_rate,
                       momentum=0.9, weight_decay=5e-4)
         scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.8)
+
+    pretrained_resnet18 = resnet18(pretrained=True)
+    net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2])
+    # network.load_sta(torch.load('path'))
+    net = load_part(net, pretrained_resnet18.state_dict())
+    
 
     network.to(device)
     network.train()
