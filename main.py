@@ -96,7 +96,7 @@ if __name__ == "__main__":
                 OOD_sets.append(OOD_set)
                 OOD_loaders.append(OODloader)
 
-        # OOD_Dataset = ['FashionMNIST']
+        OOD_Dataset = ['SVHN']
         print("OOD sets: ", OOD_Dataset)
 
         # multi_GP
@@ -190,8 +190,9 @@ if __name__ == "__main__":
                     for length_scale in length_scales:
                         val_accuracies = []
                         test_accuracies = []
+                        ood_accuracies = []
                         roc_aucs_mnist = []
-                        roc_aucs_notmnist = []
+                        # roc_aucs_notmnist = []
 
                         for _ in range(repetition):
                             print(" ### NEW MODEL ### ")
@@ -209,14 +210,17 @@ if __name__ == "__main__":
 
                                 val_accuracies.append(val_accuracy)
                                 test_accuracies.append(test_accuracy)
+
+                                ood_accuracies.append(accuracy)
+
                                 roc_aucs_mnist.append(roc_auc_mnist)
                             #roc_aucs_notmnist.append(roc_auc_notmnist)
 
                                 results[f"lgp{l_gradient_penalty}_ls{length_scale}"] = [
                                     (np.mean(val_accuracies), np.std(val_accuracies)),
                                     (np.mean(test_accuracies), np.std(test_accuracies)),
+                                    (np.mean(ood_accuracies), np.std(ood_accuracies)),
                                     (np.mean(roc_aucs_mnist), np.std(roc_aucs_mnist)),
-                                    (np.mean(roc_aucs_notmnist), np.std(roc_aucs_notmnist)),
                                 ]
                                 print(results[f"lgp{l_gradient_penalty}_ls{length_scale}"])
 
