@@ -16,8 +16,9 @@ def Regression_Maha(InD_Dataset, OOD_Dataset, net_type, outf):
     # initial setup
     # dataset_list = ['cifar10']
     dataset_list = [InD_Dataset]
-    score_list = ['Mahalanobis_0.0', 'Mahalanobis_0.01', 'Mahalanobis_0.005',
-                  'Mahalanobis_0.002', 'Mahalanobis_0.0014', 'Mahalanobis_0.001', 'Mahalanobis_0.0005']
+    # score_list = ['Mahalanobis_0.0', 'Mahalanobis_0.01', 'Mahalanobis_0.005',
+    #               'Mahalanobis_0.002', 'Mahalanobis_0.0014', 'Mahalanobis_0.001', 'Mahalanobis_0.0005']
+    score_list = ['Mahalanobis_0.0']
 
     # train and measure the performance of Mahalanobis detector
     list_best_results, list_best_results_index = [], []
@@ -41,6 +42,7 @@ def Regression_Maha(InD_Dataset, OOD_Dataset, net_type, outf):
                     (X_val[500:1000], X_val[1500:]))
                 Y_val_for_test = np.concatenate(
                     (Y_val[500:1000], Y_val[1500:]))
+                print(X_train.shape, Y_train.shape)
                 lr = LogisticRegressionCV(n_jobs=-1).fit(X_train, Y_train)
                 y_pred = lr.predict_proba(X_train)[:, 1]
                 print('training mse: {:.4f}'.format(np.mean(y_pred - Y_train)))
