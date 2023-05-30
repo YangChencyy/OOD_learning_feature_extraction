@@ -40,7 +40,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [2]
+    methods = [1]
     
     num_classes = 10
     train_batch_size = 128
@@ -64,13 +64,13 @@ if __name__ == "__main__":
 
 
     # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
-    InD_Datasets = ['MNIST']
+    InD_Datasets = ['FashionMNIST']
 
 
     for InD_Dataset in InD_Datasets:
         print("InD_dataset: ",InD_Dataset)
 
-        # InD_Dataset = 'MNIST'
+
         train_set, test_set, trloader, tsloader = data_dic[InD_Dataset](batch_size = train_batch_size, 
                                                                         test_batch_size = test_batch_size)
         OOD_sets, OOD_loaders = [], []
@@ -96,7 +96,7 @@ if __name__ == "__main__":
                 OOD_sets.append(OOD_set)
                 OOD_loaders.append(OODloader)
 
-        OOD_Dataset = ['SVHN']
+        # OOD_Dataset = ['SVHN']
         print("OOD sets: ", OOD_Dataset)
 
         # multi_GP
@@ -178,8 +178,8 @@ if __name__ == "__main__":
                     train_model_cifar(train_set, test_set, OOD_sets[i])
             else:
                 l_gradient_penalties = [0.0]
-                length_scales = [0.1]
-                # length_scales = [0.05, 0.1, 0.2, 0.3, 0.5, 1.0]
+                # length_scales = [0.1]
+                length_scales = [0.05, 0.1, 0.2, 0.3, 0.5, 1.0]
 
                 repetition = 1  # Increase for multiple repetitions
                 final_model = False  # set true for final model to train on full train set
