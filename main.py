@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
 
     # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
-    InD_Datasets = ['Cifar_10']
+    InD_Datasets = ['FashionMNIST', 'Cifar_10']
 
 
     for InD_Dataset in InD_Datasets:
@@ -124,11 +124,11 @@ if __name__ == "__main__":
                 # network.load_sta(torch.load('path'))
                 net = load_part(net, pretrained_resnet18.state_dict())
     
-                cifar10_train(network = net, trloader = trloader, epochs = 30, optim = 'SGD', verbal=True)
+                cifar10_train(network = net, trloader = trloader, epochs = 10, optim = 'SGD', verbal=True)
                 torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
 
             else:
-                epochs = 20
+                epochs = 5
                 net = data_model[InD_Dataset]()
                 train(network = net, trloader = trloader, epochs = epochs, verbal=True)
                 torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
