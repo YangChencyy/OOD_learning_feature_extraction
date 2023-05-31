@@ -40,7 +40,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [2, 4]
+    methods = [1]
     
     num_classes = 10
     train_batch_size = 128
@@ -63,8 +63,8 @@ if __name__ == "__main__":
     }
 
 
-    InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
-    # InD_Datasets = ['FashionMNIST', 'Cifar_10']
+    # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
+    InD_Datasets = ['MNIST', 'FashionMNIST']
 
 
     for InD_Dataset in InD_Datasets:
@@ -128,7 +128,7 @@ if __name__ == "__main__":
                 torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
 
             else:
-                epochs = 5
+                epochs = 8
                 net = data_model[InD_Dataset]()
                 train(network = net, trloader = trloader, epochs = epochs, verbal=True)
                 torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))

@@ -142,7 +142,9 @@ class Fashion_MNIST_Net(nn.Module):
 
 # parameter refers to k 
 def train(network, trloader, epochs, learning_rate = 0.01, momentum = 0.5, verbal = False):
-    optimizer = torch.optim.Adam(network.parameters(), lr=learning_rate)
+    optimizer = optim.SGD(network.parameters(), lr=learning_rate,
+                      momentum=momentum)
+
 
     network.to(device)
     network.train()
