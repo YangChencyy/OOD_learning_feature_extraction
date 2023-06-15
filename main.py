@@ -43,8 +43,8 @@ if __name__ == "__main__":
     methods = [1]
     
     num_classes = 10
-    train_batch_size = 128
-    test_batch_size = 128
+    train_batch_size = 50
+    test_batch_size = 50
 
     data_dic = {
         'MNIST': MNIST_dataset,
