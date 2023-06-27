@@ -128,7 +128,7 @@ if __name__ == "__main__":
                 torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
 
             else:
-                epochs = 8
+                epochs = 15
                 net = data_model[InD_Dataset]()
                 train(network = net, trloader = trloader, epochs = epochs, verbal=True)
                 torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
