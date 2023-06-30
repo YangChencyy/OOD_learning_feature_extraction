@@ -13,7 +13,7 @@ def block_split(X, Y, out):
     :return: X (data) and Y (label) for training / testing
     """
     num_samples = X.shape[0]
-    if out == 'svhn':
+    if out == 'SVHN':
         partition = 26032
     else:
         partition = 10000
