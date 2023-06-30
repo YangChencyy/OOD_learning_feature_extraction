@@ -40,7 +40,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [1, 3]
+    methods = [3]
     
     num_classes = 10
     train_batch_size = 50
