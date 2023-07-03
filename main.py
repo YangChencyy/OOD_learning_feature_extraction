@@ -139,7 +139,7 @@ if __name__ == "__main__":
             print("InD accuracy: ", InD_acc)
             InD_feature, InD_score = InD_feature[0:20000], InD_score[0:20000]
             # test_feature, test_score = test_feature[0:5000], test_score[0:5000]
-            test_feature, test_score = InD_feature[20000:25000], InD_feature[20000:25000]
+            test_feature, test_score = InD_feature[20000:25000], InD_score[20000:25000]
 
             train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy()), 1)
             train_data = pd.DataFrame(train_data)
