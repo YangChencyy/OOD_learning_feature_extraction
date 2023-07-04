@@ -134,12 +134,12 @@ if __name__ == "__main__":
                 torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
 
             ## get InD data for GP
-            InD_feature, InD_score, InD_acc = scores(net, trloader)
+            InD_features, InD_scores, InD_acc = scores(net, trloader)
             # test_feature, test_score, test_acc = scores(net, tsloader)
             print("InD accuracy: ", InD_acc)
-            InD_feature, InD_score = InD_feature[0:20000], InD_score[0:20000]
+            InD_feature, InD_score = InD_features[0:20000], InD_scores[0:20000]
             # test_feature, test_score = test_feature[0:5000], test_score[0:5000]
-            test_feature, test_score = InD_feature[20000:25000], InD_score[20000:25000]
+            test_feature, test_score = InD_features[20000:25000], InD_scores[20000:25000]
 
             train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy()), 1)
             train_data = pd.DataFrame(train_data)
