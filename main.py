@@ -40,7 +40,7 @@ gpu = 0
 
 
 if __name__ == "__main__":
-    methods = [1, 2, 3, 4]
+    methods = [1]
     
     num_classes = 10
     train_batch_size = 50
@@ -63,8 +63,8 @@ if __name__ == "__main__":
     }
 
 
-    InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
-    # InD_Datasets = ['FashionMNIST']
+    # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
+    InD_Datasets = ['MNIST', 'FashionMNIST']
 
 
     for InD_Dataset in InD_Datasets:
