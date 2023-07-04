@@ -144,7 +144,7 @@ class Fashion_MNIST_Net(nn.Module):
 def train(network, trloader, epochs, learning_rate = 0.01, momentum = 0.5, verbal = False):
     optimizer = optim.SGD(network.parameters(), lr=learning_rate,
                       momentum=momentum)
-    optimizer = optim.Adam(network.parameters(), lr=0.001)  
+    # optimizer = optim.Adam(network.parameters(), lr=0.001)  
 
 
     network.to(device)
