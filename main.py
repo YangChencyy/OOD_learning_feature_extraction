@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
 
     # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
-    InD_Datasets = ['Cifar_10']
+    InD_Datasets = ['FashionMNIST']
 
 
     for InD_Dataset in InD_Datasets:
