@@ -43,8 +43,8 @@ if __name__ == "__main__":
     methods = [1]
     
     num_classes = 10
-    train_batch_size = 50
-    test_batch_size = 50
+    train_batch_size = 128
+    test_batch_size = 128
 
     data_dic = {
         'MNIST': MNIST_dataset,
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
 
     # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
-    InD_Datasets = ['FashionMNIST']
+    InD_Datasets = ['Cifar_10']
 
 
     for InD_Dataset in InD_Datasets:
