@@ -103,7 +103,7 @@ class Fashion_MNIST_Net(nn.Module):
         f = self.fc3(out)
         out = self.fc4(f)
 
-        return f, F.log_softmax(out, dim = 1)
+        return f, out # F.log_softmax(out, dim = 1)
         
     def feature_list(self, x):
         out_list = []
@@ -142,9 +142,8 @@ class Fashion_MNIST_Net(nn.Module):
 
 # parameter refers to k 
 def train(network, trloader, epochs, learning_rate = 0.01, momentum = 0.5, verbal = False):
-    optimizer = optim.SGD(network.parameters(), lr=learning_rate,
-                      momentum=momentum)
-    # optimizer = optim.Adam(network.parameters(), lr=0.001)  
+    # optimizer = optim.SGD(network.parameters(), lr=learning_rate, momentum=momentum)
+    optimizer = optim.Adam(network.parameters(), lr=0.001)  
 
 
     network.to(device)

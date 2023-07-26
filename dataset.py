@@ -62,11 +62,9 @@ def Cifar_10_dataset(batch_size, test_batch_size, into_grey = False):
 
     test_set = datasets.CIFAR10('./datasets/cifar10', train=False,download=True, 
                                                               transform=transform)
-    train_loader = torch.utils.data.DataLoader(train_set,
-                                               batch_size=batch_size,shuffle=True)
+    train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size)
 
-    val_loader = torch.utils.data.DataLoader(test_set,
-                                             batch_size=test_batch_size, shuffle=True)
+    val_loader = torch.utils.data.DataLoader(test_set, batch_size=test_batch_size)
     
    
     return train_set, test_set, train_loader, val_loader
