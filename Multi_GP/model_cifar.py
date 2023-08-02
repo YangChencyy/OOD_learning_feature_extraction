@@ -404,7 +404,6 @@ class Cifar_10_Net(nn.Module):
         x = self.fc2(f)
 
         # return x  # f, x
-        
         return f, self.log_softmax(x)
 
 
