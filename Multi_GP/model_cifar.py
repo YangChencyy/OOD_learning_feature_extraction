@@ -323,7 +323,7 @@ class Cifar_10_Net(nn.Module):
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc1 = nn.Linear(512 * block.expansion, 16) # also try 32
         self.fc2 = nn.Linear(16, num_classes)
-        self.log_softmax = nn.LogSoftmax(dim=0)
+        # self.log_softmax = nn.LogSoftmax(dim=0)
         # self.fc3 = nn.Linear(512, num_classes)
         # self.fc = nn.Linear(512 * block.expansion, num_classes)
 
@@ -404,7 +404,8 @@ class Cifar_10_Net(nn.Module):
         x = self.fc2(f)
 
         # return x  # f, x
-        return f, self.log_softmax(x)
+        # return f, self.log_softmax(x)
+        return f, x
 
 
 def _resnet(arch, block, layers, pretrained, progress, device, **kwargs):
