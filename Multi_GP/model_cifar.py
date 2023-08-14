@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import os
+import torch.nn.functional as F
 
 __all__ = [
     "ResNet",
@@ -405,7 +406,7 @@ class Cifar_10_Net(nn.Module):
 
         # return x  # f, x
         # return f, self.log_softmax(x)
-        return f, x
+        return f, F.log_softmax(x, dim = 1)
 
 
 def _resnet(arch, block, layers, pretrained, progress, device, **kwargs):

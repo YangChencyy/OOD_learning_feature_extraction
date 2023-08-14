@@ -192,7 +192,11 @@ def cifar10_train(network, trloader, epochs, optim=None, learning_rate = 0.01, m
             optimizer.zero_grad()
             _, output = network(data)
 
-            loss = F.nll_loss(output, target)
+            # # for mnist/fmnist
+            # loss = F.nll_loss(output, target)
+            # cifar
+            criterion = nn.CrossEntropyLoss()
+            loss = criterion(output, target)
             loss.backward()
 
             optimizer.step()
