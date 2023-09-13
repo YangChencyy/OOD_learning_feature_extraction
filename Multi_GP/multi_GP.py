@@ -20,9 +20,10 @@ class MNIST_Net(nn.Module):
         self.conv1 = nn.Conv2d(1, 10, kernel_size=5)
         self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
         self.conv2_drop = nn.Dropout2d()
-        self.fc1 = nn.Linear(320, 50)
-        self.fc3 = nn.Linear(50, out_size)
-        self.fc2 = nn.Linear(out_size, 10)
+        self.fc1 = nn.Linear(320, 160)
+        self.fc2 = nn.Linear(160, 10)
+        self.fc3 = nn.Linear(160, out_size)
+        # self.fc2 = nn.Linear(320, 10)
 
     def forward(self, x):
         x = F.relu(F.max_pool2d(self.conv1(x), 2))
@@ -30,8 +31,7 @@ class MNIST_Net(nn.Module):
         x = x.view(-1, 320)
         x = F.relu(self.fc1(x))
         x = F.dropout(x, training=self.training)
-        x = self.fc3(x)
-        out = x
+        out = self.fc3(x)
         x = self.fc2(x)
         return out, F.log_softmax(x, dim = 1)
     
@@ -45,7 +45,6 @@ class MNIST_Net(nn.Module):
         x = F.relu(self.fc1(x))
         out_list.append(x)
         x = F.dropout(x, training=self.training)
-        x = self.fc3(x)
         x = self.fc2(x) 
         out_list.append(x)   
         return F.log_softmax(x, dim = 1), out_list
