@@ -15,7 +15,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Model structure for MNIST dataset
 class MNIST_Net(nn.Module):
-    def __init__(self, out_size = 32):
+    def __init__(self, out_size = 10):
         super(MNIST_Net, self).__init__()
         self.conv1 = nn.Conv2d(1, 10, kernel_size=5)
         self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
@@ -68,7 +68,7 @@ class MNIST_Net(nn.Module):
 
 class Fashion_MNIST_Net(nn.Module):
     
-    def __init__(self, out_size = 32):
+    def __init__(self, out_size = 10):
         super(Fashion_MNIST_Net, self).__init__()
         
         self.layer1 = nn.Sequential(

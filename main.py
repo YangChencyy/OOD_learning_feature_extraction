@@ -140,7 +140,7 @@ if __name__ == "__main__":
             InD_feature, InD_score = InD_features[0:20000], InD_scores[0:20000]
             # test_feature, test_score = test_feature[0:5000], test_score[0:5000]
             test_feature, test_score = InD_features[20000:25000], InD_scores[20000:25000]
-            labels = train_set.targets[20000:25000] # .numpy().tolist() 
+            labels = train_set.targets[20000:25000].numpy().tolist() 
 
             train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy()), 1)
             train_data = pd.DataFrame(train_data)
@@ -165,6 +165,7 @@ if __name__ == "__main__":
 
                 data_df = pd.DataFrame(DNN_data) 
                 data_df['class'] = ['test']*len(test_feature) + ['OOD']*len(OOD_feature)
+                # print(type(labels))
                 data_df['label'] = labels + [10]*len(OOD_feature)
 
                 data_df.to_csv(directory +  '/' + OOD_Dataset[i] + '_test.csv')
