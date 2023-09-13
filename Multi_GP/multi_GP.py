@@ -15,7 +15,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Model structure for MNIST dataset
 class MNIST_Net(nn.Module):
-    def __init__(self, out_size = 16):
+    def __init__(self, out_size = 32):
         super(MNIST_Net, self).__init__()
         self.conv1 = nn.Conv2d(1, 10, kernel_size=5)
         self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
@@ -63,13 +63,12 @@ class MNIST_Net(nn.Module):
             x = x.view(-1, 320)
             x = F.relu(self.fc1(x))
             x = F.dropout(x, training=self.training)
-            x = self.fc3(x)
             x = self.fc2(x)    
         return x
 
 class Fashion_MNIST_Net(nn.Module):
     
-    def __init__(self):
+    def __init__(self, out_size = 32):
         super(Fashion_MNIST_Net, self).__init__()
         
         self.layer1 = nn.Sequential(
@@ -89,8 +88,8 @@ class Fashion_MNIST_Net(nn.Module):
         self.fc1 = nn.Linear(in_features=64*6*6, out_features=600)
         self.drop = nn.Dropout2d(0.25)
         self.fc2 = nn.Linear(in_features=600, out_features=120)
-        self.fc3 = nn.Linear(in_features=120, out_features=16)
-        self.fc4 = nn.Linear(in_features=16, out_features=10)
+        self.fc3 = nn.Linear(in_features=120, out_features=10)
+        self.fc4 = nn.Linear(in_features=120, out_features=out_size)
 
     def forward(self, x):
         out = self.layer1(x)
@@ -99,8 +98,8 @@ class Fashion_MNIST_Net(nn.Module):
         out = self.fc1(out)
         out = self.drop(out)
         out = self.fc2(out)
-        f = self.fc3(out)
-        out = self.fc4(f)
+        f = self.fc4(out)
+        out = self.fc3(out)
 
         return f, out # F.log_softmax(out, dim = 1)
         
@@ -116,8 +115,8 @@ class Fashion_MNIST_Net(nn.Module):
         out_list.append(out)
         out = self.fc2(out)
         out_list.append(out)
-        f = self.fc3(out)
-        out = self.fc4(f)
+        # f = self.fc3(out)
+        out = self.fc4(out)
 
         return F.log_softmax(out, dim = 1), out_list
     
