@@ -292,39 +292,39 @@ def load_part(model, state_dict):
     return model
 
 
-def resnet18(pretrained=False, progress=True, device="cpu", **kwargs):
-    """Constructs a ResNet-18 model.
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    return _resnet(
-        "resnet18", BasicBlock, [2, 2, 2, 2], pretrained, progress, device, **kwargs
-    )
+# def resnet18(pretrained=False, progress=True, device="cpu", **kwargs):
+#     """Constructs a ResNet-18 model.
+#     Args:
+#         pretrained (bool): If True, returns a model pre-trained on ImageNet
+#         progress (bool): If True, displays a progress bar of the download to stderr
+#     """
+#     return _resnet(
+#         "resnet18", BasicBlock, [2, 2, 2, 2], pretrained, progress, device, **kwargs
+#     )
 
 
-def resnet34(pretrained=False, progress=True, device="cpu", **kwargs):
-    """Constructs a ResNet-34 model.
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    return _resnet(
-        "resnet34", BasicBlock, [3, 4, 6, 3], pretrained, progress, device, **kwargs
-    )
+# def resnet34(pretrained=False, progress=True, device="cpu", **kwargs):
+#     """Constructs a ResNet-34 model.
+#     Args:
+#         pretrained (bool): If True, returns a model pre-trained on ImageNet
+#         progress (bool): If True, displays a progress bar of the download to stderr
+#     """
+#     return _resnet(
+#         "resnet34", BasicBlock, [3, 4, 6, 3], pretrained, progress, device, **kwargs
+#     )
 
 
-def resnet50(pretrained=False, progress=True, device="cpu", **kwargs):
-    """Constructs a ResNet-50 model.
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    return _resnet(
-        "resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, device, **kwargs
-    )
+# def resnet50(pretrained=False, progress=True, device="cpu", **kwargs):
+#     """Constructs a ResNet-50 model.
+#     Args:
+#         pretrained (bool): If True, returns a model pre-trained on ImageNet
+#         progress (bool): If True, displays a progress bar of the download to stderr
+#     """
+#     return _resnet(
+#         "resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, device, **kwargs
+#     )
 
 
-if __name__ == "__main__":
-    resnet = resnet18(pretrained=True)
-    print(resnet)
+# if __name__ == "__main__":
+#     resnet = resnet18(pretrained=True)
+#     print(resnet)
