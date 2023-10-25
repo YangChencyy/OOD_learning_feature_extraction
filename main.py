@@ -1,20 +1,20 @@
 import warnings
 warnings.filterwarnings("ignore")
 
+import argparse
 import numpy as np
 import pandas as pd
 # import matplotlib.pyplot as plt
-import time
+# import time
 import os
-import sys
+# import sys
 
 import torch
-import torch.nn as nn
-from torch.autograd import Variable
-torch.manual_seed(424)
-import torchvision
-import torchvision.transforms as transforms
-from torch.utils.data import Dataset, DataLoader
+# import torch.nn as nn
+# from torch.autograd import Variable
+# import torchvision
+# import torchvision.transforms as transforms
+# from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import confusion_matrix
 import umap
 
@@ -46,62 +46,40 @@ data_model = {
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="DUQ parameters")
+    parser = argparse.ArgumentParser(description="GP parameters")
 
     # Add a positional argument for the number
     parser.add_argument("InD_Dataset", type=str, help="The name of the InD dataset.")
     parser.add_argument("train_batch_size", type=int, help="train_batch_size")
     parser.add_argument("test_batch_size", type=int, help="test_batch_size")
-    methods = [1]
+
+    args = parser.parse_args()
+    print("InD dataset:", args.InD_Dataset)
+
     
     num_classes = 10
-    train_batch_size = 128
-    test_batch_size = 128
 
+    train_set, test_set, trloader, tsloader = data_dic[args.InD_Dataset](batch_size = args.train_batch_size, 
+                                                                    test_batch_size = args.test_batch_size)
+    OOD_sets, OOD_loaders = [], []
+    if args.InD_Dataset == 'Cifar_10':
+        OOD_Dataset = ['SVHN', 'Imagenet_r', 'Imagenet_c']
+    else:
+        if args.InD_Dataset == 'MNIST':
+            OOD_Dataset = ['FashionMNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
+        elif args.InD_Dataset == 'FashionMNIST':
+            OOD_Dataset = ['MNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
 
+    # Get all OOD datasets     
+    for dataset in OOD_Dataset:
+        _, OOD_set, _, OODloader = data_dic[dataset](batch_size = args.train_batch_size, 
+                                                    test_batch_size = args.test_batch_size, into_grey = True)
+        OOD_sets.append(OOD_set)
+        OOD_loaders.append(OODloader)
 
-
-    # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
-    InD_Datasets = ['FashionMNIST']
-
-
-    for InD_Dataset in InD_Datasets:
-        print("InD_dataset: ",InD_Dataset)
-
-
-        train_set, test_set, trloader, tsloader = data_dic[InD_Dataset](batch_size = train_batch_size, 
-                                                                        test_batch_size = test_batch_size)
-        OOD_sets, OOD_loaders = [], []
-        if InD_Dataset == 'Cifar_10':
-            OOD_Dataset = ['SVHN', 'Imagenet_r', 'Imagenet_c']
-
-            # Get all OOD datasets     
-            for dataset in OOD_Dataset:
-                _, OOD_set, _, OODloader = data_dic[dataset](batch_size = train_batch_size, 
-                                                            test_batch_size = test_batch_size)
-                OOD_sets.append(OOD_set)
-                OOD_loaders.append(OODloader)
-
-        else:
-            if InD_Dataset == 'MNIST':
-                OOD_Dataset = ['FashionMNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
-            elif InD_Dataset == 'FashionMNIST':
-                OOD_Dataset = ['MNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
-            # Get all OOD datasets     
-            for dataset in OOD_Dataset:
-                _, OOD_set, _, OODloader = data_dic[dataset](batch_size = train_batch_size, 
-                                                            test_batch_size = test_batch_size, into_grey = True)
-                OOD_sets.append(OOD_set)
-                OOD_loaders.append(OODloader)
-
-        # OOD_Dataset = ['SVHN']
-        print("OOD sets: ", OOD_Dataset)
-
-        # multi_GP
-        print("InD_dataset: ",InD_Dataset)
         # mkdir directory to save
         parent_dir = os.getcwd()
-        directory = 'Multi_GP/store_data/' + InD_Dataset
+        directory = 'Multi_GP/store_data/' + args.InD_Dataset
         path = os.path.join(parent_dir, directory)
         isExist = os.path.exists(path)
         if not isExist:
@@ -114,22 +92,22 @@ if __name__ == "__main__":
             InD_label.append(train_set.__getitem__(i)[1])
 
         net = None
-        if InD_Dataset == 'Cifar_10':
+        if args.InD_Dataset == 'Cifar_10':
             pretrained_resnet18 = resnet18(pretrained=True)
             net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2])
             # network.load_sta(torch.load('path'))
             net = load_part(net, pretrained_resnet18.state_dict())
 
             cifar10_train(network = net, trloader = trloader, epochs = 10, optim = 'SGD', verbal=True)
-            torch.save(net.state_dict(), os.path.join(parent_dir, InD_Dataset + "_net.pt"))
+            torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + "_net.pt"))
             # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
 
         else:
             epochs = 4
-            net = data_model[InD_Dataset]()
+            net = data_model[args.InD_Dataset]()
             train(network = net, trloader = trloader, epochs = epochs, verbal=True)
             # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
-            torch.save(net.state_dict(), os.path.join(parent_dir, InD_Dataset + "_net.pt"))
+            torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + "_net.pt"))
 
 
         ## get InD data for GP
