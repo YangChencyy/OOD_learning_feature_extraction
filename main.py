@@ -23,44 +23,42 @@ from dataset import *
 from Multi_GP.multi_GP import *
 from Multi_GP.model_cifar import Cifar_10_Net, BasicBlock, resnet18, load_part
 
-from DUQ.train_duq_fm import train_model
-from DUQ.train_duq_cifar import train_model_cifar
-from DUQ.evaluate_ood import get_auroc_ood
-
-from Mahalanobis.OOD_Generate_Mahalanobis import Generate_Maha
-from Mahalanobis.OOD_Regression_Mahalanobis import Regression_Maha
-
-# from ODIN.calData import testData_ODIN
-# from ODIN.calMetric import metric_ODIN
-# from ODIN.densenet import DenseNet3
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 gpu = 0
 
+data_dic = {
+    'MNIST': MNIST_dataset,
+    'FashionMNIST': Fashion_MNIST_dataset, 
+    'Cifar_10': Cifar_10_dataset,
+    'SVHN': SVHN_dataset, 
+    'Imagenet_r': TinyImagenet_r_dataset,
+    'Imagenet_c': TinyImagenet_c_dataset
+}
+
+
+data_model = {
+    'MNIST': MNIST_Net,
+    'FashionMNIST': Fashion_MNIST_Net, 
+    'Cifar_10': Cifar_10_Net   
+}
+
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="DUQ parameters")
+
+    # Add a positional argument for the number
+    parser.add_argument("InD_Dataset", type=str, help="The name of the InD dataset.")
+    parser.add_argument("train_batch_size", type=int, help="train_batch_size")
+    parser.add_argument("test_batch_size", type=int, help="test_batch_size")
     methods = [1]
     
     num_classes = 10
     train_batch_size = 128
     test_batch_size = 128
 
-    data_dic = {
-        'MNIST': MNIST_dataset,
-        'FashionMNIST': Fashion_MNIST_dataset, 
-        'Cifar_10': Cifar_10_dataset,
-        'SVHN': SVHN_dataset, 
-        'Imagenet_r': TinyImagenet_r_dataset,
-        'Imagenet_c': TinyImagenet_c_dataset
-    }
 
-
-    data_model = {
-        'MNIST': MNIST_Net,
-        'FashionMNIST': Fashion_MNIST_Net, 
-        'Cifar_10': Cifar_10_Net   
-    }
 
 
     # InD_Datasets = ['MNIST', 'FashionMNIST', 'Cifar_10']
