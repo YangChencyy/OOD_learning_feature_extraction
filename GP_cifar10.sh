@@ -8,7 +8,7 @@
 #SBATCH --mail-user=rivachen@umich.edu
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --partition=standard
-#SBATCH --output=/home/rivachen/OOD_Learning_with_GP_boundaries-/mnist_results.log
+#SBATCH --output=/home/rivachen/OOD_Learning_with_GP_boundaries-/cifar10_results.log
 
 # module purge
 # conda init bash
