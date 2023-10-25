@@ -14,4 +14,4 @@
 # conda init bash
 source activate GP
 
-python main.py 'MNIST' 128 128  
+python main.py 'Cifar_10' 128 128  
