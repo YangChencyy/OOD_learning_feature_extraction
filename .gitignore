@@ -9,3 +9,4 @@ test.ipynb
 FashionMNIST_net.pt
 Fashion_net.pt
 test_MNIST.ipynb
+.DS_Store
