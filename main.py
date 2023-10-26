@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
         net = None
         if args.InD_Dataset == 'Cifar_10':
-            pretrained_resnet18 = resnet18(pretrained=True)
+            # pretrained_resnet18 = resnet18(pretrained=True)
             net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2])
             # network.load_sta(torch.load('path'))
             # net = load_part(net, pretrained_resnet18.state_dict())
