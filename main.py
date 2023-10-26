@@ -98,7 +98,7 @@ if __name__ == "__main__":
             # network.load_sta(torch.load('path'))
             # net = load_part(net, pretrained_resnet18.state_dict())
 
-            cifar10_train(network = net, trloader = trloader, epochs = 10, optim = 'SGD', verbal=True)
+            cifar10_train(network = net, trloader = trloader, epochs = 30, optim = 'SGD', verbal=True)
             torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + "_net.pt"))
             # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
 
