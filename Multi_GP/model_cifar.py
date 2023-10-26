@@ -268,15 +268,15 @@ class Cifar_10_Net(nn.Module):
         return f, x # F.log_softmax(x, dim = 1)
 
 
-# def _resnet(arch, block, layers, pretrained, progress, device, **kwargs):
-#     model = ResNet(block, layers, **kwargs)
-#     if pretrained:
-#         script_dir = os.path.dirname(__file__)
-#         state_dict = torch.load(
-#             "Multi_GP/checkpoint/" + arch + ".pt", map_location=device
-#         )
-#         model.load_state_dict(state_dict)
-#     return model
+def _resnet(arch, block, layers, pretrained, progress, device, **kwargs):
+    model = Cifar_10_Net(block, layers, **kwargs)
+    if pretrained:
+        script_dir = os.path.dirname(__file__)
+        state_dict = torch.load(
+            "Multi_GP/checkpoint/" + arch + ".pt", map_location=device
+        )
+        model.load_state_dict(state_dict)
+    return model
 
 def load_part(model, state_dict):
     pretrained_dict = state_dict 
@@ -292,15 +292,15 @@ def load_part(model, state_dict):
     return model
 
 
-# def resnet18(pretrained=False, progress=True, device="cpu", **kwargs):
-#     """Constructs a ResNet-18 model.
-#     Args:
-#         pretrained (bool): If True, returns a model pre-trained on ImageNet
-#         progress (bool): If True, displays a progress bar of the download to stderr
-#     """
-#     return _resnet(
-#         "resnet18", BasicBlock, [2, 2, 2, 2], pretrained, progress, device, **kwargs
-#     )
+def resnet18(pretrained=False, progress=True, device="cpu", **kwargs):
+    """Constructs a ResNet-18 model.
+    Args:
+        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        progress (bool): If True, displays a progress bar of the download to stderr
+    """
+    return _resnet(
+        "resnet18", BasicBlock, [2, 2, 2, 2], pretrained, progress, device, **kwargs
+    )
 
 
 # def resnet34(pretrained=False, progress=True, device="cpu", **kwargs):
