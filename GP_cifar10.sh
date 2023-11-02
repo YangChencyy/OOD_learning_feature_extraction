@@ -2,7 +2,7 @@
 
 #SBATCH --account=sunwbgt98
 #SBATCH --job-name=GP_cifar10
-#SBATCH --nodes=1
+#SBATCH --nodes=2
 #SBATCH --mem=8GB
 #SBATCH --time=24:00:00
 #SBATCH --mail-user=rivachen@umich.edu

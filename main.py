@@ -62,8 +62,10 @@ if __name__ == "__main__":
     train_set, test_set, trloader, tsloader = data_dic[args.InD_Dataset](batch_size = args.train_batch_size, 
                                                                     test_batch_size = args.test_batch_size)
     OOD_sets, OOD_loaders = [], []
+    grey = True
     if args.InD_Dataset == 'Cifar_10':
         OOD_Dataset = ['SVHN', 'Imagenet_r', 'Imagenet_c']
+        grey = False
     else:
         if args.InD_Dataset == 'MNIST':
             OOD_Dataset = ['FashionMNIST', 'Cifar_10', 'SVHN', 'Imagenet_r', 'Imagenet_c']
@@ -73,7 +75,7 @@ if __name__ == "__main__":
     # Get all OOD datasets     
     for dataset in OOD_Dataset:
         _, OOD_set, _, OODloader = data_dic[dataset](batch_size = args.train_batch_size, 
-                                                    test_batch_size = args.test_batch_size, into_grey = True)
+                                                    test_batch_size = args.test_batch_size, into_grey = grey)
         OOD_sets.append(OOD_set)
         OOD_loaders.append(OODloader)
 
