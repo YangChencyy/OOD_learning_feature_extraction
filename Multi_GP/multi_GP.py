@@ -88,8 +88,10 @@ class Fashion_MNIST_Net(nn.Module):
         self.fc1 = nn.Linear(in_features=64*6*6, out_features=600)
         self.drop = nn.Dropout2d(0.25)
         self.fc2 = nn.Linear(in_features=600, out_features=120)
-        self.fc3 = nn.Linear(in_features=120, out_features=10)
-        self.fc4 = nn.Linear(in_features=120, out_features=out_size)
+        # self.fc3 = nn.Linear(in_features=120, out_features=10)
+        # self.fc4 = nn.Linear(in_features=120, out_features=out_size)
+        self.fc3 = nn.Linear(in_features=120, out_features=out_size)
+        self.fc4 = nn.Linear(in_features=out_size, out_features=10)
 
     def forward(self, x):
         out = self.layer1(x)
@@ -98,8 +100,10 @@ class Fashion_MNIST_Net(nn.Module):
         out = self.fc1(out)
         out = self.drop(out)
         out = self.fc2(out)
-        f = self.fc4(out)
-        out = self.fc3(out)
+        # f = self.fc4(out)
+        # out = self.fc3(out)
+        f = self.fc3(f)
+        out = self.fc4(f)
 
         return f, out # F.log_softmax(out, dim = 1)
         
