@@ -186,8 +186,10 @@ class Cifar_10_Net(nn.Module):
             block, 512, layers[3], stride=2, dilate=replace_stride_with_dilation[2]
         )
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(512 * block.expansion, num_classes) # also try 32
-        self.fc2 = nn.Linear(512 * block.expansion, dim_f)
+        # self.fc = nn.Linear(512 * block.expansion, num_classes) # also try 32
+        # self.fc2 = nn.Linear(512 * block.expansion, dim_f)
+        self.fc = nn.Linear(512 * block.expansion, dim_f) # also try 32
+        self.fc2 = nn.Linear(dim_f, num_classes)
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -262,8 +264,8 @@ class Cifar_10_Net(nn.Module):
         x = self.avgpool(x)
         x = x.reshape(x.size(0), -1)
 
-        f = self.fc2(x)
-        x = self.fc(x)
+        f = self.fc(x)
+        x = self.fc2(f)
 
         return f, x # F.log_softmax(x, dim = 1)
 

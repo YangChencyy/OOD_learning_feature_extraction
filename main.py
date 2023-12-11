@@ -75,80 +75,80 @@ if __name__ == "__main__":
     # Get all OOD datasets     
     for dataset in OOD_Dataset:
         _, OOD_set, _, OODloader = data_dic[dataset](batch_size = args.train_batch_size, 
-                                                    test_batch_size = args.test_batch_size, into_grey = grey)
+                                                test_batch_size = args.test_batch_size, into_grey = grey)
         OOD_sets.append(OOD_set)
         OOD_loaders.append(OODloader)
 
-        # mkdir directory to save
-        parent_dir = os.getcwd()
-        directory = 'Multi_GP/store_data/' + args.InD_Dataset
-        path = os.path.join(parent_dir, directory)
-        isExist = os.path.exists(path)
-        if not isExist:
-            # Create a new directory because it does not exist
-            os.makedirs(path)
-            print("The new directory is created!")
-        # Get all labels of training data for GP
-        InD_label = []
-        for i in range(len(train_set)):
-            InD_label.append(train_set.__getitem__(i)[1])
+    # mkdir directory to save
+    parent_dir = os.getcwd()
+    directory = 'Multi_GP/store_data/' + args.InD_Dataset
+    path = os.path.join(parent_dir, directory)
+    isExist = os.path.exists(path)
+    if not isExist:
+        # Create a new directory because it does not exist
+        os.makedirs(path)
+        print("The new directory is created!")
+    # Get all labels of training data for GP
+    InD_label = []
+    for i in range(len(train_set)):
+        InD_label.append(train_set.__getitem__(i)[1])
 
-        net = None
-        if args.InD_Dataset == 'Cifar_10':
-            # pretrained_resnet18 = resnet18(pretrained=True)
-            net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2])
-            # network.load_sta(torch.load('path'))
-            # net = load_part(net, pretrained_resnet18.state_dict())
+    net = None
+    if args.InD_Dataset == 'Cifar_10':
+        # pretrained_resnet18 = resnet18(pretrained=True)
+        net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2], dim_f = 32)
+        # network.load_sta(torch.load('path'))
+        # net = load_part(net, pretrained_resnet18.state_dict())
 
-            cifar10_train(network = net, trloader = trloader, epochs = 30, optim = 'SGD', verbal=True)
-            torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + "_net.pt"))
-            # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
+        cifar10_train(network = net, trloader = trloader, epochs = 30, optim = 'SGD', verbal=True)
+        torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + "_net.pt"))
+        # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
 
-        else:
-            epochs = 4
-            net = data_model[args.InD_Dataset]()
-            train(network = net, trloader = trloader, epochs = epochs, verbal=True)
-            # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
-            torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + "_net.pt"))
-
-
-        ## get InD data for GP
-        InD_features, InD_scores, InD_acc = scores(net, trloader)
-        # test_feature, test_score, test_acc = scores(net, tsloader)
-        print("InD accuracy: ", InD_acc)
-        InD_feature, InD_score = InD_features[0:20000], InD_scores[0:20000]
-        # test_feature, test_score = test_feature[0:5000], test_score[0:5000]
-        test_feature, test_score = InD_features[20000:25000], InD_scores[20000:25000]
-        labels = train_set.targets[20000:25000] # .numpy().tolist() 
-
-        train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy()), 1)
-        train_data = pd.DataFrame(train_data)
-        train_data['label'] = InD_label[0:20000]
-        train_data.to_csv(directory +  '/train.csv')
-        print("train data stored")
-
-        ## get OOD data for GP
-        for i in range(len(OOD_loaders)):
-
-            OOD_feature, OOD_score = scoresOOD(net, OOD_loaders[i])
-            OOD_feature, OOD_score = OOD_feature[0:5000], OOD_score[0:5000]
+    else:
+        epochs = 4
+        net = data_model[args.InD_Dataset]()
+        train(network = net, trloader = trloader, epochs = epochs, verbal=True)
+        # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
+        torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + "_net.pt"))
 
 
-            total_CNN = np.concatenate((test_feature.cpu().numpy(), OOD_feature.cpu().numpy()), 0)
-            reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=10, n_components=2)
-            UMAPf = reducer_CNN.fit_transform(total_CNN)
+    ## get InD data for GP
+    InD_features, InD_scores, InD_acc = scores(net, trloader)
+    # test_feature, test_score, test_acc = scores(net, tsloader)
+    print("InD accuracy: ", InD_acc)
+    InD_feature, InD_score = InD_features[0:20000], InD_scores[0:20000]
+    # test_feature, test_score = test_feature[0:5000], test_score[0:5000]
+    test_feature, test_score = InD_features[20000:25000], InD_scores[20000:25000]
+    labels = train_set.targets[20000:25000] # .numpy().tolist() 
 
-            # all_feature = np.concatenate((test_feature, OOD_feature), 0)
-            all_score = np.concatenate((test_score.cpu().numpy(), OOD_score.cpu().numpy()), 0)
-            DNN_data = np.concatenate((total_CNN, all_score, UMAPf), 1)
+    train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy()), 1)
+    train_data = pd.DataFrame(train_data)
+    train_data['label'] = InD_label[0:20000]
+    train_data.to_csv(directory +  '/train.csv')
+    print("train data stored")
 
-            data_df = pd.DataFrame(DNN_data) 
-            data_df['class'] = ['test']*len(test_feature) + ['OOD']*len(OOD_feature)
-            # print(type(labels))
-            data_df['label'] = labels + [10]*len(OOD_feature)
+    ## get OOD data for GP
+    for i in range(len(OOD_loaders)):
 
-            data_df.to_csv(directory +  '/' + OOD_Dataset[i] + '_test.csv')
-            print(OOD_Dataset[i] + " test data stored")
+        OOD_feature, OOD_score = scoresOOD(net, OOD_loaders[i])
+        OOD_feature, OOD_score = OOD_feature[0:5000], OOD_score[0:5000]
+
+
+        total_CNN = np.concatenate((test_feature.cpu().numpy(), OOD_feature.cpu().numpy()), 0)
+        reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=10, n_components=2)
+        UMAPf = reducer_CNN.fit_transform(total_CNN)
+
+        # all_feature = np.concatenate((test_feature, OOD_feature), 0)
+        all_score = np.concatenate((test_score.cpu().numpy(), OOD_score.cpu().numpy()), 0)
+        DNN_data = np.concatenate((total_CNN, all_score, UMAPf), 1)
+
+        data_df = pd.DataFrame(DNN_data) 
+        data_df['class'] = ['test']*len(test_feature) + ['OOD']*len(OOD_feature)
+        # print(type(labels))
+        data_df['label'] = labels + [10]*len(OOD_feature)
+
+        data_df.to_csv(directory +  '/' + OOD_Dataset[i] + '_test.csv')
+        print(OOD_Dataset[i] + " test data stored")
 
 
     print("\nEND")
