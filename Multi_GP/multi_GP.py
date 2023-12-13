@@ -211,6 +211,7 @@ def cifar10_train(network, trloader, epochs, optim=None, learning_rate = 0.01, m
 
 def scores(network, tsloader):
     network.eval()
+    network.to(device)
     outputs, outputs_16, test_losses = [], [], []
     test_loss, correct = 0, 0
 
@@ -236,6 +237,7 @@ def scores(network, tsloader):
 
 
 def scoresOOD(network, oodloader):
+    network.to(device)
     network.eval()
     outputs_16 = []
     outputs = []

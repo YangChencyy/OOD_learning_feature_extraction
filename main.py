@@ -102,7 +102,6 @@ if __name__ == "__main__":
         state_dict = torch.load(os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
         net.load_state_dict(state_dict)
 
-
         # cifar10_train(network = net, trloader = trloader, epochs = 20, optim = 'SGD', verbal=True)
         # torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
 
