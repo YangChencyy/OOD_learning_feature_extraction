@@ -52,6 +52,7 @@ if __name__ == "__main__":
     parser.add_argument("InD_Dataset", type=str, help="The name of the InD dataset.")
     parser.add_argument("train_batch_size", type=int, help="train_batch_size")
     parser.add_argument("test_batch_size", type=int, help="test_batch_size")
+    parser.add_argument("f_size", type=int, help="extracted_feature_size")
 
     args = parser.parse_args()
     print("InD dataset:", args.InD_Dataset)
@@ -96,12 +97,12 @@ if __name__ == "__main__":
     net = None
     if args.InD_Dataset == 'Cifar_10':
         # pretrained_resnet18 = resnet18(pretrained=True)
-        net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2], dim_f = 32)
+        net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2], dim_f = args.f_size)
         # network.load_sta(torch.load('path'))
         # net = load_part(net, pretrained_resnet18.state_dict())
 
-        cifar10_train(network = net, trloader = trloader, epochs = 30, optim = 'SGD', verbal=True)
-        torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + "_net.pt"))
+        cifar10_train(network = net, trloader = trloader, epochs = 20, optim = 'SGD', verbal=True)
+        torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
         # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
 
     else:

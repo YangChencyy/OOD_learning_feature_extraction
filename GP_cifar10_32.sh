@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --account=sunwbgt98
-#SBATCH --job-name=GP_cifar10
+#SBATCH --job-name=GP_cifar10_32
 #SBATCH --nodes=2
 #SBATCH --mem=8GB
 #SBATCH --time=24:00:00
@@ -14,4 +14,4 @@
 # conda init bash
 source activate GP
 
-python main.py 'Cifar_10' 128 128  
+python main.py 'Cifar_10' 128 128 32
