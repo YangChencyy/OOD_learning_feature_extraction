@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     # mkdir directory to save
     parent_dir = os.getcwd()
-    directory = 'Multi_GP/store_data/' + args.InD_Dataset
+    directory = 'Multi_GP/store_data/' + args.InD_Dataset + '_' + str(args.f_size)
     path = os.path.join(parent_dir, directory)
     isExist = os.path.exists(path)
     if not isExist:
@@ -96,14 +96,16 @@ if __name__ == "__main__":
 
     net = None
     if args.InD_Dataset == 'Cifar_10':
-        # pretrained_resnet18 = resnet18(pretrained=True)
-        net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2], dim_f = args.f_size)
-        # network.load_sta(torch.load('path'))
-        # net = load_part(net, pretrained_resnet18.state_dict())
 
-        cifar10_train(network = net, trloader = trloader, epochs = 20, optim = 'SGD', verbal=True)
-        torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
-        # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
+        net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2], dim_f = args.f_size)
+
+        state_dict = torch.load(os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
+        net.load_state_dict(state_dict)
+
+
+        # cifar10_train(network = net, trloader = trloader, epochs = 20, optim = 'SGD', verbal=True)
+        # torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
+
 
     else:
         epochs = 4
