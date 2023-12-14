@@ -121,7 +121,9 @@ if __name__ == "__main__":
     InD_feature, InD_score = InD_features[0:20000], InD_scores[0:20000]
     # test_feature, test_score = test_feature[0:5000], test_score[0:5000]
     test_feature, test_score = InD_features[20000:25000], InD_scores[20000:25000]
-    labels = train_set.targets[20000:25000].numpy().tolist() 
+    labels = train_set.targets[20000:25000] # .numpy().tolist() 
+    if type(labels) != list:
+        labels = labels.numpy().tolist() 
 
     train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy()), 1)
     train_data = pd.DataFrame(train_data)
