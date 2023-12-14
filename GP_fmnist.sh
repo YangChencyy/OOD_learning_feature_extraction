@@ -14,4 +14,4 @@
 # conda init bash
 source activate GP
 
-python main.py 'FashionMNIST' 128 128  
+python main.py 'FashionMNIST' 128 128 32
