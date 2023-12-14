@@ -77,7 +77,7 @@ class MNIST_Net(nn.Module):
 
 class Fashion_MNIST_Net(nn.Module):
     
-    def __init__(self, out_size = 18):
+    def __init__(self, out_size = 32):
         super(Fashion_MNIST_Net, self).__init__()
         
         self.layer1 = nn.Sequential(

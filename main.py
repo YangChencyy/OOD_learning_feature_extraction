@@ -52,7 +52,7 @@ if __name__ == "__main__":
     parser.add_argument("InD_Dataset", type=str, help="The name of the InD dataset.")
     parser.add_argument("train_batch_size", type=int, help="train_batch_size")
     parser.add_argument("test_batch_size", type=int, help="test_batch_size")
-    parser.add_argument("f_size", type=int, help="extracted_feature_size")
+    parser.add_argument("f_size", type=int, default=32, help="extracted_feature_size")
 
     args = parser.parse_args()
     print("InD dataset:", args.InD_Dataset)
@@ -107,11 +107,11 @@ if __name__ == "__main__":
 
 
     else:
-        epochs = 4
-        net = data_model[args.InD_Dataset]()
+        epochs = 5
+        net = data_model[args.InD_Dataset](dim_f = args.f_size)
         train(network = net, trloader = trloader, epochs = epochs, verbal=True)
         # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
-        torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + "_net.pt"))
+        torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
 
 
     ## get InD data for GP
