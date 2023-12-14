@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
     else:
         epochs = 5
-        net = data_model[args.InD_Dataset](dim_f = args.f_size)
+        net = data_model[args.InD_Dataset](out_size = args.f_size)
         train(network = net, trloader = trloader, epochs = epochs, verbal=True)
         # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
         torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
