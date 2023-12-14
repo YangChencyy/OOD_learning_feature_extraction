@@ -15,14 +15,14 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Model structure for MNIST dataset
 class MNIST_Net(nn.Module):
-    def __init__(self, out_size = 18):
+    def __init__(self, out_size = 32):
         super(MNIST_Net, self).__init__()
         self.conv1 = nn.Conv2d(1, 10, kernel_size=5)
         self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
         self.conv2_drop = nn.Dropout2d()
         self.fc1 = nn.Linear(320, 160)
-        self.fc2 = nn.Linear(160, 10)
-        self.fc3 = nn.Linear(160, out_size)
+        self.fc2 = nn.Linear(160, out_size)
+        self.fc3 = nn.Linear(out_size, 10)
         # self.fc2 = nn.Linear(320, 10)
 
     def forward(self, x):
@@ -31,9 +31,9 @@ class MNIST_Net(nn.Module):
         x = x.view(-1, 320)
         x = F.relu(self.fc1(x))
         x = F.dropout(x, training=self.training)
-        out = self.fc3(x)
-        x = self.fc2(x)
-        return out, F.log_softmax(x, dim = 1)
+        f = self.fc2(x)
+        x = self.fc3(f)
+        return f, x # F.log_softmax(x, dim = 1)
     
     def feature_list(self, x):
         out_list = []
@@ -46,8 +46,10 @@ class MNIST_Net(nn.Module):
         out_list.append(x)
         x = F.dropout(x, training=self.training)
         x = self.fc2(x) 
-        out_list.append(x)   
-        return F.log_softmax(x, dim = 1), out_list
+        out_list.append(x)
+        x = self.fc3(x)  
+        out_list.append(x)
+        return x, out_list # F.log_softmax(x, dim = 1), out_list
     
      
     def intermediate_forward(self, x, layer_index):
@@ -63,7 +65,14 @@ class MNIST_Net(nn.Module):
             x = x.view(-1, 320)
             x = F.relu(self.fc1(x))
             x = F.dropout(x, training=self.training)
-            x = self.fc2(x)    
+            x = self.fc2(x)   
+        elif layer_index == 4:
+            x = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x)), 2))
+            x = x.view(-1, 320)
+            x = F.relu(self.fc1(x))
+            x = F.dropout(x, training=self.training)
+            x = self.fc2(x)   
+            x = self.fc3(x) 
         return x
 
 class Fashion_MNIST_Net(nn.Module):
@@ -102,7 +111,7 @@ class Fashion_MNIST_Net(nn.Module):
         out = self.fc2(out)
         # f = self.fc4(out)
         # out = self.fc3(out)
-        f = self.fc3(f)
+        f = self.fc3(out)
         out = self.fc4(f)
 
         return f, out # F.log_softmax(out, dim = 1)
@@ -119,10 +128,13 @@ class Fashion_MNIST_Net(nn.Module):
         out_list.append(out)
         out = self.fc2(out)
         out_list.append(out)
-        # f = self.fc3(out)
+        out = self.fc3(out)
+        out_list.append(out)
         out = self.fc4(out)
+        out_list.append(out)
 
-        return F.log_softmax(out, dim = 1), out_list
+
+        return out, out_list # F.log_softmax(out, dim = 1), out_list
     
     def intermediate_forward(self, x, layer_index):
         out = self.layer1(x)
@@ -139,6 +151,21 @@ class Fashion_MNIST_Net(nn.Module):
             out = self.fc1(out)
             out = self.drop(out)
             out = self.fc2(out)
+        elif layer_index == 4:
+            out = self.layer2(out)
+            out = out.view(out.size(0), -1)
+            out = self.fc1(out)
+            out = self.drop(out)
+            out = self.fc2(out)
+            out = self.fc3(out)
+        elif layer_index == 5:
+            out = self.layer2(out)
+            out = out.view(out.size(0), -1)
+            out = self.fc1(out)
+            out = self.drop(out)
+            out = self.fc2(out)
+            out = self.fc3(out)
+            out = self.fc4(out)
 
         return out
 
