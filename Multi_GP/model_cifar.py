@@ -268,6 +268,81 @@ class Cifar_10_Net(nn.Module):
         x = self.fc2(f)
 
         return f, x # F.log_softmax(x, dim = 1)
+    
+    def feature_list(self, x):
+        out_list = []
+        x = self.conv1(x)
+        out_list.append(x)
+        x = self.maxpool(self.relu(x = self.bn1(x)))
+        out_list.append(x)
+        x = self.layer1(x)
+        out_list.append(x)
+        x = self.layer2(x)
+        out_list.append(x)
+        x = self.layer3(x)
+        out_list.append(x)
+        x = self.layer4(x)
+        out_list.append(x)
+        x = self.avgpool(x)
+        x = x.reshape(x.size(0), -1)
+        x = self.fc(x)
+        out_list.append(x)
+        x = self.fc2(x)
+        out_list.append(x)
+        return x, out_list 
+    
+    def intermediate_forward(self, x, layer_index):
+        x = self.conv1(x)
+        if layer_index == 1:
+            x = self.maxpool(self.relu(x = self.bn1(x)))
+        elif layer_index == 2:
+            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.layer1(x)
+        elif layer_index == 3:
+            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.layer1(x) 
+            x = self.layer2(x)
+        elif layer_index == 4:
+            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.layer1(x) 
+            x = self.layer2(x)
+            x = self.layer3(x)
+        elif layer_index == 5:
+            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.layer1(x) 
+            x = self.layer2(x)
+            x = self.layer3(x)
+            x = self.layer4(x)
+        elif layer_index == 6:
+            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.layer1(x) 
+            x = self.layer2(x)
+            x = self.layer3(x)
+            x = self.layer4(x)
+            x = self.avgpool(x)
+            x = x.reshape(x.size(0), -1)
+            f = self.fc(x)
+        elif layer_index == 7:
+            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.layer1(x) 
+            x = self.layer2(x)
+            x = self.layer3(x)
+            x = self.layer4(x)
+            x = self.avgpool(x)
+            x = x.reshape(x.size(0), -1)
+            f = self.fc(x)
+        elif layer_index == 8:
+            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.layer1(x) 
+            x = self.layer2(x)
+            x = self.layer3(x)
+            x = self.layer4(x)
+            x = self.avgpool(x)
+            x = x.reshape(x.size(0), -1)
+            x = self.fc(x)
+            x = self.fc2(x)
+
+        return x
 
 
 def _resnet(arch, block, layers, pretrained, progress, device, **kwargs):
