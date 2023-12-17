@@ -349,7 +349,7 @@ def scoresOOD_new(network, oodloader, test_feature, labels, ood_name):
                             loc="lower right", title="Classes", prop={'size': 15})
         ax.add_artist(legend)
 
-        plt.savefi(ood_name + '_' + str(i) + '.png', bbox_inches='tight')
+        plt.savefig(ood_name + '_' + str(i) + '.png', bbox_inches='tight')
 
     
     return
