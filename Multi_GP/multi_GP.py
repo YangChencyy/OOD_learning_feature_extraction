@@ -285,7 +285,7 @@ def score_new(network, tsloader):
     network.to(device)
     outputs, outputs_16, test_losses = [], [], []
     test_loss, correct = 0, 0
-    feature_lists = []*4
+    feature_lists = [[] for _ in range(4)]
     with torch.no_grad():
         for data, target in tsloader:
             data, target = data.to(device), target.to(device)
@@ -320,7 +320,7 @@ import matplotlib.pyplot as plt
 def scoresOOD_new(network, oodloader, test_feature, labels, ood_name):
     network.to(device)
     network.eval()
-    feature_lists = []*4
+    feature_lists = [[] for _ in range(4)]
     outputs = []
     with torch.no_grad():
         for data, _ in oodloader:
