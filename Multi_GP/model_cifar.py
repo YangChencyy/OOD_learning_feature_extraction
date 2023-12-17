@@ -188,8 +188,11 @@ class Cifar_10_Net(nn.Module):
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         # self.fc = nn.Linear(512 * block.expansion, num_classes) # also try 32
         # self.fc2 = nn.Linear(512 * block.expansion, dim_f)
-        self.fc = nn.Linear(512 * block.expansion, dim_f) # also try 32
-        self.fc2 = nn.Linear(dim_f, num_classes)
+        self.fc = nn.Linear(512 * block.expansion, 256) 
+        self.fc_f1 = nn.Linear(256, 128)
+        self.fc_f2 = nn.Linear(128, 64) 
+        self.fc_f3 = nn.Linear(64, 32)
+        self.fc2 = nn.Linear(32, num_classes)
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -264,16 +267,21 @@ class Cifar_10_Net(nn.Module):
         x = self.avgpool(x)
         x = x.reshape(x.size(0), -1)
 
-        f = self.fc(x)
-        x = self.fc2(f)
+        # f = self.fc(x)
+        # x = self.fc2(f)
+        f1 = self.fc(x)
+        f2 = self.fc_f1(f1)
+        f3 = self.fc_f2(f2)
+        f4 = self.fc_f3(f3)
+        x = self.fc2(f4)
 
-        return f, x # F.log_softmax(x, dim = 1)
+        return [f1, f2, f3, f4], x # f, x # F.log_softmax(x, dim = 1)
     
     def feature_list(self, x):
         out_list = []
         x = self.conv1(x)
         out_list.append(x)
-        x = self.maxpool(self.relu(x = self.bn1(x)))
+        x = self.maxpool(self.relu(self.bn1(x)))
         out_list.append(x)
         x = self.layer1(x)
         out_list.append(x)
@@ -294,27 +302,27 @@ class Cifar_10_Net(nn.Module):
     def intermediate_forward(self, x, layer_index):
         x = self.conv1(x)
         if layer_index == 1:
-            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.maxpool(self.relu(self.bn1(x)))
         elif layer_index == 2:
-            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.maxpool(self.relu(self.bn1(x)))
             x = self.layer1(x)
         elif layer_index == 3:
-            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.maxpool(self.relu(self.bn1(x)))
             x = self.layer1(x) 
             x = self.layer2(x)
         elif layer_index == 4:
-            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.maxpool(self.relu(self.bn1(x)))
             x = self.layer1(x) 
             x = self.layer2(x)
             x = self.layer3(x)
         elif layer_index == 5:
-            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.maxpool(self.relu(self.bn1(x)))
             x = self.layer1(x) 
             x = self.layer2(x)
             x = self.layer3(x)
             x = self.layer4(x)
         elif layer_index == 6:
-            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.maxpool(self.relu(self.bn1(x)))
             x = self.layer1(x) 
             x = self.layer2(x)
             x = self.layer3(x)
@@ -323,16 +331,7 @@ class Cifar_10_Net(nn.Module):
             x = x.reshape(x.size(0), -1)
             f = self.fc(x)
         elif layer_index == 7:
-            x = self.maxpool(self.relu(x = self.bn1(x)))
-            x = self.layer1(x) 
-            x = self.layer2(x)
-            x = self.layer3(x)
-            x = self.layer4(x)
-            x = self.avgpool(x)
-            x = x.reshape(x.size(0), -1)
-            f = self.fc(x)
-        elif layer_index == 8:
-            x = self.maxpool(self.relu(x = self.bn1(x)))
+            x = self.maxpool(self.relu(self.bn1(x)))
             x = self.layer1(x) 
             x = self.layer2(x)
             x = self.layer3(x)

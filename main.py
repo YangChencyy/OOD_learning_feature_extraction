@@ -113,46 +113,60 @@ if __name__ == "__main__":
         # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
         torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
 
+    test = True
+    if test:
+        test_feature, InD_scores, InD_acc = scores(net, trloader)
+        print("InD accuracy: ", InD_acc)
+        labels = train_set.targets[20000:25000]
+        if type(labels) != list:
+            labels = labels.numpy().tolist() 
 
-    ## get InD data for GP
-    InD_features, InD_scores, InD_acc = scores(net, trloader)
-    # test_feature, test_score, test_acc = scores(net, tsloader)
-    print("InD accuracy: ", InD_acc)
-    InD_feature, InD_score = InD_features[0:20000], InD_scores[0:20000]
-    # test_feature, test_score = test_feature[0:5000], test_score[0:5000]
-    test_feature, test_score = InD_features[20000:25000], InD_scores[20000:25000]
-    labels = train_set.targets[20000:25000] # .numpy().tolist() 
-    if type(labels) != list:
-        labels = labels.numpy().tolist() 
+        for i in range(len(OOD_loaders)):
+            
+            scoresOOD_new(net, OOD_loaders[i], test_feature, labels, OOD_Dataset[i])
+            
 
-    train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy()), 1)
-    train_data = pd.DataFrame(train_data)
-    train_data['label'] = InD_label[0:20000]
-    train_data.to_csv(directory +  '/train.csv')
-    print("train data stored")
+    else:
+        ## get InD data for GP
+        InD_features, InD_scores, InD_acc = scores(net, trloader)
+        # test_feature, test_score, test_acc = scores(net, tsloader)
+        print("InD accuracy: ", InD_acc)
+        InD_feature, InD_score = InD_features[0:20000], InD_scores[0:20000]
+        # test_feature, test_score = test_feature[0:5000], test_score[0:5000]
+        test_feature, test_score = InD_features[20000:25000], InD_scores[20000:25000]
+        labels = train_set.targets[20000:25000] # .numpy().tolist() 
+        if type(labels) != list:
+            labels = labels.numpy().tolist() 
 
-    ## get OOD data for GP
-    for i in range(len(OOD_loaders)):
+        train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy()), 1)
+        train_data = pd.DataFrame(train_data)
+        train_data['label'] = InD_label[0:20000]
+        train_data.to_csv(directory +  '/train.csv')
+        print("train data stored")
 
-        OOD_feature, OOD_score = scoresOOD(net, OOD_loaders[i])
-        OOD_feature, OOD_score = OOD_feature[0:5000], OOD_score[0:5000]
+
+        ## get OOD data for GP
+        for i in range(len(OOD_loaders)):
+
+            OOD_feature, OOD_score = scoresOOD(net, OOD_loaders[i])
+            OOD_feature, OOD_score = OOD_feature[0:5000], OOD_score[0:5000]
 
 
-        total_CNN = np.concatenate((test_feature.cpu().numpy(), OOD_feature.cpu().numpy()), 0)
-        reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=10, n_components=2)
-        UMAPf = reducer_CNN.fit_transform(total_CNN)
+            total_CNN = np.concatenate((test_feature.cpu().numpy(), OOD_feature.cpu().numpy()), 0)
+            reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=10, n_components=2)
+            UMAPf = reducer_CNN.fit_transform(total_CNN)
 
-        # all_feature = np.concatenate((test_feature, OOD_feature), 0)
-        all_score = np.concatenate((test_score.cpu().numpy(), OOD_score.cpu().numpy()), 0)
-        DNN_data = np.concatenate((total_CNN, all_score, UMAPf), 1)
+            # all_feature = np.concatenate((test_feature, OOD_feature), 0)
+            all_score = np.concatenate((test_score.cpu().numpy(), OOD_score.cpu().numpy()), 0)
+            DNN_data = np.concatenate((total_CNN, all_score, UMAPf), 1)
 
-        data_df = pd.DataFrame(DNN_data) 
-        data_df['class'] = ['test']*len(test_feature) + ['OOD']*len(OOD_feature)
-        # print(type(labels))
-        data_df['label'] = labels + [10]*len(OOD_feature)
+            data_df = pd.DataFrame(DNN_data) 
+            data_df['class'] = ['test']*len(test_feature) + ['OOD']*len(OOD_feature)
+            # print(type(labels))
+            data_df['label'] = labels + [10]*len(OOD_feature)
 
-        data_df.to_csv(directory +  '/' + OOD_Dataset[i] + '_test.csv')
-        print(OOD_Dataset[i] + " test data stored")
+            data_df.to_csv(directory +  '/' + OOD_Dataset[i] + '_test.csv')
+            print(OOD_Dataset[i] + " test data stored")
 
 
     print("\nEND")

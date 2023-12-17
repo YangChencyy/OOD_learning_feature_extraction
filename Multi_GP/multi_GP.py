@@ -11,6 +11,7 @@ from sklearn.metrics import accuracy_score
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+
 # from dataset import *
 
 # Model structure for MNIST dataset
@@ -278,6 +279,80 @@ def scoresOOD(network, oodloader):
     outputs = torch.cat(outputs, 0)
     return outputs_16, outputs
 
+
+def score_new(network, tsloader):
+    network.eval()
+    network.to(device)
+    outputs, outputs_16, test_losses = [], [], []
+    test_loss, correct = 0, 0
+    feature_lists = []*4
+    with torch.no_grad():
+        for data, target in tsloader:
+            data, target = data.to(device), target.to(device)
+            features, output = network(data)
+            outputs.append(output)
+            feature_lists[0].append(features[0])
+            feature_lists[1].append(features[1])
+            feature_lists[2].append(features[2])
+            feature_lists[3].append(features[3])
+
+            test_loss += F.nll_loss(output, target, size_average=False).item()
+            pred = output.data.max(1, keepdim=True)[1]
+            correct += pred.eq(target.data.view_as(pred)).sum()
+
+    test_loss /= len(tsloader.dataset)
+    test_losses.append(test_loss)
+    print('\nTest set: Avg. loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+        test_loss, correct, len(tsloader.dataset),
+        100. * correct / len(tsloader.dataset)))
+    acc = correct / len(tsloader.dataset)
+
+    for i in range(len(feature_lists)):
+        test_feature = feature_lists[i]
+        test_feature = torch.cat(test_feature, 0)
+        test_feature = test_feature[20000:25000]
+        feature_lists[i] = test_feature
+    # outputs = torch.cat(outputs, 0)
+    return feature_lists, outputs, acc.item()
+
+import umap
+import matplotlib.pyplot as plt
+def scoresOOD_new(network, oodloader, test_feature, labels, ood_name):
+    network.to(device)
+    network.eval()
+    feature_lists = []*4
+    outputs = []
+    with torch.no_grad():
+        for data, _ in oodloader:
+            data = data.to(device)
+            features, output = network(data)
+            feature_lists[0].append(features[0])
+            feature_lists[1].append(features[1])
+            feature_lists[2].append(features[2])
+            feature_lists[3].append(features[3])
+            outputs.append(output)
+
+
+    for i in range(len(feature_lists)):
+        OOD_feature = feature_lists[i]
+        OOD_feature = torch.cat(OOD_feature, 0)
+        OOD_feature = OOD_feature[0:5000]
+        total_CNN = np.concatenate((test_feature[i].cpu().numpy(), OOD_feature.cpu().numpy()), 0)
+        reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=10, n_components=2)
+        UMAPf = reducer_CNN.fit_transform(total_CNN)
+        fig, ax = plt.subplots(figsize=(8, 6.5))
+        color = labels + [10]*len(OOD_feature)
+        scatter = ax.scatter(UMAPf[:,0], UMAPf[:,1], c=color, s=1, cmap="Spectral")
+
+        # produce a legend with the unique colors from the scatter
+        legend = ax.legend(*scatter.legend_elements(),
+                            loc="lower right", title="Classes", prop={'size': 15})
+        ax.add_artist(legend)
+
+        plt.savefi(ood_name + '_' + str(i) + '.png', bbox_inches='tight')
+
+    
+    return
 
 
 def main():
