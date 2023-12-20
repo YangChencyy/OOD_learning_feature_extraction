@@ -186,7 +186,7 @@ class Cifar_10_Net(nn.Module):
             block, 512, layers[3], stride=2, dilate=replace_stride_with_dilation[2]
         )
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        # self.fc = nn.Linear(512 * block.expansion, num_classes) # also try 32
+        # self.fc = nn.Linear(512 * block.expansion, num_classes) 
         # self.fc2 = nn.Linear(512 * block.expansion, dim_f)
         self.fc = nn.Linear(512 * block.expansion, 256) 
         self.fc_f1 = nn.Linear(256, 128)

@@ -96,13 +96,17 @@ if __name__ == "__main__":
 
     net = None
     if args.InD_Dataset == 'Cifar_10':
+        net = CIFAR10Classifier()
+        epochs = 50
+        train(network = net, trloader = trloader, epochs = epochs, verbal=True)
 
-        net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2], dim_f = args.f_size)
+
+        # net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2], dim_f = args.f_size)
 
         # state_dict = torch.load(os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
         # net.load_state_dict(state_dict)
 
-        cifar10_train(network = net, trloader = trloader, epochs = 20, optim = 'SGD', verbal=True)
+        # cifar10_train(network = net, trloader = trloader, epochs = 20, optim = 'SGD', verbal=True)
         # torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
 
 
@@ -113,7 +117,7 @@ if __name__ == "__main__":
         # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
         torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
 
-    test = True
+    test = False
     if test:
         test_feature, InD_scores, InD_acc = score_new(net, trloader)
         print("InD accuracy: ", InD_acc)
