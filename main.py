@@ -117,7 +117,7 @@ if __name__ == "__main__":
         # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
         torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
 
-    test = False
+    test = True
     if test:
         test_feature, InD_scores, InD_acc = score_new(net, trloader)
         print("InD accuracy: ", InD_acc)
