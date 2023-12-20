@@ -275,7 +275,7 @@ class Cifar_10_Net(nn.Module):
         f4 = self.fc_f3(f3)
         x = self.fc2(f4)
 
-        return [f0, f1, f2, f3, f4], x # f, x # F.log_softmax(x, dim = 1)
+        return [f0, f1, f2, f3], x # f, x # F.log_softmax(x, dim = 1)
     
     def feature_list(self, x):
         out_list = []
