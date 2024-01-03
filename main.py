@@ -10,11 +10,6 @@ import os
 # import sys
 
 import torch
-# import torch.nn as nn
-# from torch.autograd import Variable
-# import torchvision
-# import torchvision.transforms as transforms
-# from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import confusion_matrix
 import umap
 
@@ -96,7 +91,7 @@ if __name__ == "__main__":
 
     net = None
     if args.InD_Dataset == 'Cifar_10':
-        net = CIFAR10Classifier()
+        # net = CIFAR10Classifier()
         # epochs = 50
         # train(network = net, trloader = trloader, epochs = epochs, verbal=True)
 
