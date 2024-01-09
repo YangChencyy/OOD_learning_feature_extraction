@@ -1,6 +1,6 @@
 from dataset import Cifar_100_dataset
 from Multi_GP.model_cifar import Cifar_10_Net, BasicBlock
-from Multi_GP.multi_GP import cifar10_train, scores
+from Multi_GP.multi_GP import *
 
 import os
 
