@@ -69,6 +69,29 @@ def Cifar_10_dataset(batch_size, test_batch_size, into_grey = False):
    
     return train_set, test_set, train_loader, val_loader
 
+def Cifar_100_dataset(batch_size, test_batch_size, into_grey = False):
+    if into_grey:
+        transform = transforms.Compose([transforms.Resize(28),
+                                        transforms.Grayscale(),
+                                        transforms.ToTensor(),
+                                        # transforms.Normalize((0.5,), (0.5,))
+                                        ])
+    else:
+        transform = transforms.Compose([transforms.ToTensor(),
+                                        # transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+                                        ])
+
+    train_set = datasets.CIFAR100('./data/cifar10', train=True,download=True,
+                                                                transform=transform)
+
+    test_set = datasets.CIFAR100('./datasets/cifar10', train=False,download=True, 
+                                                              transform=transform)
+    train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size)
+
+    val_loader = torch.utils.data.DataLoader(test_set, batch_size=test_batch_size)
+    
+   
+    return train_set, test_set, train_loader, val_loader
 
 # 3*32*32
 def SVHN_dataset(batch_size, test_batch_size, into_grey = False):
