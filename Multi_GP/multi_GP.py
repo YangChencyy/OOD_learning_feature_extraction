@@ -347,8 +347,8 @@ def scoresOOD(network, oodloader):
 
 
 def score_new(network, tsloader):
-    network.eval()
     network.to(device)
+    network.eval()
     outputs, outputs_16, test_losses = [], [], []
     test_loss, correct = 0, 0
     feature_lists = [[] for _ in range(4)]
