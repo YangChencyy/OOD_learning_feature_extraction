@@ -9,7 +9,7 @@ train_set, test_set, trloader, tsloader = Cifar_100_dataset(batch_size = 128, te
 
 net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2], num_classes = 100, dim_f = f_size)
 cifar10_train(network = net, trloader = trloader, epochs = 20, optim = 'SGD', verbal=True)
-_, _, train_acc = scores(net, trloader)
+_, _, train_acc = score_new(net, trloader)
 print("Train accuracy: ", train_acc)
-_, _, test_acc = scores(net, trloader)
+_, _, test_acc = score_new(net, trloader)
 print("Train accuracy: ", train_acc)
