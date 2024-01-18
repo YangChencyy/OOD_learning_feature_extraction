@@ -404,7 +404,7 @@ def scoresOOD_new(network, oodloader, test_feature, labels, ood_name):
         OOD_feature = torch.cat(OOD_feature, 0)
         OOD_feature = OOD_feature[0:5000]
         total_CNN = np.concatenate((test_feature[i].cpu().numpy(), OOD_feature.cpu().numpy()), 0)
-        reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=10, n_components=2)
+        reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=100, n_components=50)
         UMAPf = reducer_CNN.fit_transform(total_CNN)
         fig, ax = plt.subplots(figsize=(8, 6.5))
         color = labels + [10]*len(OOD_feature)
