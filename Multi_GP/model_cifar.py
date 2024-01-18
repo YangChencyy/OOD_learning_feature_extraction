@@ -256,7 +256,7 @@ class Cifar_10_Net(nn.Module):
         x = self.conv1(x)
         x1 = x
         x = self.bn1(x)
-        x2 = x
+        # x2 = x
         x = self.relu(x)
         x = self.maxpool(x)
 
@@ -264,7 +264,7 @@ class Cifar_10_Net(nn.Module):
         x3 = x
         x = self.layer2(x)
         x = self.layer3(x)
-        x4 = x
+        # x4 = x
         x = self.layer4(x)
 
         x = self.avgpool(x)
@@ -273,8 +273,8 @@ class Cifar_10_Net(nn.Module):
         # f = self.fc(x)
         # x = self.fc2(f)
         f1 = self.fc(f0)
-        f2 = self.fc_f1(f1)
-        f3 = self.fc_f2(f2)
+        # f2 = self.fc_f1(f1)
+        # f3 = self.fc_f2(f2)
         f4 = self.fc_f3(f3)
         x = self.fc2(f4)
 
