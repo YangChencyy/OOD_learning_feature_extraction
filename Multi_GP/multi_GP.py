@@ -375,10 +375,10 @@ def score_new(network, tsloader):
 
     for i in range(len(feature_lists)):
         test_feature = feature_lists[i]
-        print('size')
+        # print('size')
         # print(test_feature.shape)
         test_feature = torch.cat(test_feature, 0)
-        print(test_feature.shape)
+        # print(test_feature.shape)
         test_feature = test_feature[20000:25000]
         feature_lists[i] = test_feature
     # outputs = torch.cat(outputs, 0)
@@ -408,6 +408,7 @@ def scoresOOD_new(network, oodloader, test_feature, labels, ood_name):
         OOD_feature = OOD_feature[0:5000]
         # test_feature, OOD_feature = test_feature.view(test_feature.size(0), -1), OOD_feature.view(OOD_feature.size(0), -1)
         total_CNN = np.concatenate((test_feature[i].cpu().numpy(), OOD_feature.cpu().numpy()), 0)
+        print(i, type(total_CNN))
         print(total_CNN.shape, type(total_CNN))
         total_CNN = total_CNN.view(total_CNN.size(0), -1)
         reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=100, n_components=50)
