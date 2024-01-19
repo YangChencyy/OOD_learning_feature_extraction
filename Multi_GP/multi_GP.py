@@ -410,7 +410,7 @@ def scoresOOD_new(network, oodloader, test_feature, labels, ood_name):
         total_CNN = np.concatenate((test_feature[i].cpu().numpy(), OOD_feature.cpu().numpy()), 0)
         print(i, type(total_CNN))
         print(total_CNN.shape, type(total_CNN))
-        total_CNN = total_CNN.reshape(total_CNN.shape[0], -1)
+        # total_CNN = total_CNN.reshape(total_CNN.shape[0], -1)
         reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=30, n_components=2)
         UMAPf = reducer_CNN.fit_transform(total_CNN)
         # fig, ax = plt.subplots(figsize=(8, 6.5))
