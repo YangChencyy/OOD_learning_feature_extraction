@@ -375,7 +375,10 @@ def score_new(network, tsloader):
 
     for i in range(len(feature_lists)):
         test_feature = feature_lists[i]
+        print('size')
+        print(test_feature.shape)
         test_feature = torch.cat(test_feature, 0)
+        print(test_feature.shape)
         test_feature = test_feature[20000:25000]
         feature_lists[i] = test_feature
     # outputs = torch.cat(outputs, 0)
