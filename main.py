@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
     test = True
     if test:
-        test_feature, InD_scores, InD_acc = score_new(net, tsloader)
+        test_feature, InD_scores, InD_acc = score_new(net, trloader)
         print("InD accuracy: ", InD_acc)
         labels = train_set.targets[20000:25000]
         if type(labels) != list:
