@@ -123,10 +123,9 @@ if __name__ == "__main__":
             labels = labels.numpy().tolist()
 
          
-        scoresOOD_new(net, OOD_loaders[0], test_feature, labels, OOD_Dataset[0])
-        # for i in range(len(OOD_loaders)):
-            
-        #     scoresOOD_new(net, OOD_loaders[i], test_feature, labels, OOD_Dataset[i])
+        # scoresOOD_new(net, OOD_loaders[0], test_feature, labels, OOD_Dataset[0])
+        for i in range(len(OOD_loaders)):
+            scoresOOD_new(net, OOD_loaders[i], test_feature, labels, OOD_Dataset[i])
             
 
     else:
