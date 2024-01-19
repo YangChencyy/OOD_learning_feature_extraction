@@ -256,7 +256,7 @@ class Cifar_10_Net(nn.Module):
         x = self.conv1(x)
         x1 = x
         x = self.bn1(x)
-        # x2 = x
+        x2 = x
         x = self.relu(x)
         x = self.maxpool(x)
 
@@ -264,7 +264,7 @@ class Cifar_10_Net(nn.Module):
         x3 = x
         x = self.layer2(x)
         x = self.layer3(x)
-        # x4 = x
+        x4 = x
         x = self.layer4(x)
 
         x = self.avgpool(x)
@@ -278,7 +278,7 @@ class Cifar_10_Net(nn.Module):
         f4 = self.fc_f3(f3)
         x = self.fc2(f4)
 
-        return [f1, f2, f3, f4], x  # [f0, f1, f2, f3], x #[x1, x2, x3, x4], x # f, x # F.log_softmax(x, dim = 1)
+        return [x1, x2, x3, x4], x  # [f0, f1, f2, f3], x #[x1, x2, x3, x4], x # f, x # F.log_softmax(x, dim = 1)
     
     def feature_list(self, x):
         out_list = []
