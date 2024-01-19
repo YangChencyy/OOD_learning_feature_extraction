@@ -116,20 +116,24 @@ if __name__ == "__main__":
     if test:
         test_feature, InD_scores, InD_acc = score_new(net, trloader)
         print("InD accuracy: ", InD_acc)
+        test_feature2, InD_scores2, InD_acc2 = score_new(net, tsloader)
+        print("Test accuracy: ", InD_acc2)
         labels = train_set.targets[20000:25000]
         if type(labels) != list:
-            labels = labels.numpy().tolist() 
+            labels = labels.numpy().tolist()
 
-        for i in range(len(OOD_loaders)):
+         
+        scoresOOD_new(net, OOD_loaders[0], test_feature, labels, OOD_Dataset[0])
+        # for i in range(len(OOD_loaders)):
             
-            scoresOOD_new(net, OOD_loaders[i], test_feature, labels, OOD_Dataset[i])
+        #     scoresOOD_new(net, OOD_loaders[i], test_feature, labels, OOD_Dataset[i])
             
 
     else:
         ## get InD data for GP
         InD_features, InD_scores, InD_acc = scores(net, trloader)
         # test_feature, test_score, test_acc = scores(net, tsloader)
-        print("InD accuracy: ", InD_acc)
+        print("Train accuracy: ", InD_acc)
         InD_feature, InD_score = InD_features[0:20000], InD_scores[0:20000]
         # test_feature, test_score = test_feature[0:5000], test_score[0:5000]
         test_feature, test_score = InD_features[20000:25000], InD_scores[20000:25000]

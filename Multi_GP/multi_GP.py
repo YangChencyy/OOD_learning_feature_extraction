@@ -421,6 +421,9 @@ def scoresOOD_new(network, oodloader, test_feature, labels, ood_name):
         color = labels + [10]*len(OOD_feature)
         scatter = ax.scatter(UMAPf[:,0], UMAPf[:,1], c=color, s=1, cmap="Spectral")
 
+        ax.set_xlim(left=7)
+        ax.set_ylim(bottom=7)
+
         # produce a legend with the unique colors from the scatter
         # bbox_to_anchor will position the legend relative to the plot
         legend = ax.legend(*scatter.legend_elements(),
