@@ -406,16 +406,29 @@ def scoresOOD_new(network, oodloader, test_feature, labels, ood_name):
         total_CNN = np.concatenate((test_feature[i].cpu().numpy(), OOD_feature.cpu().numpy()), 0)
         reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=100, n_components=50)
         UMAPf = reducer_CNN.fit_transform(total_CNN)
+        # fig, ax = plt.subplots(figsize=(8, 6.5))
+        # color = labels + [10]*len(OOD_feature)
+        # scatter = ax.scatter(UMAPf[:,0], UMAPf[:,1], c=color, s=1, cmap="Spectral")
+
+        # # produce a legend with the unique colors from the scatter
+        # legend = ax.legend(*scatter.legend_elements(),
+        #                     loc="lower right", title="Classes", prop={'size': 15})
+        # ax.add_artist(legend)
+
+        # plt.savefig(ood_name + '_' + str(i) + '.png', bbox_inches='tight')
+
         fig, ax = plt.subplots(figsize=(8, 6.5))
         color = labels + [10]*len(OOD_feature)
         scatter = ax.scatter(UMAPf[:,0], UMAPf[:,1], c=color, s=1, cmap="Spectral")
 
         # produce a legend with the unique colors from the scatter
+        # bbox_to_anchor will position the legend relative to the plot
         legend = ax.legend(*scatter.legend_elements(),
-                            loc="lower right", title="Classes", prop={'size': 15})
+                            loc="upper left", bbox_to_anchor=(1, 1), title="Classes", prop={'size': 15})
         ax.add_artist(legend)
 
         plt.savefig(ood_name + '_' + str(i) + '.png', bbox_inches='tight')
+
 
     
     return
