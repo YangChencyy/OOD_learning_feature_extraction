@@ -98,12 +98,36 @@ if __name__ == "__main__":
 
         net = Cifar_10_Net(BasicBlock, [2, 2, 2, 2], dim_f = args.f_size)
 
-        state_dict = torch.load(os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
-        net.load_state_dict(state_dict)
+        # state_dict = torch.load(os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
+        # net.load_state_dict(state_dict)
 
-        # cifar10_train(network = net, trloader = trloader, epochs = 20, optim = 'SGD', verbal=True)
-        # torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
+        cifar10_train(network = net, trloader = trloader, epochs = 10, optim = 'SGD', verbal=True)
+        torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net1.pt"))
+        test_feature, InD_scores, InD_acc = scores(net, trloader)
+        print("InD accuracy: ", InD_acc)
+        test_feature2, InD_scores2, InD_acc2 = scores(net, tsloader)
+        print("Test accuracy: ", InD_acc2)
 
+        cifar10_train(network = net, trloader = trloader, epochs = 10, optim = 'SGD', verbal=True)
+        torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net2.pt"))
+        test_feature, InD_scores, InD_acc = scores(net, trloader)
+        print("InD accuracy: ", InD_acc)
+        test_feature2, InD_scores2, InD_acc2 = scores(net, tsloader)
+        print("Test accuracy: ", InD_acc2)
+
+        cifar10_train(network = net, trloader = trloader, epochs = 10, optim = 'SGD', verbal=True)
+        torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net3.pt"))
+        test_feature, InD_scores, InD_acc = scores(net, trloader)
+        print("InD accuracy: ", InD_acc)
+        test_feature2, InD_scores2, InD_acc2 = scores(net, tsloader)
+        print("Test accuracy: ", InD_acc2)
+
+        cifar10_train(network = net, trloader = trloader, epochs = 10, optim = 'SGD', verbal=True)
+        torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net4.pt"))
+        test_feature, InD_scores, InD_acc = scores(net, trloader)
+        print("InD accuracy: ", InD_acc)
+        test_feature2, InD_scores2, InD_acc2 = scores(net, tsloader)
+        print("Test accuracy: ", InD_acc2)
 
     else:
         epochs = 5
@@ -112,63 +136,68 @@ if __name__ == "__main__":
         # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
         torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
 
-    test = True
-    if test:
-        test_feature, InD_scores, InD_acc = score_new(net, trloader)
-        print("InD accuracy: ", InD_acc)
-        test_feature2, InD_scores2, InD_acc2 = score_new(net, tsloader)
-        print("Test accuracy: ", InD_acc2)
-        labels = train_set.targets[20000:25000]
-        if type(labels) != list:
-            labels = labels.numpy().tolist()
+    test_feature, InD_scores, InD_acc = score_new(net, trloader)
+    print("InD accuracy: ", InD_acc)
+    test_feature2, InD_scores2, InD_acc2 = score_new(net, tsloader)
+    print("Test accuracy: ", InD_acc2)
+ 
+    # test = True
+    # if test:
+    #     test_feature, InD_scores, InD_acc = score_new(net, trloader)
+    #     print("InD accuracy: ", InD_acc)
+    #     test_feature2, InD_scores2, InD_acc2 = score_new(net, tsloader)
+    #     print("Test accuracy: ", InD_acc2)
+    #     labels = train_set.targets[20000:25000]
+    #     if type(labels) != list:
+    #         labels = labels.numpy().tolist()
 
          
-        scoresOOD_new(net, OOD_loaders[0], test_feature, labels, OOD_Dataset[0])
-        # for i in range(len(OOD_loaders)):
-        #     scoresOOD_new(net, OOD_loaders[i], test_feature, labels, OOD_Dataset[i])
+    #     scoresOOD_new(net, OOD_loaders[0], test_feature, labels, OOD_Dataset[0])
+    #     # for i in range(len(OOD_loaders)):
+    #     #     scoresOOD_new(net, OOD_loaders[i], test_feature, labels, OOD_Dataset[i])
             
 
-    else:
-        ## get InD data for GP
-        InD_features, InD_scores, InD_acc = scores(net, trloader)
-        # test_feature, test_score, test_acc = scores(net, tsloader)
-        print("Train accuracy: ", InD_acc)
-        InD_feature, InD_score = InD_features[0:20000], InD_scores[0:20000]
-        # test_feature, test_score = test_feature[0:5000], test_score[0:5000]
-        test_feature, test_score = InD_features[20000:25000], InD_scores[20000:25000]
-        labels = train_set.targets[20000:25000] # .numpy().tolist() 
-        if type(labels) != list:
-            labels = labels.numpy().tolist() 
+    # else:
+    #     ## get InD data for GP
+    #     InD_features, InD_scores, InD_acc = scores(net, trloader)
+    #     # test_feature, test_score, test_acc = scores(net, tsloader)
+    #     print("Train accuracy: ", InD_acc)
+    #     InD_feature, InD_score = InD_features[0:20000], InD_scores[0:20000]
+    #     # test_feature, test_score = test_feature[0:5000], test_score[0:5000]
+    #     test_feature, test_score = InD_features[20000:25000], InD_scores[20000:25000]
+    #     labels = train_set.targets[20000:25000] # .numpy().tolist() 
+    #     if type(labels) != list:
+    #         labels = labels.numpy().tolist() 
 
-        train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy()), 1)
-        train_data = pd.DataFrame(train_data)
-        train_data['label'] = InD_label[0:20000]
-        train_data.to_csv(directory +  '/train.csv')
-        print("train data stored")
-
-
-        ## get OOD data for GP
-        for i in range(len(OOD_loaders)):
-
-            OOD_feature, OOD_score = scoresOOD(net, OOD_loaders[i])
-            OOD_feature, OOD_score = OOD_feature[0:5000], OOD_score[0:5000]
+    #     train_data = np.concatenate((InD_feature.cpu().numpy(), InD_score.cpu().numpy()), 1)
+    #     train_data = pd.DataFrame(train_data)
+    #     train_data['label'] = InD_label[0:20000]
+    #     train_data.to_csv(directory +  '/train.csv')
+    #     print("train data stored")
 
 
-            total_CNN = np.concatenate((test_feature.cpu().numpy(), OOD_feature.cpu().numpy()), 0)
-            reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=10, n_components=2)
-            UMAPf = reducer_CNN.fit_transform(total_CNN)
+    #     ## get OOD data for GP
+    #     for i in range(len(OOD_loaders)):
 
-            # all_feature = np.concatenate((test_feature, OOD_feature), 0)
-            all_score = np.concatenate((test_score.cpu().numpy(), OOD_score.cpu().numpy()), 0)
-            DNN_data = np.concatenate((total_CNN, all_score, UMAPf), 1)
+    #         OOD_feature, OOD_score = scoresOOD(net, OOD_loaders[i])
+    #         OOD_feature, OOD_score = OOD_feature[0:5000], OOD_score[0:5000]
 
-            data_df = pd.DataFrame(DNN_data) 
-            data_df['class'] = ['test']*len(test_feature) + ['OOD']*len(OOD_feature)
-            # print(type(labels))
-            data_df['label'] = labels + [10]*len(OOD_feature)
 
-            data_df.to_csv(directory +  '/' + OOD_Dataset[i] + '_test.csv')
-            print(OOD_Dataset[i] + " test data stored")
+    #         total_CNN = np.concatenate((test_feature.cpu().numpy(), OOD_feature.cpu().numpy()), 0)
+    #         reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=10, n_components=2)
+    #         UMAPf = reducer_CNN.fit_transform(total_CNN)
+
+    #         # all_feature = np.concatenate((test_feature, OOD_feature), 0)
+    #         all_score = np.concatenate((test_score.cpu().numpy(), OOD_score.cpu().numpy()), 0)
+    #         DNN_data = np.concatenate((total_CNN, all_score, UMAPf), 1)
+
+    #         data_df = pd.DataFrame(DNN_data) 
+    #         data_df['class'] = ['test']*len(test_feature) + ['OOD']*len(OOD_feature)
+    #         # print(type(labels))
+    #         data_df['label'] = labels + [10]*len(OOD_feature)
+
+    #         data_df.to_csv(directory +  '/' + OOD_Dataset[i] + '_test.csv')
+    #         print(OOD_Dataset[i] + " test data stored")
 
 
     print("\nEND")
