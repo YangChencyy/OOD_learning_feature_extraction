@@ -128,25 +128,25 @@ if __name__ == "__main__":
         # torch.save(net, os.path.join(parent_dir, InD_Dataset + "_net.pt"))
         torch.save(net.state_dict(), os.path.join(parent_dir, args.InD_Dataset + '_' + str(args.f_size) + "_net.pt"))
 
-    test_feature, InD_scores, InD_acc = score_new(net, trloader)
-    print("InD accuracy: ", InD_acc)
-    test_feature2, InD_scores2, InD_acc2 = score_new(net, tsloader)
-    print("Test accuracy: ", InD_acc2)
+    # test_feature, InD_scores, InD_acc = score_new(net, trloader)
+    # print("InD accuracy: ", InD_acc)
+    # test_feature2, InD_scores2, InD_acc2 = score_new(net, tsloader)
+    # print("Test accuracy: ", InD_acc2)
  
-    # test = True
-    # if test:
-    #     test_feature, InD_scores, InD_acc = score_new(net, trloader)
-    #     print("InD accuracy: ", InD_acc)
-    #     test_feature2, InD_scores2, InD_acc2 = score_new(net, tsloader)
-    #     print("Test accuracy: ", InD_acc2)
-    #     labels = train_set.targets[20000:25000]
-    #     if type(labels) != list:
-    #         labels = labels.numpy().tolist()
+    test = True
+    if test:
+        test_feature, InD_scores, InD_acc = score_new(net, trloader)
+        print("InD accuracy: ", InD_acc)
+        test_feature2, InD_scores2, InD_acc2 = score_new(net, tsloader)
+        print("Test accuracy: ", InD_acc2)
+        labels = train_set.targets[20000:25000]
+        if type(labels) != list:
+            labels = labels.numpy().tolist()
 
          
-    #     scoresOOD_new(net, OOD_loaders[0], test_feature, labels, OOD_Dataset[0])
-    #     # for i in range(len(OOD_loaders)):
-    #     #     scoresOOD_new(net, OOD_loaders[i], test_feature, labels, OOD_Dataset[i])
+        # scoresOOD_new(net, OOD_loaders[0], test_feature, labels, OOD_Dataset[0])
+        for i in range(len(OOD_loaders)):
+            scoresOOD_new(net, OOD_loaders[i], test_feature, labels, OOD_Dataset[i])
             
 
     # else:

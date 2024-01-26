@@ -9,6 +9,7 @@ import torch.nn.functional as F
 from scipy import stats
 import math
 from sklearn.metrics import accuracy_score
+from sklearn.manifold import TSNE
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -406,41 +407,29 @@ def scoresOOD_new(network, oodloader, test_feature, labels, ood_name):
         OOD_feature = feature_lists[i]
         OOD_feature = torch.cat(OOD_feature, 0)
         OOD_feature = OOD_feature[0:5000]
-        # test_feature, OOD_feature = test_feature.view(test_feature.size(0), -1), OOD_feature.view(OOD_feature.size(0), -1)
+        test_feature, OOD_feature = test_feature.view(test_feature.size(0), -1), OOD_feature.view(OOD_feature.size(0), -1)
         total_CNN = np.concatenate((test_feature[i].cpu().numpy(), OOD_feature.cpu().numpy()), 0)
-        print(i, type(total_CNN))
-        print(total_CNN.shape, type(total_CNN))
-        # total_CNN = total_CNN.reshape(total_CNN.shape[0], -1)
-        reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=30, n_components=2)
-        UMAPf = reducer_CNN.fit_transform(total_CNN)
-        # fig, ax = plt.subplots(figsize=(8, 6.5))
-        # color = labels + [10]*len(OOD_feature)
-        # scatter = ax.scatter(UMAPf[:,0], UMAPf[:,1], c=color, s=1, cmap="Spectral")
+        # print(i, type(total_CNN))
+        # print(total_CNN.shape, type(total_CNN))
 
-        # # produce a legend with the unique colors from the scatter
-        # legend = ax.legend(*scatter.legend_elements(),
-        #                     loc="lower right", title="Classes", prop={'size': 15})
-        # ax.add_artist(legend)
+        # ## UMAP visualization
+        # reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=30, n_components=2)
+        # X_embedded = reducer_CNN.fit_transform(total_CNN)
 
-        # plt.savefig(ood_name + '_' + str(i) + '.png', bbox_inches='tight')
+        X_embedded = TSNE(n_components=2, learning_rate='auto',
+                     init='random', perplexity=40).fit_transform(total_CNN)
 
         fig, ax = plt.subplots(figsize=(8, 6.5))
         color = labels + [10]*len(OOD_feature)
-        scatter = ax.scatter(UMAPf[:,0], UMAPf[:,1], c=color, s=1, cmap="Spectral")
+        scatter = ax.scatter(X_embedded[:,0], X_embedded[:,1], c=color, s=1, cmap="Spectral")
 
-        # ax.set_xlim(left=7)
-        # ax.set_ylim(bottom=7)
-
-        # produce a legend with the unique colors from the scatter
-        # bbox_to_anchor will position the legend relative to the plot
         legend = ax.legend(*scatter.legend_elements(),
                             loc="upper left", bbox_to_anchor=(1, 1), title="Classes", prop={'size': 15})
         ax.add_artist(legend)
 
-        plt.savefig(ood_name + '_' + str(i) + '.png', bbox_inches='tight')
+        plt.savefig('tsne' + ood_name + '_' + str(i) + '.png', bbox_inches='tight')
 
 
-    
     return
 
 
