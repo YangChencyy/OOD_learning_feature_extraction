@@ -407,10 +407,11 @@ def scoresOOD_new(network, oodloader, test_feature, labels, ood_name):
         OOD_feature = feature_lists[i]
         OOD_feature = torch.cat(OOD_feature, 0)
         OOD_feature = OOD_feature[0:5000]
-        test_feature, OOD_feature = test_feature.view(test_feature.size(0), -1), OOD_feature.view(OOD_feature.size(0), -1)
+        # test_feature, OOD_feature = test_feature.view(test_feature.size(0), -1), OOD_feature.view(OOD_feature.size(0), -1)
         total_CNN = np.concatenate((test_feature[i].cpu().numpy(), OOD_feature.cpu().numpy()), 0)
         # print(i, type(total_CNN))
         # print(total_CNN.shape, type(total_CNN))
+        total_CNN = total_CNN.reshape(len(total_CNN), -1)
 
         # ## UMAP visualization
         # reducer_CNN = umap.UMAP(random_state = 42, n_neighbors=30, n_components=2)
