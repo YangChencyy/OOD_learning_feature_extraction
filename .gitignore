@@ -1,7 +1,7 @@
 __pycache__/
 .DS_Store
-/.vscode/
-data/*
+.vscode/
+data/
 Multi_GP/store_data/
 Multi_GP/.DS_Store
 test.ipynb
