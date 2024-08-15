@@ -5,7 +5,7 @@ data/
 Multi_GP/store_data/
 Multi_GP/.DS_Store
 test.ipynb
-MNIST_net.pt
 FashionMNIST_net.pt
 Fashion_net.pt
 Cifar_10_net.pt
+MNIST_net.pt
